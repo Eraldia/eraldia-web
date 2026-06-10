@@ -1,7 +1,7 @@
 ---
 title: "Cuánto cuesta automatizar con IA en una pyme: precios reales 2026"
 description: "Rangos de precios reales (2026) para automatizar procesos con IA en una pyme española: qué cuesta un diagnóstico, una automatización a medida y el mantenimiento mensual."
-date: 2026-01-01
+date: 2026-06-10
 tags: ["precios", "automatización", "ia", "pymes"]
 categories: ["guías"]
 ---
