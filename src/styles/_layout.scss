@@ -303,6 +303,14 @@
   max-width: 360px;
 }
 
+.footer__icon {
+  display: block;
+  width: 48px;
+  height: 48px;
+  border-radius: $border-radius-lg;
+  margin-bottom: $space-4;
+}
+
 .footer__logo {
   font-family: $font-logo;
   font-style: italic;
