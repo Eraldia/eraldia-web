@@ -71,7 +71,7 @@ const currentYear = new Date().getFullYear();
   {/* Google Fonts: Space Grotesk (títulos) + Inter (texto) + JetBrains Mono (código) */}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,300..600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@1,9..144,300..600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   {/* Feed */}
   <link rel="alternate" type="application/atom+xml" title={`${SITE_TITLE} Feed`} href={url('/atom.xml')}>
@@ -90,19 +90,8 @@ const currentYear = new Date().getFullYear();
     <!-- ================================================================ -->
     <header class={`header${isHome ? ' header--on-hero' : ' header--light'}`}>
       <div class="container header__inner">
-        <a href={url('/')} class="header__logo">
-          <span class="header__logo-icon">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <defs>
-                <linearGradient id="logo-e-gradient" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#5EEAD4"/>
-                  <stop offset="100%" stop-color="#FBBF24"/>
-                </linearGradient>
-              </defs>
-              <text x="14" y="20" text-anchor="middle" font-family="Fraunces, Georgia, 'Times New Roman', serif" font-style="italic" font-weight="300" font-size="32" style="font-variation-settings: 'opsz' 144;" fill="url(#logo-e-gradient)">e</text>
-            </svg>
-          </span>
-          Eraldia
+        <a href={url('/')} class="header__logo" aria-label="Eraldia">
+          <span class="logo-e" aria-hidden="true">e</span>raldia
         </a>
 
         <input type="checkbox" id="nav-toggle" class="header__nav-toggle" aria-hidden="true">
@@ -136,7 +125,7 @@ const currentYear = new Date().getFullYear();
       <div class="container footer__inner">
         <div class="footer__top">
           <div class="footer__brand">
-            <div class="footer__logo">Eraldia</div>
+            <div class="footer__logo"><span class="logo-e" aria-hidden="true">e</span>raldia</div>
             <p class="footer__tagline">{TAGLINE}</p>
           </div>
 

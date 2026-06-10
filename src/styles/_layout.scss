@@ -156,11 +156,12 @@
 .header__logo {
   display: flex;
   align-items: center;
-  gap: $space-2;
   font-family: $font-logo;
-  font-optical-sizing: auto;
-  font-size: 1.4rem;
-  font-weight: 600;
+  font-style: italic;
+  font-variation-settings: 'opsz' 144;
+  text-transform: lowercase;
+  font-size: 1.65rem;
+  font-weight: 500;
   color: $color-dark;
   text-decoration: none;
   letter-spacing: 0;
@@ -171,12 +172,14 @@
   }
 }
 
-.header__logo-icon {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+// Gradient initial "e" — doubles as the brand mark within the wordmark
+.logo-e {
+  background: linear-gradient(135deg, #5EEAD4 0%, #FBBF24 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-shadow: none;
 }
 
 // Hamburger toggle (CSS-only, hidden on desktop)
@@ -301,8 +304,12 @@
 }
 
 .footer__logo {
-  font-size: $font-size-xl;
-  font-weight: $font-weight-bold;
+  font-family: $font-logo;
+  font-style: italic;
+  font-variation-settings: 'opsz' 144;
+  text-transform: lowercase;
+  font-size: 1.65rem;
+  font-weight: 500;
   color: $color-white;
   margin-bottom: $space-3;
 }
