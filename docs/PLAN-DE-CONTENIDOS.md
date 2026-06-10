@@ -64,51 +64,56 @@ Contenido mínimo de cada landing:
 - CTA al diagnóstico (490 €).
 - Schema `ProfessionalService` con `areaServed`.
 
-**Toque diferencial vasco:** un párrafo de bienvenida en euskera en las landings
-de Bilbao/Euskadi (la propia marca viene de *eraldatu*). Señal de cercanía
-imposible de copiar por consultoras genéricas, y un dato citable para los LLMs.
+**Toque diferencial vasco (sutil):** unas pocas palabras en euskera en las
+landings de Bilbao/Euskadi — un saludo breve y la mención de que la marca viene
+de *eraldatu* ("transformar"). Nada más: cercanía sin caer en tópicos.
 
 ---
 
-## 4. Calendario editorial — 6 meses (jul–dic 2026)
+## 4. Cola editorial — 1 post cada 3 días
 
-Cadencia realista para un consultor solo: **2 posts/mes** + las 5 landings
-locales repartidas en los dos primeros meses. Cada post sigue la plantilla GEO
-del §6.
+La cadencia es **un post cada 3 días**, publicado automáticamente por el
+pipeline descrito en `docs/PIPELINE-CONTENIDOS.md`: el contenido se redacta por
+lotes (en una sesión de trabajo con Claude, sin coste de API) y queda en una
+cola (`content-queue/`); un workflow programado publica la siguiente pieza en la
+web y en LinkedIn cuando toca. Cada post sigue la plantilla GEO del §6.
 
-### Mes 1 — Cimientos locales + dinero
+Los bloques siguientes definen el **orden de publicación** (cada bloque ≈ 6
+días de cadencia, no un mes):
+
+### Bloque 1 — Cimientos locales + dinero
 | # | Título | Slug | Cluster | Keyword objetivo |
 |---|--------|------|---------|------------------|
 | 1 | Cuánto cuesta automatizar con IA en una pyme: precios reales 2026 | `cuanto-cuesta-automatizacion-ia-pyme` | Dinero | cuánto cuesta automatización IA pyme |
 | 2 | Consultor de IA para tu pyme: qué hace, cuándo contratarlo y qué debe entregarte | `que-hace-consultor-ia-pyme` | Dinero/Confianza | qué hace un consultor de IA |
 | — | Landings: Bilbao + País Vasco | | Local | |
 
-### Mes 2 — Ayudas (imán de tráfico local) + sector asesorías
+### Bloque 2 — Ayudas (imán de tráfico local) + sector asesorías
 | # | Título | Slug | Cluster | Keyword objetivo |
 |---|--------|------|---------|------------------|
 | 3 | Ayudas para digitalizar tu pyme vasca con IA: Kit Digital, SPRI y programas de Bizkaia | `ayudas-ia-pymes-pais-vasco` | Local/Dinero | ayudas digitalización pymes País Vasco |
 | 4 | IA en asesorías y gestorías: 4 automatizaciones que liberan horas en cada cierre | `ia-asesorias-gestorias` | Sectorial | IA para asesorías |
 | — | Landings: Andalucía + Sevilla + Málaga | | Local | |
 
-### Mes 3 — Andalucía + sector clínicas
+### Bloque 3 — Andalucía + sector clínicas
 | # | Título | Slug | Cluster | Keyword objetivo |
 |---|--------|------|---------|------------------|
 | 5 | IA para pymes andaluzas: por dónde empezar (y qué ayudas existen en 2026) | `ia-pymes-andaluzas-por-donde-empezar` | Local | IA pymes Andalucía |
 | 6 | IA en clínicas dentales y de fisioterapia: recordatorios, citas y resúmenes sin contratar a nadie | `ia-clinicas-dentales-fisioterapia` | Sectorial | IA clínica dental |
 
-### Mes 4 — Hostelería (puente Bilbao↔Andalucía) + decisión
+### Bloque 4 — Hostelería (puente Bilbao↔Andalucía) + decisión
 | # | Título | Slug | Cluster | Keyword objetivo |
 |---|--------|------|---------|------------------|
-| 7 | IA en hostelería: del bar de pintxos en Bilbao al chiringuito de Málaga, mismas 5 automatizaciones | `ia-hosteleria-restaurantes` | Sectorial/Local | IA restaurantes hostelería |
+| 7 | IA en hostelería y restauración: 5 automatizaciones que funcionan igual en Bilbao y en Málaga | `ia-hosteleria-restaurantes` | Sectorial/Local | IA restaurantes hostelería |
 | 8 | Cómo elegir consultor de IA (y 7 señales de humo de vendedor) | `como-elegir-consultor-ia` | Dinero/Confianza | elegir consultor IA |
 
-### Mes 5 — Diferenciación vasca + problema→solución
+### Bloque 5 — Diferenciación vasca + problema→solución
 | # | Título | Slug | Cluster | Keyword objetivo |
 |---|--------|------|---------|------------------|
 | 9 | ¿Funciona la IA en euskera? Estado real de los modelos en 2026 y qué significa para tu negocio | `ia-en-euskera-estado-2026` | Local/Confianza | IA euskera |
 | 10 | "Respondo lo mismo 30 veces al día": cómo montar un asistente de respuestas en 2 semanas | `asistente-respuestas-frecuentes-pyme` | Problema | automatizar respuestas clientes |
 
-### Mes 6 — Casos + cierre de año (pieza GEO fuerte)
+### Bloque 6 — Casos + pieza GEO fuerte
 | # | Título | Slug | Cluster | Keyword objetivo |
 |---|--------|------|---------|------------------|
 | 11 | Caso real: cómo una asesoría de Bizkaia recuperó 10 h/semana con tres automatizaciones | `caso-asesoria-bizkaia-automatizacion` | Confianza/Local | caso automatización asesoría |
@@ -118,13 +123,17 @@ del §6.
 > caso anonimizado o un proyecto piloto propio, indicándolo honestamente. Nunca
 > inventar un cliente: la credibilidad es el activo central de la marca.
 
-### Reglas del calendario
+### Reglas de la cola
 - Todo post lleva **al menos un enlace a una landing local** y a un servicio.
 - Posts geográficos alternan Euskadi ↔ Andalucía para que ambos mercados crezcan
   en paralelo.
 - Las piezas de precios (1, 12) y ayudas (3, 5) se **actualizan cada 6 meses**
   cambiando `dateModified`: son las que más citan los motores generativos y las
   que más caducan.
+- Cuando la cola baje de ~3 piezas, se redacta un nuevo lote en una sesión de
+  trabajo (ver `docs/PIPELINE-CONTENIDOS.md` §Rellenar la cola).
+- Sin tópicos regionales (gastronomía, folclore): la localización se hace con
+  sectores, ayudas y cercanía real, no con clichés.
 
 ---
 
@@ -184,8 +193,9 @@ post debe cumplir:
 
 ## 8. Distribución (cada post)
 
-1. **LinkedIn**: versión nativa resumida del post (no solo el enlace) el día de
-   publicación; es el canal de captación declarado en el modelo de negocio.
+1. **LinkedIn (automático)**: cada pieza de la cola incluye su versión nativa
+   para LinkedIn (no solo el enlace); el pipeline la publica el mismo día que el
+   post. Ver `docs/PIPELINE-CONTENIDOS.md` §LinkedIn.
 2. **Reutilización local**: ofrecer las piezas de ayudas/subvenciones a
    newsletters de asociaciones empresariales (CEBEK, Cámaras) como colaboración —
    genera los enlaces y menciones locales que alimentan SEO y GEO a la vez.
@@ -200,13 +210,14 @@ post debe cumplir:
 | Impresiones/clics de keywords locales ("consultor ia bilbao", "ia pymes andalucía") | Google Search Console | Top 3 en Bilbao; top 10 en Andalucía |
 | Citas en motores de IA | Test manual mensual: preguntar a ChatGPT/Perplexity "consultor de IA para pymes en Bilbao" y variantes | Aparecer mencionado en ≥1 motor |
 | Leads desde blog/landings | Formulario con campo "¿cómo nos has conocido?" | 2–3 diagnósticos atribuibles a contenido |
-| Posts publicados | Este plan | 12 posts + 5 landings |
+| Posts publicados | Cola + workflow programado | 1 post cada 3 días sin intervención manual |
 
 ---
 
 ## 10. Orden de ejecución recomendado
 
 1. Acciones técnicas del §7 (1–2 días de trabajo, multiplican todo lo demás).
-2. Landings de Bilbao y País Vasco.
-3. Posts 1–2 (precios y "qué hace un consultor": las piezas más citables).
-4. Resto del calendario a ritmo de 2 posts/mes, alternando geografías.
+2. Activar el pipeline de publicación (`docs/PIPELINE-CONTENIDOS.md`): la cola
+   inicial ya está redactada en `content-queue/`.
+3. Landings de Bilbao y País Vasco.
+4. Rellenar la cola por lotes cuando baje de ~3 piezas.

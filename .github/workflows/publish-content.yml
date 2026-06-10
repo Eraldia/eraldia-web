@@ -1,0 +1,94 @@
+name: Publish queued content
+
+# Corre a diario, pero tools/publish-next.mjs solo publica si el último post
+# tiene 3 días o más (cadencia configurable). El contenido ya está redactado
+# en content-queue/ — aquí no se genera nada, solo se publica.
+on:
+  schedule:
+    - cron: "30 6 * * *" # 06:30 UTC ≈ 07:30/08:30 Madrid
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Publicar aunque no hayan pasado 3 días"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  issues: write
+  actions: write
+
+concurrency:
+  group: publish-content
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Publish next queued post
+        id: publish
+        env:
+          FORCE: ${{ inputs.force && '1' || '' }}
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_AUTHOR_URN: ${{ secrets.LINKEDIN_AUTHOR_URN }}
+          SITE_URL: "https://sailwave-ai.github.io/eraldia-web"
+        run: node tools/publish-next.mjs
+
+      - name: Commit and push
+        if: steps.publish.outputs.published == 'true'
+        run: |
+          git config user.name "eraldia-publisher"
+          git config user.email "actions@github.com"
+          git add src/content/blog content-queue
+          git commit -m "Publicar: ${{ steps.publish.outputs.slug }}"
+          git push
+
+      # Los push hechos con GITHUB_TOKEN no disparan otros workflows,
+      # así que lanzamos el deploy explícitamente.
+      - name: Trigger deploy
+        if: steps.publish.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run deploy.yml --repo "${{ github.repository }}" --ref main
+
+      - name: Ensure labels exist
+        if: steps.publish.outputs.published == 'true' || steps.publish.outputs.queue_empty == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create "linkedin-pendiente" --repo "${{ github.repository }}" --color FDB813 --force
+          gh label create "rellenar-cola" --repo "${{ github.repository }}" --color D93F0B --force
+
+      - name: LinkedIn manual fallback
+        if: steps.publish.outputs.linkedin == 'manual' || steps.publish.outputs.linkedin == 'error'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --repo "${{ github.repository }}" \
+            --title "Publicar en LinkedIn: ${{ steps.publish.outputs.slug }}" \
+            --body-file linkedin-pending.md \
+            --label "linkedin-pendiente" || true
+
+      - name: Warn when queue is low
+        if: steps.publish.outputs.queue_low == 'true' || steps.publish.outputs.queue_empty == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          existing=$(gh issue list --repo "${{ github.repository }}" --state open --label "rellenar-cola" --json number --jq 'length')
+          if [ "$existing" = "0" ]; then
+            gh issue create \
+              --repo "${{ github.repository }}" \
+              --title "La cola de contenido se está agotando" \
+              --body "Quedan ${{ steps.publish.outputs.remaining || 0 }} piezas en content-queue/posts. Abre una sesión de Claude y pide rellenar la cola siguiendo docs/PIPELINE-CONTENIDOS.md y docs/PLAN-DE-CONTENIDOS.md." \
+              --label "rellenar-cola" || true
+          fi
