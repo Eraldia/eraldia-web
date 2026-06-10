@@ -558,6 +558,160 @@
   color: $color-accent-dark;
 }
 
+// Tarjeta de sector como enlace a su landing
+.use-case-card--link {
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+    border-color: transparent;
+  }
+
+  .card__link {
+    margin-top: $space-4;
+  }
+}
+
+// Sector prioritario (tier 1)
+.use-case-card--featured {
+  border-color: rgba($color-primary, 0.4);
+  border-top: 3px solid $color-primary;
+}
+
+.use-case-card__flag {
+  position: absolute;
+  top: $space-4;
+  right: $space-4;
+  z-index: 1;
+  padding: $space-1 $space-3;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: $color-white;
+  background: $color-primary;
+  border-radius: $border-radius-full;
+  box-shadow: $shadow-sm;
+}
+
+// Marcador para sectores sin foto
+.use-case-card__image--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba($color-primary, 0.12), rgba($color-accent, 0.12));
+
+  span {
+    font-family: $font-heading;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    color: $color-primary;
+    letter-spacing: 0.02em;
+  }
+}
+
+// --------------------------------------------------------------------------
+// FAQ (landings de sector y posts)
+// --------------------------------------------------------------------------
+.faq__list {
+  margin-top: $space-5;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.faq__item {
+  border: 1px solid $color-border;
+  border-radius: $border-radius-lg;
+  padding: $space-4 $space-5;
+  background: $color-white;
+  transition: border-color $transition-base;
+
+  &[open] {
+    border-color: rgba($color-primary, 0.4);
+  }
+}
+
+.faq__question {
+  font-weight: $font-weight-semibold;
+  color: $color-dark;
+  cursor: pointer;
+  list-style: none;
+  position: relative;
+  padding-right: $space-6;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &::after {
+    content: '+';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: $font-size-xl;
+    color: $color-primary;
+    line-height: 1;
+  }
+}
+
+.faq__item[open] .faq__question::after {
+  content: '\2212'; // minus
+}
+
+.faq__answer {
+  margin: $space-3 0 0;
+  color: $color-text-light;
+  line-height: $line-height-base;
+}
+
+// --------------------------------------------------------------------------
+// Otros sectores (interlinking)
+// --------------------------------------------------------------------------
+.related-sectores {
+  margin-top: $space-8;
+  padding-top: $space-6;
+  border-top: 1px solid $color-border;
+}
+
+.related-sectores__title {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-dark;
+  margin-bottom: $space-4;
+}
+
+.related-sectores__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-3;
+}
+
+.related-sectores__link {
+  display: inline-block;
+  padding: $space-2 $space-4;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-primary;
+  background: rgba($color-primary, 0.08);
+  border-radius: $border-radius-full;
+  text-decoration: none;
+  transition: background $transition-fast;
+
+  &:hover {
+    background: rgba($color-primary, 0.16);
+    text-decoration: none;
+  }
+}
+
 // --------------------------------------------------------------------------
 // Feature Blocks
 // --------------------------------------------------------------------------

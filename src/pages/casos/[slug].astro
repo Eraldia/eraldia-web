@@ -1,0 +1,108 @@
+---
+import { url } from '../../utils';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const sectores = await getCollection('sectores');
+  return sectores.map(sector => ({
+    params: { slug: sector.slug },
+    props: { sector },
+  }));
+}
+
+const { sector } = Astro.props;
+const { Content } = await render(sector);
+
+const otros = (await getCollection('sectores'))
+  .filter(s => s.slug !== sector.slug)
+  .sort((a, b) => (a.data.weight ?? 99) - (b.data.weight ?? 99));
+
+const { faqs } = sector.data;
+
+// Schema FAQPage para GEO/SEO (solo si hay preguntas)
+const faqSchema = faqs.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(f => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+} : null;
+---
+
+<BaseLayout title={sector.data.title} description={sector.data.metaDescription ?? sector.data.description}>
+
+{faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
+
+<div class="page-header">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol class="breadcrumb__list" itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li class="breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href={url('/')} class="breadcrumb__link" itemprop="item"><span itemprop="name">Inicio</span></a>
+          <meta itemprop="position" content="1">
+        </li>
+        <li class="breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href={url('/casos/')} class="breadcrumb__link" itemprop="item"><span itemprop="name">Casos de uso</span></a>
+          <meta itemprop="position" content="2">
+        </li>
+        <li class="breadcrumb__item breadcrumb__item--current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+          <span itemprop="name">{sector.data.title}</span>
+          <meta itemprop="position" content="3">
+        </li>
+      </ol>
+    </nav>
+    <h1 class="page-header__title">{sector.data.title}</h1>
+    <p class="page-header__desc">{sector.data.description}</p>
+    {sector.data.kpis.length > 0 && (
+      <div class="use-case-card__kpis" style="margin-top: 1.5rem;">
+        {sector.data.kpis.map(k => <span class="use-case-card__kpi">{k}</span>)}
+      </div>
+    )}
+  </div>
+</div>
+
+<section class="section">
+  <div class="container container--narrow">
+    <div class="content">
+      <Content />
+    </div>
+
+    {faqs.length > 0 && (
+      <div class="faq" style="margin-top: 3rem;">
+        <h2 class="section__title">Preguntas frecuentes</h2>
+        <div class="faq__list">
+          {faqs.map(f => (
+            <details class="faq__item">
+              <summary class="faq__question">{f.q}</summary>
+              <p class="faq__answer">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <div class="cta cta--inline cta--dark reveal" aria-label="Contacto" style="margin-top: 3rem;">
+      <div class="cta__inner">
+        <h2 class="cta__title">¿Lo vemos en tu caso?</h2>
+        <p class="cta__desc">
+          Cuéntame en dos líneas qué proceso te quita más tiempo y te digo, sin humo, si la IA puede ayudarte y cuánto costaría.
+        </p>
+        <a href={url('/#contacto')} class="btn btn--primary btn--lg">Hablamos 30 minutos, gratis</a>
+      </div>
+    </div>
+
+    <nav class="related-sectores" aria-label="Otros sectores">
+      <h2 class="related-sectores__title">Otros sectores</h2>
+      <ul class="related-sectores__list">
+        {otros.map(s => (
+          <li><a href={url(`/casos/${s.slug}/`)} class="related-sectores__link">{s.data.title}</a></li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</section>
+
+</BaseLayout>
