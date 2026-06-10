@@ -37,12 +37,6 @@
     transition: max-height $transition-base, opacity $transition-fast, padding $transition-fast;
   }
 
-  .header--on-hero .header__nav,
-  .header--light .header__nav {
-    background-color: rgba($color-dark, 0.95);
-    border-bottom-color: rgba($color-white, 0.1);
-  }
-
   .header__nav-link {
     padding: $space-3 $space-4;
     font-size: $font-size-base;
