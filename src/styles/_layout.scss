@@ -167,9 +167,15 @@
   }
 }
 
-// Gradient initial "e" — doubles as the brand mark within the wordmark
-.logo-e {
-  background: linear-gradient(135deg, $color-primary-bright 0%, $color-accent-bright 100%);
+// Wordmark gradient: dark → terracotta → amber, timed so warm color lands on "ia"
+.logo-wordmark {
+  background: linear-gradient(
+    90deg,
+    $color-text       0%,
+    $color-text       58%,
+    $color-primary    72%,
+    $color-accent     100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
