@@ -56,6 +56,9 @@ p {
 }
 
 .lead {
+  font-family: $font-accent;
+  font-style: italic;
+  font-variation-settings: 'opsz' 72;
   font-size: $font-size-xl;
   line-height: 1.5;
   color: $color-text-light;
@@ -138,9 +141,12 @@ blockquote {
   border-radius: 0 $border-radius $border-radius 0;
 
   p {
+    font-family: $font-accent;
     font-size: $font-size-lg;
     color: $color-text-light;
     font-style: italic;
+    font-variation-settings: 'opsz' 36;
+    font-weight: $font-weight-normal;
     margin-bottom: 0;
 
     &:last-child {
