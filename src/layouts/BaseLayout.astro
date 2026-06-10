@@ -1,0 +1,182 @@
+---
+import { url, BASE } from '../utils';
+import { SITE_TITLE, SITE_DESCRIPTION, TAGLINE, CONTACT_EMAIL, LINKEDIN_URL, AUTHOR } from '../consts';
+import '../styles/style.scss';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogType?: 'website' | 'article';
+  ogImage?: string;
+  canonicalUrl?: string;
+  publishedTime?: string;
+  tags?: string[];
+  isHome?: boolean;
+}
+
+const {
+  title,
+  description = SITE_DESCRIPTION,
+  ogType = 'website',
+  ogImage,
+  canonicalUrl,
+  publishedTime,
+  tags = [],
+  isHome = false,
+} = Astro.props;
+
+const pageTitle = title ? `${title} | ${SITE_TITLE}` : `${SITE_TITLE} — ${TAGLINE}`;
+const ogTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE;
+const canonical = canonicalUrl ?? Astro.url.href;
+const ogImageUrl = new URL(ogImage ?? url('/images/og-image.svg'), Astro.url).href;
+
+// Ruta sin el prefijo de la base, para detectar la sección activa
+const pathname = Astro.url.pathname;
+const currentPath = BASE && pathname.startsWith(BASE) ? pathname.slice(BASE.length) : pathname;
+const isServiciosActive = currentPath.startsWith('/servicios');
+const isCasosActive = currentPath.startsWith('/casos');
+const isSobreMiActive = currentPath.startsWith('/sobre-mi');
+const isBlogActive = currentPath.startsWith('/blog');
+
+const currentYear = new Date().getFullYear();
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>{pageTitle}</title>
+
+  <meta name="description" content={description}>
+  <meta name="author" content={AUTHOR}>
+
+  {/* Open Graph */}
+  <meta property="og:title" content={ogTitle}>
+  <meta property="og:description" content={description}>
+  <meta property="og:type" content={ogType}>
+  <meta property="og:url" content={canonical}>
+  <meta property="og:image" content={ogImageUrl}>
+  <meta property="og:site_name" content={SITE_TITLE}>
+  {publishedTime && <meta property="article:published_time" content={publishedTime}>}
+  {tags.map(tag => <meta property="article:tag" content={tag}>)}
+
+  {/* Canonical URL */}
+  <link rel="canonical" href={canonical}>
+
+  {/* Favicon */}
+  <link rel="icon" href={url('/images/favicon.svg')} type="image/svg+xml">
+
+  {/* Google Fonts: Space Grotesk (títulos) + Inter (texto) + JetBrains Mono (código) */}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  {/* Feed */}
+  <link rel="alternate" type="application/atom+xml" title={`${SITE_TITLE} Feed`} href={url('/atom.xml')}>
+
+  {/* Inline IntersectionObserver para scroll-reveal (< 300 bytes, progressive enhancement) */}
+  <script is:inline>
+  document.addEventListener("DOMContentLoaded",function(){if(!("IntersectionObserver"in window))return;document.querySelectorAll(".reveal").forEach(function(e){e.style.willChange="opacity,transform"});var o=new IntersectionObserver(function(e){e.forEach(function(e){e.isIntersecting&&(e.target.classList.add("is-visible"),o.unobserve(e.target))})},{threshold:0.15,rootMargin:"0px 0px -40px 0px"});document.querySelectorAll(".reveal").forEach(function(e){o.observe(e)})});
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Saltar al contenido</a>
+  <div class="page-wrapper">
+
+    <!-- ================================================================ -->
+    <!-- Header                                                            -->
+    <!-- ================================================================ -->
+    <header class={`header${isHome ? ' header--on-hero' : ' header--light'}`}>
+      <div class="container header__inner">
+        <a href={url('/')} class="header__logo">
+          <span class="header__logo-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M6 7.5H22" stroke="#0F766E" stroke-width="3" stroke-linecap="round"/>
+              <path d="M6 14H16" stroke="#0F766E" stroke-width="3" stroke-linecap="round"/>
+              <path d="M6 20.5H22" stroke="#0F766E" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="21.5" cy="14" r="2.5" fill="#F59E0B"/>
+            </svg>
+          </span>
+          Eraldia
+        </a>
+
+        <input type="checkbox" id="nav-toggle" class="header__nav-toggle" aria-hidden="true">
+        <label for="nav-toggle" class="header__toggle-label" aria-label="Abrir o cerrar el menú">
+          <span class="header__toggle-bar"></span>
+          <span class="header__toggle-bar"></span>
+          <span class="header__toggle-bar"></span>
+        </label>
+
+        <nav class="header__nav" aria-label="Navegación principal">
+          <a href={url('/servicios/')} class={`header__nav-link${isServiciosActive ? ' header__nav-link--active' : ''}`}>Servicios</a>
+          <a href={url('/casos/')} class={`header__nav-link${isCasosActive ? ' header__nav-link--active' : ''}`}>Casos de uso</a>
+          <a href={url('/sobre-mi/')} class={`header__nav-link${isSobreMiActive ? ' header__nav-link--active' : ''}`}>Sobre mí</a>
+          <a href={url('/blog/')} class={`header__nav-link${isBlogActive ? ' header__nav-link--active' : ''}`}>Blog</a>
+          <a href={url('/#contacto')} class="header__nav-link">Contacto</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ================================================================ -->
+    <!-- Main Content                                                      -->
+    <!-- ================================================================ -->
+    <main class="main" id="main-content">
+      <slot />
+    </main>
+
+    <!-- ================================================================ -->
+    <!-- Footer                                                            -->
+    <!-- ================================================================ -->
+    <footer class="footer">
+      <div class="container footer__inner">
+        <div class="footer__top">
+          <div class="footer__brand">
+            <div class="footer__logo">Eraldia</div>
+            <p class="footer__tagline">{TAGLINE}</p>
+          </div>
+
+          <div class="footer__nav">
+            <div class="footer__nav-group">
+              <div class="footer__nav-title">Servicios</div>
+              <ul class="footer__nav-list">
+                <li><a href={url('/servicios/')} class="footer__nav-link">Todos los servicios</a></li>
+                <li><a href={url('/servicios/diagnostico-ia/')} class="footer__nav-link">Diagnóstico de IA</a></li>
+                <li><a href={url('/servicios/automatizacion/')} class="footer__nav-link">Automatización a medida</a></li>
+                <li><a href={url('/servicios/acompanamiento/')} class="footer__nav-link">Acompañamiento mensual</a></li>
+              </ul>
+            </div>
+
+            <div class="footer__nav-group">
+              <div class="footer__nav-title">Eraldia</div>
+              <ul class="footer__nav-list">
+                <li><a href={url('/sobre-mi/')} class="footer__nav-link">Sobre mí</a></li>
+                <li><a href={url('/casos/')} class="footer__nav-link">Casos de uso</a></li>
+                <li><a href={url('/blog/')} class="footer__nav-link">Blog</a></li>
+              </ul>
+            </div>
+
+            <div class="footer__nav-group">
+              <div class="footer__nav-title">Contacto</div>
+              <ul class="footer__nav-list">
+                <li><a href={url('/#contacto')} class="footer__nav-link">Escríbeme</a></li>
+                <li><a href={`mailto:${CONTACT_EMAIL}`} class="footer__nav-link">{CONTACT_EMAIL}</a></li>
+                {LINKEDIN_URL && (
+                  <li><a href={LINKEDIN_URL} class="footer__nav-link" rel="noopener" target="_blank">LinkedIn</a></li>
+                )}
+                <li><a href={url('/atom.xml')} class="footer__nav-link">RSS</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer__bottom">
+          <span class="footer__copyright">&copy; {currentYear} {SITE_TITLE} &middot; Gorka Alapont. Todos los derechos reservados.</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>

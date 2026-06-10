@@ -1,0 +1,83 @@
+---
+import { url } from '../../utils';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const POSTS_PER_PAGE = 9;
+
+const allPosts = await getCollection('blog');
+allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Con 1 post no hay paginación real, pero dejamos la estructura lista
+const posts = allPosts.slice(0, POSTS_PER_PAGE);
+const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+
+const title = 'Blog';
+const description = 'Guías prácticas y sin humo sobre IA y automatización para pymes: qué funciona, qué cuesta y por dónde empezar.';
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+---
+
+<BaseLayout title={title} description={description}>
+
+<div class="page-header">
+  <div class="container">
+    <h1 class="page-header__title">Blog</h1>
+    <p class="page-header__desc">{description}</p>
+  </div>
+</div>
+
+<section class="blog-listing">
+  <div class="container">
+
+    {posts.length > 0 ? (
+      <div class="blog-grid">
+        {posts.map(post => (
+          <a href={url(`/blog/${post.slug}/`)} class="blog-card">
+            <div class="blog-card__body">
+              <div class="blog-card__meta">
+                {post.data.date && (
+                  <span class="blog-card__date">{formatDate(post.data.date)}</span>
+                )}
+              </div>
+
+              <h2 class="blog-card__title">{post.data.title}</h2>
+
+              {post.data.description && (
+                <p class="blog-card__desc">{post.data.description}</p>
+              )}
+
+              {post.data.tags && post.data.tags.length > 0 && (
+                <div class="blog-card__tags">
+                  {post.data.tags.map(tag => (
+                    <span class="tag">{tag}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="empty-state">
+        <p class="empty-state__text">Todavía no hay artículos. Vuelve pronto.</p>
+      </div>
+    )}
+
+    {/* Paginación — con 1 post solo hay 1 página */}
+    {totalPages > 1 && (
+      <nav class="pagination" aria-label="Paginación del blog">
+        <span class="pagination__link pagination__link--disabled" aria-disabled="true">&laquo; Anterior</span>
+        <span class="pagination__link pagination__link--active" aria-current="page">1</span>
+        {totalPages > 1 && (
+          <a href={url('/blog/page/2/')} class="pagination__link">Siguiente &raquo;</a>
+        )}
+      </nav>
+    )}
+
+  </div>
+</section>
+
+</BaseLayout>

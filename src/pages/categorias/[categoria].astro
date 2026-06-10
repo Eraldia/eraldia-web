@@ -1,0 +1,61 @@
+---
+import { url } from '../../utils';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+
+  const catMap = new Map<string, typeof posts>();
+  for (const post of posts) {
+    for (const cat of (post.data.categories ?? [])) {
+      if (!catMap.has(cat)) catMap.set(cat, []);
+      catMap.get(cat)!.push(post);
+    }
+  }
+
+  return [...catMap.entries()].map(([cat, catPosts]) => ({
+    params: { categoria: cat },
+    props: { categoria: cat, posts: catPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()) },
+  }));
+}
+
+const { categoria, posts } = Astro.props;
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+---
+
+<BaseLayout title={`Categoría: ${categoria}`} description={`Artículos de la categoría "${categoria}".`}>
+
+<div class="page-header">
+  <div class="container">
+    <h1 class="page-header__title">Categoría: <span class="tag" style="font-size: inherit; vertical-align: middle;">{categoria}</span></h1>
+    <p class="page-header__desc">{posts.length} {posts.length === 1 ? 'artículo' : 'artículos'}</p>
+  </div>
+</div>
+
+<section class="blog-listing">
+  <div class="container">
+    <div class="blog-grid">
+      {posts.map(post => (
+        <a href={url(`/blog/${post.slug}/`)} class="blog-card">
+          <div class="blog-card__body">
+            <div class="blog-card__meta">
+              {post.data.date && (
+                <span class="blog-card__date">{formatDate(post.data.date)}</span>
+              )}
+            </div>
+            <h2 class="blog-card__title">{post.data.title}</h2>
+            {post.data.description && (
+              <p class="blog-card__desc">{post.data.description}</p>
+            )}
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+</BaseLayout>

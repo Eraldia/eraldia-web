@@ -1,0 +1,82 @@
+---
+import { url } from '../../utils';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const servicios = await getCollection('servicios');
+  return servicios.map(servicio => ({
+    params: { slug: servicio.slug },
+    props: { servicio },
+  }));
+}
+
+const { servicio } = Astro.props;
+const { Content } = await render(servicio);
+
+const allServicios = await getCollection('servicios');
+allServicios.sort((a, b) => (a.data.weight ?? 99) - (b.data.weight ?? 99));
+---
+
+<BaseLayout title={servicio.data.title} description={servicio.data.description}>
+
+<div class="page-header">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol class="breadcrumb__list" itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li class="breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href={url('/')} class="breadcrumb__link" itemprop="item"><span itemprop="name">Inicio</span></a>
+          <meta itemprop="position" content="1">
+        </li>
+        <li class="breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href={url('/servicios/')} class="breadcrumb__link" itemprop="item"><span itemprop="name">Servicios</span></a>
+          <meta itemprop="position" content="2">
+        </li>
+        <li class="breadcrumb__item breadcrumb__item--current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+          <span itemprop="name">{servicio.data.title}</span>
+          <meta itemprop="position" content="3">
+        </li>
+      </ol>
+    </nav>
+    <h1 class="page-header__title">{servicio.data.title}</h1>
+    {servicio.data.description && (
+      <p class="page-header__desc">{servicio.data.description}</p>
+    )}
+  </div>
+</div>
+
+<section class="service-detail">
+  <div class="container">
+    <div class="layout-sidebar">
+
+      <!-- Sidebar: navigation to other services -->
+      <aside class="layout-sidebar__aside">
+        <nav class="sidebar-nav" aria-label="Navegación de servicios">
+          <div class="sidebar-nav__title">Servicios</div>
+          <ul class="sidebar-nav__list">
+            {allServicios.map(s => (
+              <li>
+                <a
+                  href={url(`/servicios/${s.slug}/`)}
+                  class={`sidebar-nav__link${s.slug === servicio.slug ? ' sidebar-nav__link--active' : ''}`}
+                >
+                  {s.data.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Main content -->
+      <div class="layout-sidebar__main">
+        <div class="service-detail__content content">
+          <Content />
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</BaseLayout>

@@ -1,0 +1,145 @@
+---
+import { url } from '../../utils';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post, index) => {
+    const sorted = [...posts].sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+    const currentIndex = sorted.findIndex(p => p.slug === post.slug);
+    const prev = sorted[currentIndex + 1] ?? null; // post más antiguo (anterior en el tiempo)
+    const next = sorted[currentIndex - 1] ?? null; // post más reciente (siguiente en el tiempo)
+    return {
+      params: { slug: post.slug },
+      props: { post, prev, next },
+    };
+  });
+}
+
+const { post, prev, next } = Astro.props;
+const { Content } = await render(post);
+
+const pageUrl = Astro.url.href;
+const publishedTime = post.data.date.toISOString();
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
+function formatDatetime(date: Date) {
+  return date.toISOString().split('T')[0];
+}
+---
+
+<BaseLayout
+  title={`${post.data.title} | Blog`}
+  description={post.data.description}
+  ogType="article"
+  publishedTime={publishedTime}
+  tags={post.data.tags}
+  canonicalUrl={pageUrl}
+>
+
+<article class="blog-post">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <ol class="breadcrumb__list" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <li class="breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href={url('/')} class="breadcrumb__link" itemprop="item"><span itemprop="name">Inicio</span></a>
+        <meta itemprop="position" content="1">
+      </li>
+      <li class="breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href={url('/blog/')} class="breadcrumb__link" itemprop="item"><span itemprop="name">Blog</span></a>
+        <meta itemprop="position" content="2">
+      </li>
+      <li class="breadcrumb__item breadcrumb__item--current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+        <span itemprop="name">{post.data.title}</span>
+        <meta itemprop="position" content="3">
+      </li>
+    </ol>
+  </nav>
+
+  <header class="blog-post__header">
+    <h1 class="blog-post__title">{post.data.title}</h1>
+    <div class="blog-post__meta">
+      {post.data.date && (
+        <span class="blog-post__meta-item">
+          <time datetime={formatDatetime(post.data.date)}>
+            {formatDate(post.data.date)}
+          </time>
+        </span>
+      )}
+
+      {post.data.author && (
+        <>
+          <span class="blog-post__meta-divider">&middot;</span>
+          <span class="blog-post__meta-item">{post.data.author}</span>
+        </>
+      )}
+    </div>
+  </header>
+
+  <div class="blog-post__content content">
+    <Content />
+  </div>
+
+  <!-- Share -->
+  <footer class="blog-post__share">
+    <div class="blog-post__share-label">Comparte este artículo</div>
+    <div class="share-links">
+      <a
+        class="share-link"
+        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(pageUrl)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Compartir en X"
+      >X / Twitter</a>
+      <a
+        class="share-link"
+        href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Compartir en LinkedIn"
+      >LinkedIn</a>
+      <a
+        class="share-link"
+        href={`mailto:?subject=${encodeURIComponent(post.data.title)}&body=${encodeURIComponent(pageUrl)}`}
+        aria-label="Compartir por correo"
+      >Email</a>
+    </div>
+  </footer>
+
+  <!-- Tags -->
+  {post.data.tags && post.data.tags.length > 0 && (
+    <footer class="blog-post__tags">
+      <div class="blog-post__tags-label">Etiquetas</div>
+      <div class="tags">
+        {post.data.tags.map(tag => (
+          <a href={url(`/tags/${tag}/`)} class="tag">{tag}</a>
+        ))}
+      </div>
+    </footer>
+  )}
+
+  <!-- Prev / Next Navigation -->
+  {(prev || next) && (
+    <nav class="post-nav" aria-label="Navegación entre artículos">
+      {prev && (
+        <a href={url(`/blog/${prev.slug}/`)} class="post-nav__item post-nav__item--prev">
+          <span class="post-nav__label">&larr; Anterior</span>
+          <span class="post-nav__title">{prev.data.title}</span>
+        </a>
+      )}
+
+      {next && (
+        <a href={url(`/blog/${next.slug}/`)} class="post-nav__item post-nav__item--next">
+          <span class="post-nav__label">Siguiente &rarr;</span>
+          <span class="post-nav__title">{next.data.title}</span>
+        </a>
+      )}
+    </nav>
+  )}
+
+</article>
+
+</BaseLayout>

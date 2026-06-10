@@ -21,21 +21,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Zola
-        uses: taiki-e/install-action@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          tool: zola@0.19.2
+          node-version: '20'
+          cache: 'npm'
 
-      # config.toml apunta al dominio definitivo (eraldia.com). Mientras el sitio
-      # se sirva desde GitHub Pages, sobreescribimos la base_url aquí. Cuando el
-      # dominio esté activo, elimina el flag --base-url.
+      - name: Install dependencies
+        run: npm ci
+
+      # astro.config.mjs apunta al dominio definitivo (eraldia.com, base /).
+      # GitHub Pages sirve el repo (renombrado a eraldia-web) en una subcarpeta:
+      # https://sailwave-ai.github.io/eraldia-web/ — por eso el override.
+      # Cuando eraldia.com esté activo en Cloudflare Pages, elimina este env
+      # (o el workflow entero si dejas de usar GitHub Pages).
       - name: Build site
-        run: zola build --base-url "https://sailwave-ai.github.io"
+        env:
+          ASTRO_SITE: "https://sailwave-ai.github.io"
+          ASTRO_BASE: "/eraldia-web"
+        run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./public
+          path: ./dist
 
   deploy:
     needs: build

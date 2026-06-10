@@ -1,0 +1,68 @@
+---
+import { url } from '../../utils';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+
+  const tagMap = new Map<string, typeof posts>();
+  for (const post of posts) {
+    for (const tag of (post.data.tags ?? [])) {
+      if (!tagMap.has(tag)) tagMap.set(tag, []);
+      tagMap.get(tag)!.push(post);
+    }
+  }
+
+  return [...tagMap.entries()].map(([tag, tagPosts]) => ({
+    params: { tag },
+    props: { tag, posts: tagPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()) },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+---
+
+<BaseLayout title={`Etiqueta: ${tag}`} description={`Artículos etiquetados con "${tag}".`}>
+
+<div class="page-header">
+  <div class="container">
+    <h1 class="page-header__title">Etiqueta: <span class="tag" style="font-size: inherit; vertical-align: middle;">{tag}</span></h1>
+    <p class="page-header__desc">{posts.length} {posts.length === 1 ? 'artículo' : 'artículos'}</p>
+  </div>
+</div>
+
+<section class="blog-listing">
+  <div class="container">
+    <div class="blog-grid">
+      {posts.map(post => (
+        <a href={url(`/blog/${post.slug}/`)} class="blog-card">
+          <div class="blog-card__body">
+            <div class="blog-card__meta">
+              {post.data.date && (
+                <span class="blog-card__date">{formatDate(post.data.date)}</span>
+              )}
+            </div>
+            <h2 class="blog-card__title">{post.data.title}</h2>
+            {post.data.description && (
+              <p class="blog-card__desc">{post.data.description}</p>
+            )}
+            {post.data.tags && post.data.tags.length > 0 && (
+              <div class="blog-card__tags">
+                {post.data.tags.map(t => (
+                  <span class="tag">{t}</span>
+                ))}
+              </div>
+            )}
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+</BaseLayout>

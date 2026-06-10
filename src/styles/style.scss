@@ -1,0 +1,15 @@
+// ==========================================================================
+// Eraldia — Main Stylesheet Entry Point
+// ==========================================================================
+// Astro compila este archivo desde src/styles/ via el layout BaseLayout.astro
+// Import order matters: variables first, then reset, then building up.
+
+@import "variables";
+@import "reset";
+@import "typography";
+@import "layout";
+@import "components";
+@import "animations";
+@import "blog";
+@import "services";
+@import "responsive";

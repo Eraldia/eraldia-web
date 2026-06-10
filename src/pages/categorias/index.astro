@@ -1,0 +1,44 @@
+---
+import { url } from '../../utils';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+
+// Collect all unique categories
+const catMap = new Map<string, number>();
+for (const post of posts) {
+  for (const cat of (post.data.categories ?? [])) {
+    catMap.set(cat, (catMap.get(cat) ?? 0) + 1);
+  }
+}
+const categories = [...catMap.entries()].sort((a, b) => a[0].localeCompare(b[0], 'es'));
+---
+
+<BaseLayout title="Categorías" description="Todos los artículos del blog organizados por categoría.">
+
+<div class="page-header">
+  <div class="container">
+    <h1 class="page-header__title">Categorías</h1>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container container--narrow">
+    {categories.length > 0 ? (
+      <div class="tags" style="gap: 0.75rem; flex-wrap: wrap; display: flex;">
+        {categories.map(([cat, count]) => (
+          <a href={url(`/categorias/${cat}/`)} class="tag" style="font-size: 1rem; padding: 0.5rem 1rem;">
+            {cat} <small style="opacity: 0.65;">({count})</small>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="empty-state">
+        <p class="empty-state__text">No hay categorías todavía.</p>
+      </div>
+    )}
+  </div>
+</section>
+
+</BaseLayout>

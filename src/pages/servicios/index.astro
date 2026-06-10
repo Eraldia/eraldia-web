@@ -1,0 +1,51 @@
+---
+import { url } from '../../utils';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const servicios = await getCollection('servicios');
+servicios.sort((a, b) => (a.data.weight ?? 99) - (b.data.weight ?? 99));
+
+const title = 'Servicios';
+const description = 'Tres servicios sencillos que funcionan como una escalera: primero entendemos tu negocio, después automatizamos lo que más te cuesta y, si quieres, te acompañamos mes a mes.';
+---
+
+<BaseLayout title={title} description={description}>
+
+<div class="page-header">
+  <div class="container">
+    <h1 class="page-header__title">Servicios</h1>
+    <p class="page-header__desc">{description}</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="content container--narrow" style="margin-bottom: 3rem;">
+      <p>Trabajo con un modelo claro en tres pasos. Puedes contratar solo el primero y decidir después: cada servicio tiene precio cerrado, plazo definido y entregables concretos. Sin permanencias y sin sorpresas en la factura.</p>
+    </div>
+
+    {servicios.length > 0 ? (
+      <div class="services-grid">
+        {servicios.map(servicio => (
+          <a href={url(`/servicios/${servicio.slug}/`)} class="service-card">
+            {servicio.data.icon && (
+              <div class="service-card__icon" set:html={servicio.data.icon} />
+            )}
+            <h3 class="service-card__title">{servicio.data.title}</h3>
+            {servicio.data.description && (
+              <p class="service-card__desc">{servicio.data.description}</p>
+            )}
+            <span class="service-card__action">Saber más</span>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="empty-state">
+        <p class="empty-state__text">Servicios disponibles muy pronto.</p>
+      </div>
+    )}
+  </div>
+</section>
+
+</BaseLayout>

@@ -1,6 +1,12 @@
 # Publicar eraldia.com — guía paso a paso
 
-La web es un sitio estático (Zola), así que el hosting es gratis o casi. Recomendación: **Cloudflare Pages** (gratis, CDN global, SSL automático y el dominio en el mismo sitio). Hostinger funciona, pero pagarías por algo que aquí es gratis.
+La web es un sitio estático (Astro), así que el hosting es gratis o casi. Recomendación: **Cloudflare Pages** (gratis, CDN global, SSL automático y el dominio en el mismo sitio). Hostinger funciona, pero pagarías por algo que aquí es gratis.
+
+> **Estado actual (provisional):** la web se sirve en GitHub Pages en
+> `https://sailwave-ai.github.io/eraldia-web/` (subcarpeta, porque el repo se
+> renombró a `eraldia-web`). El workflow compila con las variables de entorno
+> `ASTRO_SITE` y `ASTRO_BASE` para que los enlaces y el CSS funcionen en esa
+> subcarpeta. Todo esto desaparece al pasar a Cloudflare Pages con dominio propio.
 
 ## Paso 0 — Comprar el dominio
 
@@ -11,34 +17,33 @@ La web es un sitio estático (Zola), así que el hosting es gratis o casi. Recom
 ## Paso 1 — Desplegar en Cloudflare Pages
 
 1. [dash.cloudflare.com](https://dash.cloudflare.com) → **Workers & Pages → Create → Pages → Connect to Git**.
-2. Autoriza GitHub y elige el repositorio `Sailwave-AI/sailwave-ai.github.io` (puedes renombrarlo a `eraldia` en GitHub Settings; los despliegues siguen funcionando).
+2. Autoriza GitHub y elige el repositorio `Sailwave-AI/eraldia-web`.
 3. Configuración de build:
-   - **Framework preset:** Zola
-   - **Build command:** `zola build`
-   - **Build output directory:** `public`
-   - **Variable de entorno:** `ZOLA_VERSION = 0.19.2`
+   - **Framework preset:** Astro
+   - **Build command:** `npm run build`
+   - **Build output directory:** `dist`
 4. Deploy. Tendrás el sitio en `https://<proyecto>.pages.dev` en un minuto.
 5. **Custom domain:** en el proyecto de Pages → Custom domains → añade `eraldia.com` (y `www.eraldia.com`). Cloudflare crea los DNS y el SSL solo.
-6. Cuando el dominio funcione, edita `.github/workflows/deploy.yml` y quita el flag `--base-url` (o desactiva el workflow de GitHub Pages, ya no hará falta).
+6. Cuando el dominio funcione, edita `.github/workflows/deploy.yml` y elimina el bloque `env` (`ASTRO_SITE`/`ASTRO_BASE`) del paso de build — o borra el workflow entero si dejas de usar GitHub Pages, que es lo razonable una vez estés en Cloudflare.
 
 ## Paso 2 — Correo profesional (gratis)
 
 Cloudflare → tu dominio → **Email → Email Routing**:
 1. Crea la dirección `hola@eraldia.com` → reenvía a `alapontgorka@gmail.com`.
 2. Para **enviar** como `hola@eraldia.com` desde Gmail: Ajustes de Gmail → Cuentas → "Enviar como" (usa los datos SMTP de Gmail con tu cuenta).
-3. Actualiza `contact_email` en `config.toml`.
+3. Actualiza `CONTACT_EMAIL` en `src/consts.ts`.
 
 ## Paso 3 — Formulario de leads (Formspree)
 
 1. Cuenta gratis en [formspree.io](https://formspree.io) (50 envíos/mes de sobra para empezar).
 2. Crea un formulario apuntando a tu correo y copia su ID (p. ej. `xqkrgyzb`).
-3. Pégalo en `config.toml` → `formspree_id = "xqkrgyzb"`.
+3. Pégalo en `src/consts.ts` → `export const FORMSPREE_ID = "xqkrgyzb"`.
 4. Haz commit: el formulario de la portada se activa solo (mientras esté vacío, la web muestra un botón de correo como alternativa).
 5. En Formspree, activa la notificación por email y prueba un envío real.
 
 ## Paso 4 — Analítica (sin cookies, sin banner)
 
-Cloudflare → **Web Analytics** (gratis, sin cookies, no requiere banner RGPD): crea el sitio, copia el snippet JS y pégalo en `templates/base.html` antes de `</head>`. Alternativa de pago: Plausible (9 €/mes).
+Cloudflare → **Web Analytics** (gratis, sin cookies, no requiere banner RGPD): crea el sitio, copia el snippet JS y pégalo en `src/layouts/BaseLayout.astro` antes de `</head>`. Alternativa de pago: Plausible (9 €/mes).
 
 ## Paso 5 — Checklist legal mínimo (España)
 
@@ -49,12 +54,13 @@ Antes de captar leads en serio:
 
 ## Alternativa: Hostinger
 
-Si prefieres Hostinger (ya pagando hosting): compila en local con `zola build` y sube la carpeta `public/` por el File Manager o FTP a `public_html/`. Desventajas: no hay deploy automático desde GitHub y pagas por algo gratuito en Cloudflare. Solo tiene sentido si ya usas Hostinger para otra cosa.
+Si prefieres Hostinger (ya pagando hosting): compila en local con `npm run build` y sube la carpeta `dist/` por el File Manager o FTP a `public_html/`. Desventajas: no hay deploy automático desde GitHub y pagas por algo gratuito en Cloudflare. Solo tiene sentido si ya usas Hostinger para otra cosa.
 
 ## Desarrollo en local
 
 ```bash
-# Instalar Zola: https://www.getzola.org/documentation/getting-started/installation/
-zola serve   # servidor local con recarga en vivo
-zola build   # genera ./public
+npm install       # instalar dependencias
+npm run dev       # servidor local con recarga en vivo (http://localhost:4321)
+npm run build     # genera ./dist
+npm run preview   # previsualizar el build local
 ```
