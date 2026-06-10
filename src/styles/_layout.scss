@@ -133,24 +133,7 @@
   backdrop-filter: blur(14px);
 }
 
-.header--on-hero {
-  border-bottom-color: rgba($color-white, 0.12);
-  position: relative;
-}
-
-.header--on-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba($color-dark, 0.75) 0%,
-    rgba($color-dark, 0.25) 60%,
-    rgba($color-dark, 0) 100%
-  );
-  z-index: 0;
-}
-
+.header--on-hero,
 .header--light {
   border-bottom-color: rgba($color-white, 0.12);
   background: linear-gradient(
