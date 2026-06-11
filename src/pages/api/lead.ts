@@ -6,6 +6,7 @@ export const prerender = false;
 
 const FIELDS = [
   'source',
+  'fuente',
   'nombre',
   'email',
   'negocio',
@@ -66,25 +67,33 @@ export const POST: APIRoute = async ({ request, locals }) => {
     return reply(wantsJson, 500, { ok: false, error: 'Almacenamiento no disponible.' });
   }
 
+  // La tabla `leads` exige nombre/email/mensaje NOT NULL. El diagnóstico no
+  // envía `mensaje`, así que lo componemos a partir de la recomendación.
+  const recomendacion = clean(data.recomendacion);
+  const mensaje = clean(data.mensaje) ?? recomendacion ?? '(sin mensaje)';
+  const fuente = clean(data.source) ?? clean(data.fuente) ?? 'contacto';
+  const ip = clean(request.headers.get('cf-connecting-ip'));
+
   try {
     await db
       .prepare(
         `INSERT INTO leads
-           (source, nombre, email, negocio, mensaje, sector, proceso, horas, metodo, recomendacion, user_agent)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+           (nombre, email, negocio, mensaje, fuente, user_agent, ip, sector, proceso, horas, metodo, recomendacion)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       )
       .bind(
-        clean(data.source) ?? 'contacto',
-        clean(data.nombre),
+        clean(data.nombre) ?? '',
         email,
         clean(data.negocio),
-        clean(data.mensaje),
+        mensaje,
+        fuente,
+        clean(request.headers.get('user-agent')),
+        ip,
         clean(data.sector),
         clean(data.proceso),
         clean(data.horas),
         clean(data.metodo),
-        clean(data.recomendacion),
-        clean(request.headers.get('user-agent')),
+        recomendacion,
       )
       .run();
   } catch (err) {

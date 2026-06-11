@@ -1,23 +1,20 @@
--- Tabla de leads de Eraldia.
--- Recoge tanto los envíos del formulario de contacto como los del
--- diagnóstico exprés. Los campos del diagnóstico quedan NULL en los
--- envíos de contacto y viceversa.
+-- Tabla base de leads de Eraldia (esquema canónico, ya existente en producción).
+-- Recoge los envíos del formulario de contacto. El diagnóstico exprés añade
+-- columnas extra en la migración 0002.
+-- En producción la tabla ya existe; este CREATE ... IF NOT EXISTS solo actúa en
+-- bases nuevas (local/preview) para que el esquema coincida con el de producción.
 
 CREATE TABLE IF NOT EXISTS leads (
-  id            INTEGER PRIMARY KEY AUTOINCREMENT,
-  created_at    TEXT NOT NULL DEFAULT (datetime('now')),
-  source        TEXT NOT NULL,            -- 'contacto' | 'diagnostico'
-  nombre        TEXT,
-  email         TEXT,
-  negocio       TEXT,                     -- contacto: a qué se dedica
-  mensaje       TEXT,                     -- contacto: qué le quita tiempo
-  sector        TEXT,                     -- diagnóstico
-  proceso       TEXT,                     -- diagnóstico
-  horas         TEXT,                     -- diagnóstico
-  metodo        TEXT,                     -- diagnóstico
-  recomendacion TEXT,                     -- diagnóstico
-  user_agent    TEXT
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  nombre      TEXT NOT NULL,
+  email       TEXT NOT NULL,
+  negocio     TEXT,
+  mensaje     TEXT NOT NULL,
+  fuente      TEXT,                       -- 'contacto' | 'diagnostico'
+  user_agent  TEXT,
+  ip          TEXT,
+  created_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
 CREATE INDEX IF NOT EXISTS idx_leads_created_at ON leads (created_at);
-CREATE INDEX IF NOT EXISTS idx_leads_source ON leads (source);
+CREATE INDEX IF NOT EXISTS idx_leads_fuente ON leads (fuente);
