@@ -1,0 +1,8 @@
+# Variables/secretos del Worker para desarrollo local con `wrangler dev`.
+# Copia este fichero a `.dev.vars` (ignorado por git) y rellena los valores.
+# En producción NO se usa este fichero: el secreto se sube con
+#   npx wrangler secret put RESEND_API_KEY
+
+# Clave de API de Resend (https://resend.com/api-keys). Sin ella, el lead se
+# guarda igual pero no se envía el aviso por email.
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxx

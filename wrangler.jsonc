@@ -14,6 +14,11 @@
     "binding": "ASSETS",
     "directory": "dist"
   },
+  // El aviso de leads por email usa Resend. La clave NO va aquí (es un secreto):
+  //   npx wrangler secret put RESEND_API_KEY
+  // En local, ponla en .dev.vars (ver .dev.vars.example). El remitente está en
+  // src/consts.ts (LEAD_NOTIFY_FROM) y debe ser un dominio verificado en Resend.
+  //
   // Base de datos D1 para guardar los leads del formulario de contacto y del
   // diagnóstico exprés. Crea la base con `npx wrangler d1 create eraldia-leads`
   // y pega aquí el `database_id` que devuelve. Aplica el esquema con
