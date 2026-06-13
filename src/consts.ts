@@ -15,6 +15,6 @@ export const CONTACT_EMAIL = 'hola@eraldia.com';
 // Remitente de los avisos de leads (formulario de contacto y diagnóstico exprés).
 // Debe ser una dirección de un dominio verificado en Resend; mientras eraldia.com
 // no esté verificado, usar el remitente de pruebas 'onboarding@resend.dev'.
-export const LEAD_NOTIFY_FROM = 'Eraldia web <web@eraldia.com>';
+export const LEAD_NOTIFY_FROM = 'Eraldia <hola@eraldia.com>';
 
 export const LINKEDIN_URL = '';
