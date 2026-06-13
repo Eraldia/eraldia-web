@@ -8,12 +8,13 @@ export const SITE_DESCRIPTION =
 export const TAGLINE = 'Pon tu pyme al día con la IA';
 export const AUTHOR = 'Gorka Alapont';
 
-// TODO: cambiar por hola@eraldia.com cuando el dominio y el reenvío de correo estén activos
-export const CONTACT_EMAIL = 'alapontgorka@gmail.com';
+// Correo del dominio (Proton). Es el email público (footer, contacto) y el
+// destino de los avisos de leads que envía /api/lead.
+export const CONTACT_EMAIL = 'hola@eraldia.com';
 
 // Remitente de los avisos de leads (formulario de contacto y diagnóstico exprés).
 // Debe ser una dirección de un dominio verificado en Resend; mientras eraldia.com
 // no esté verificado, usar el remitente de pruebas 'onboarding@resend.dev'.
-export const LEAD_NOTIFY_FROM = 'Eraldia web <web@eraldia.com>';
+export const LEAD_NOTIFY_FROM = 'Eraldia <hola@eraldia.com>';
 
 export const LINKEDIN_URL = '';
