@@ -195,7 +195,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, TAGLINE, CONTACT_EMAIL } from '../consts'
       </p>
     </div>
 
-    <form class="contact-form reveal" id="contact-form" action={url('/api/lead')} method="POST" data-email={CONTACT_EMAIL}>
+    <form class="contact-form reveal" id="contact-form" action={url('/api/lead/')} method="POST" data-email={CONTACT_EMAIL}>
       <input type="hidden" name="source" value="contacto">
       <div class="contact-form__row">
         <div class="contact-form__field">
