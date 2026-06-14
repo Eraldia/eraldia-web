@@ -34,11 +34,44 @@ const ogImageUrl = new URL(ogImage ?? url('/images/og-image.svg'), Astro.url).hr
 const pathname = Astro.url.pathname;
 const currentPath = BASE && pathname.startsWith(BASE) ? pathname.slice(BASE.length) : pathname;
 const isServiciosActive = currentPath.startsWith('/servicios');
-const isCasosActive = currentPath.startsWith('/casos');
 const isSobreMiActive = currentPath.startsWith('/sobre-mi');
 const isBlogActive = currentPath.startsWith('/blog');
 const isDiagnosticoActive = currentPath.startsWith('/diagnostico-express');
-const isPlaybookActive = currentPath.startsWith('/playbook');
+const isAsesoriasActive = currentPath.startsWith('/ia-para-asesorias');
+const isAbogadosActive = currentPath.startsWith('/ia-para-abogados');
+
+// JSON-LD global: identifica la entidad Eraldia (servicio profesional enfocado a
+// asesorías y despachos) y a Gorka como persona, para SEO/GEO. Una sola vez.
+const siteUrl = new URL(url('/'), Astro.url).href;
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'ProfessionalService',
+      '@id': `${siteUrl}#eraldia`,
+      name: SITE_TITLE,
+      description:
+        'Consultoría de IA y automatización para asesorías, gestorías y despachos de abogados. Precio cerrado, resultados medibles y sin humo.',
+      url: siteUrl,
+      email: CONTACT_EMAIL,
+      areaServed: [{ '@type': 'Country', name: 'España' }],
+      serviceType: [
+        'Automatización con IA para asesorías y gestorías',
+        'Automatización con IA para despachos de abogados',
+      ],
+      founder: { '@id': `${siteUrl}#gorka` },
+      ...(LINKEDIN_URL ? { sameAs: [LINKEDIN_URL] } : {}),
+    },
+    {
+      '@type': 'Person',
+      '@id': `${siteUrl}#gorka`,
+      name: AUTHOR,
+      jobTitle: 'Consultor de IA para pymes',
+      worksFor: { '@id': `${siteUrl}#eraldia` },
+      ...(LINKEDIN_URL ? { sameAs: [LINKEDIN_URL] } : {}),
+    },
+  ],
+};
 
 const currentYear = new Date().getFullYear();
 ---
@@ -66,6 +99,9 @@ const currentYear = new Date().getFullYear();
 
   {/* Canonical URL */}
   <link rel="canonical" href={canonical}>
+
+  {/* JSON-LD global: entidad Eraldia + autor (SEO/GEO) */}
+  <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
 
   {/* Favicon */}
   <link rel="icon" href={url('/images/favicon.svg')} type="image/svg+xml">
@@ -105,10 +141,10 @@ const currentYear = new Date().getFullYear();
 
         <nav class="header__nav" aria-label="Navegación principal">
           <a href={url('/servicios/')} class={`header__nav-link${isServiciosActive ? ' header__nav-link--active' : ''}`}>Servicios</a>
-          <a href={url('/casos/')} class={`header__nav-link${isCasosActive ? ' header__nav-link--active' : ''}`}>Casos de uso</a>
+          <a href={url('/ia-para-asesorias/')} class={`header__nav-link${isAsesoriasActive ? ' header__nav-link--active' : ''}`}>Asesorías</a>
+          <a href={url('/ia-para-abogados/')} class={`header__nav-link${isAbogadosActive ? ' header__nav-link--active' : ''}`}>Abogados</a>
           <a href={url('/sobre-mi/')} class={`header__nav-link${isSobreMiActive ? ' header__nav-link--active' : ''}`}>Sobre mí</a>
           <a href={url('/blog/')} class={`header__nav-link${isBlogActive ? ' header__nav-link--active' : ''}`}>Blog</a>
-          <a href={url('/playbook/')} class={`header__nav-link${isPlaybookActive ? ' header__nav-link--active' : ''}`}>Playbook</a>
           <a href={url('/diagnostico-express/')} class={`header__nav-link${isDiagnosticoActive ? ' header__nav-link--active' : ''}`}>Diagnóstico exprés</a>
           <a href={url('/#contacto')} class="header__nav-link">Contacto</a>
         </nav>
@@ -148,11 +184,11 @@ const currentYear = new Date().getFullYear();
             <div class="footer__nav-group">
               <div class="footer__nav-title">Sectores</div>
               <ul class="footer__nav-list">
-                <li><a href={url('/casos/gestorias/')} class="footer__nav-link">Gestorías y asesorías</a></li>
+                <li><a href={url('/ia-para-asesorias/')} class="footer__nav-link">Asesorías y gestorías</a></li>
+                <li><a href={url('/ia-para-abogados/')} class="footer__nav-link">Despachos de abogados</a></li>
                 <li><a href={url('/casos/clinicas/')} class="footer__nav-link">Clínicas y centros de salud</a></li>
                 <li><a href={url('/casos/gimnasios/')} class="footer__nav-link">Gimnasios y centros deportivos</a></li>
                 <li><a href={url('/casos/inmobiliarias/')} class="footer__nav-link">Inmobiliarias</a></li>
-                <li><a href={url('/casos/abogados/')} class="footer__nav-link">Despachos de abogados</a></li>
               </ul>
             </div>
 

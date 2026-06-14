@@ -21,19 +21,19 @@ import { SITE_TITLE, SITE_DESCRIPTION, TAGLINE, CONTACT_EMAIL } from '../consts'
     <span class="hero__grid"></span>
   </div>
   <div class="container hero__inner">
-    <span class="hero__badge">Transformación digital e IA para pymes</span>
+    <span class="hero__badge">IA para asesorías y despachos</span>
     <h1 class="hero__title">
-      {TAGLINE}
+      Pon tu asesoría o despacho al día con la IA
     </h1>
     <p class="hero__subtitle">
-      Detecto qué procesos de tu negocio se pueden automatizar, los implanto en semanas y te acompaño para que funcionen de verdad. Precio cerrado, resultados medibles y cero jerga.
+      Te quito el trabajo repetitivo —facturas, plazos, consultas y expedientes— y te doy capacidad para atender a más clientes sin contratar. Precio cerrado, resultados medibles y cero humo.
     </p>
     <div class="hero__actions">
       <a href="#contacto" class="btn btn--primary btn--lg">Pide tu diagnóstico gratuito</a>
       <a href={url('/diagnostico-express/')} class="btn btn--outline btn--lg">Diagnóstico exprés (1 min)</a>
     </div>
     <p class="hero__actions-note">
-      ¿Prefieres una pista al instante? Responde 4 preguntas y te digo qué automatizar primero. O lee gratis el <a href={url('/playbook/')}>playbook de IA agéntica para pymes</a>.
+      Mira cómo trabajo con <a href={url('/ia-para-asesorias/')}>asesorías y gestorías</a> o con <a href={url('/ia-para-abogados/')}>despachos de abogados</a>. ¿Otro tipo de pyme? También — <a href={url('/casos/')}>cuéntame tu caso</a>. O lee gratis el <a href={url('/playbook/')}>playbook de IA</a>.
     </p>
     <div class="hero__stats">
       <div class="hero__stat">
@@ -63,8 +63,76 @@ import { SITE_TITLE, SITE_DESCRIPTION, TAGLINE, CONTACT_EMAIL } from '../consts'
     <div class="section__header reveal">
       <h2 class="section__title">La IA no es el problema. El humo, sí.</h2>
       <p class="section__subtitle">
-        Cada semana te ofrecen una herramienta que "lo cambia todo" y, mientras tanto, en tu negocio se siguen picando facturas a mano, los presupuestos tardan días y el correo no da tregua. No necesitas más promesas: necesitas saber qué automatizar, cuánto cuesta y qué ahorra. Eso es lo que hago.
+        Cada semana te ofrecen una herramienta que "lo cambia todo" y, mientras tanto, en tu despacho se siguen picando facturas a mano, persiguiendo documentación a los clientes, vigilando plazos y respondiendo las mismas consultas una y otra vez. No necesitas otra suscripción: necesitas saber qué automatizar, cuánto cuesta y cuántas horas te devuelve. Eso es lo que hago.
       </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- Vertical focus — asesorías y despachos                             -->
+<!-- ================================================================ -->
+<section class="section section--alt">
+  <div class="container">
+    <div class="section__header">
+      <h2 class="section__title">Pensado para asesorías y despachos</h2>
+      <p class="section__subtitle">
+        Dos focos, el mismo método. Elige el tuyo y mira las automatizaciones concretas y lo que cuestan.
+      </p>
+    </div>
+
+    <div class="grid grid--2 reveal-stagger">
+      <a href={url('/ia-para-asesorias/')} class="service-card reveal">
+        <div class="service-card__icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/>
+          </svg>
+        </div>
+        <h3 class="service-card__title">IA para asesorías y gestorías</h3>
+        <p class="service-card__desc">
+          Picado de facturas y nóminas, recordatorios de plazos a clientes, respuestas a las consultas de siempre y onboarding sin caos. Llega a la campaña de renta y a cada cierre con margen.
+        </p>
+        <span class="service-card__action">Ver automatizaciones y precios</span>
+      </a>
+
+      <a href={url('/ia-para-abogados/')} class="service-card reveal">
+        <div class="service-card__icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>
+          </svg>
+        </div>
+        <h3 class="service-card__title">IA para despachos de abogados</h3>
+        <p class="service-card__desc">
+          Resumen y búsqueda en expedientes, control de plazos procesales, intake de clientes y respuestas iniciales —siempre bajo tu supervisión y con el secreto profesional por delante.
+        </p>
+        <span class="service-card__action">Ver automatizaciones y precios</span>
+      </a>
+    </div>
+
+    <div class="section__header" style="margin-top: 4rem; margin-bottom: 2rem;">
+      <h2 class="section__title">No es solo ahorrar horas: es crecer</h2>
+      <p class="section__subtitle">
+        Las horas que recuperas no se evaporan: se convierten en capacidad para atender mejor y a más clientes.
+      </p>
+    </div>
+
+    <div class="grid grid--3 reveal-stagger">
+      <div class="card reveal">
+        <h3 class="card__title">Más capacidad sin contratar</h3>
+        <p class="card__desc">Atiende más clientes y expedientes con el mismo equipo. La automatización absorbe los picos —renta, cierres, vencimientos— sin sumar nóminas.</p>
+      </div>
+      <div class="card reveal">
+        <h3 class="card__title">Clientes que se quedan</h3>
+        <p class="card__desc">Respuestas rápidas, plazos cumplidos y avisos proactivos. El cliente nota el servicio, y eso es lo que retiene y trae referidos.</p>
+      </div>
+      <div class="card reveal">
+        <h3 class="card__title">Tiempo para lo que de verdad vale</h3>
+        <p class="card__desc">Menos horas administrativas que no se facturan, más horas para el asesoramiento y la captación que mueven el negocio.</p>
+      </div>
+    </div>
+
+    <div class="pb-pullquote" style="margin-top: 3rem; text-align: center;">
+      Una asesoría al día con la IA no trabaja más horas: atiende a más clientes con las mismas.
     </div>
   </div>
 </section>
@@ -72,7 +140,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, TAGLINE, CONTACT_EMAIL } from '../consts'
 <!-- ================================================================ -->
 <!-- Service Pillars                                                    -->
 <!-- ================================================================ -->
-<section class="section section--alt">
+<section class="section">
   <div class="container">
     <div class="section__header">
       <h2 class="section__title">Tres servicios, una escalera</h2>

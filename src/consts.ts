@@ -4,7 +4,7 @@
 
 export const SITE_TITLE = 'Eraldia';
 export const SITE_DESCRIPTION =
-  'Consultoría de transformación digital e inteligencia artificial para pymes. Automatizaciones con precio cerrado, resultados medibles y sin humo.';
+  'Consultoría de IA y automatización para asesorías, gestorías y despachos de abogados. Menos trabajo repetitivo —facturas, plazos, consultas, expedientes— y más capacidad para crecer sin contratar. Precio cerrado y sin humo.';
 export const TAGLINE = 'Pon tu pyme al día con la IA';
 export const AUTHOR = 'Gorka Alapont';
 
