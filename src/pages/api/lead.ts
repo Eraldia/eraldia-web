@@ -157,9 +157,14 @@ function escapeHtml(value: string): string {
 
 // Envía el aviso de un nuevo lead a Gorka vía la API de Resend.
 async function notifyByEmail(apiKey: string, lead: Lead): Promise<void> {
-  const esDiagnostico = lead.source === 'diagnostico';
+  const ORIGENES: Record<string, string> = {
+    diagnostico: 'diagnóstico exprés',
+    playbook: 'playbook IA',
+    contacto: 'contacto',
+  };
+  const origen = ORIGENES[lead.source ?? 'contacto'] ?? 'contacto';
   const quien = lead.nombre || lead.email || 'sin nombre';
-  const subject = `Nuevo lead${esDiagnostico ? ' (diagnóstico exprés)' : ' (contacto)'}: ${quien}`;
+  const subject = `Nuevo lead (${origen}): ${quien}`;
 
   const rows = FIELDS.filter((f) => lead[f])
     .map(

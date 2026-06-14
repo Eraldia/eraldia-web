@@ -38,6 +38,7 @@ const isCasosActive = currentPath.startsWith('/casos');
 const isSobreMiActive = currentPath.startsWith('/sobre-mi');
 const isBlogActive = currentPath.startsWith('/blog');
 const isDiagnosticoActive = currentPath.startsWith('/diagnostico-express');
+const isPlaybookActive = currentPath.startsWith('/playbook');
 
 const currentYear = new Date().getFullYear();
 ---
@@ -107,6 +108,7 @@ const currentYear = new Date().getFullYear();
           <a href={url('/casos/')} class={`header__nav-link${isCasosActive ? ' header__nav-link--active' : ''}`}>Casos de uso</a>
           <a href={url('/sobre-mi/')} class={`header__nav-link${isSobreMiActive ? ' header__nav-link--active' : ''}`}>Sobre mí</a>
           <a href={url('/blog/')} class={`header__nav-link${isBlogActive ? ' header__nav-link--active' : ''}`}>Blog</a>
+          <a href={url('/playbook/')} class={`header__nav-link${isPlaybookActive ? ' header__nav-link--active' : ''}`}>Playbook</a>
           <a href={url('/diagnostico-express/')} class={`header__nav-link${isDiagnosticoActive ? ' header__nav-link--active' : ''}`}>Diagnóstico exprés</a>
           <a href={url('/#contacto')} class="header__nav-link">Contacto</a>
         </nav>
@@ -159,6 +161,7 @@ const currentYear = new Date().getFullYear();
               <ul class="footer__nav-list">
                 <li><a href={url('/sobre-mi/')} class="footer__nav-link">Sobre mí</a></li>
                 <li><a href={url('/casos/')} class="footer__nav-link">Casos de uso</a></li>
+                <li><a href={url('/playbook/')} class="footer__nav-link">Playbook de IA</a></li>
                 <li><a href={url('/diagnostico-express/')} class="footer__nav-link">Diagnóstico exprés</a></li>
                 <li><a href={url('/blog/')} class="footer__nav-link">Blog</a></li>
               </ul>

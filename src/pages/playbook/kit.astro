@@ -1,0 +1,151 @@
+---
+import { url } from '../../utils';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = 'Kit práctico de IA agéntica para pymes';
+const description =
+  'Checklist y plantillas para poner tu primer agente de IA a trabajar: brief de alcance, criterios de éxito y barreras de supervisión. Imprímelo o guárdalo como PDF.';
+
+// Checklist: ¿está mi proceso listo para un agente?
+const checklist = [
+  'La tarea se repite muchas veces (a la semana o al día), no es algo puntual.',
+  'Puedo contar cuántas horas cuesta hoy y quién la hace.',
+  'Sé describir con ejemplos cómo es un resultado «bien hecho».',
+  'Los datos que necesita están en un sitio al que puedo dar acceso (correo, hoja, CRM…).',
+  'Si el agente se equivoca, el error se puede detectar y corregir sin daño grave.',
+  'Hay una persona que puede revisar los primeros casos y los dudosos.',
+  'Las cuentas y herramientas pueden ir a nombre de mi empresa.',
+  'No estoy metiendo datos personales sensibles sin contrato de tratamiento (RGPD).',
+];
+
+// Plantilla 1 — Brief de la automatización (acotar el alcance)
+const brief = [
+  ['Proceso que quiero delegar', 'En una frase: «cuando pasa X, hay que hacer Y».'],
+  ['Quién lo hace hoy y cuánto cuesta', 'Persona + horas a la semana + coste por hora.'],
+  ['Disparador', '¿Qué inicia la tarea? (un email, un formulario, una hora del día…)'],
+  ['Pasos actuales', 'Lista de los pasos tal cual se hacen ahora, en orden.'],
+  ['Datos y herramientas que necesita', 'Solo los imprescindibles. Marca cuáles llevan datos personales.'],
+  ['Qué NO debe hacer nunca', 'Acciones prohibidas y casos en los que debe parar y preguntar.'],
+  ['Resultado esperado', 'Cómo queda la tarea cuando está «bien hecha».'],
+];
+
+// Plantilla 2 — Criterios de éxito y medición
+const criterios = [
+  ['Métrica principal', 'Lo que de verdad importa: horas ahorradas, tiempo de respuesta, errores…'],
+  ['Valor de partida (antes)', 'El dato de hoy, medido. Sin esto no hay comparación.'],
+  ['Objetivo (después)', 'A dónde quiero llegar y para cuándo.'],
+  ['Qué es «bien hecho»', '3-4 ejemplos reales de resultados correctos.'],
+  ['Qué es «mal hecho»', '2-3 ejemplos de errores que no se pueden permitir.'],
+  ['Cómo y cada cuánto reviso', 'Muestra de casos a revisar y frecuencia (p. ej. 10 al día la primera semana).'],
+];
+
+// Plantilla 3 — Barreras y supervisión
+const barreras = [
+  ['Acciones que el agente decide solo', 'Lo de bajo riesgo: clasificar, redactar borradores, mover datos.'],
+  ['Acciones que requieren aprobación humana', 'Lo de consecuencias: enviar, cobrar, borrar, comprometer una fecha.'],
+  ['Tope de gasto', 'Límite de coste por uso o por día, y aviso al acercarse.'],
+  ['Qué pasa cuando duda', 'A quién avisa y cómo retoma una persona.'],
+  ['Registro', 'Dónde queda guardado qué hizo el agente y con qué datos.'],
+  ['Plan de marcha atrás', 'Cómo se desactiva y se vuelve al método manual si hace falta.'],
+];
+---
+
+<BaseLayout title={title} description={description}>
+
+<section class="pb-hero">
+  <div class="pb-hero__inner">
+    <span class="hero__badge">Kit práctico · 2026</span>
+    <h1 class="pb-hero__title">Kit práctico de IA agéntica</h1>
+    <p class="pb-hero__subtitle">
+      La checklist y las plantillas para acotar y medir tu primer agente. Acompaña al
+      <a href={url('/playbook/')} style="color:#fff;text-decoration:underline;">Playbook de IA agéntica para pymes</a>.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container container--narrow">
+    <div class="kit">
+
+      <div class="kit__toolbar">
+        <a href={url('/playbook/')} class="btn btn--outline btn--sm">← Volver al playbook</a>
+        <button type="button" class="btn btn--primary btn--sm" id="kit-print">Imprimir o guardar como PDF</button>
+      </div>
+
+      <!-- Checklist -->
+      <div class="kit__block">
+        <h2 class="kit__block-title">Checklist: ¿está mi proceso listo para un agente?</h2>
+        <p class="kit__block-desc">Marca cada casilla. Si fallan dos o más, mejor empezar por otro proceso (o por un diagnóstico).</p>
+        <ul class="kit__check">
+          {checklist.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+
+      <!-- Plantilla 1 -->
+      <div class="kit__block">
+        <h2 class="kit__block-title">Plantilla 1 · Brief de la automatización</h2>
+        <p class="kit__block-desc">Rellénalo antes de pedir presupuesto a nadie. Acota el alcance y te ahorra el «lo vamos viendo».</p>
+        <div class="kit__template">
+          {brief.map(([label, hint]) => (
+            <div class="kit__row">
+              <span class="kit__row-label">{label}</span>
+              <span class="kit__row-hint">{hint}</span>
+              <span class="kit__row-blank"></span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Plantilla 2 -->
+      <div class="kit__block">
+        <h2 class="kit__block-title">Plantilla 2 · Criterios de éxito y medición</h2>
+        <p class="kit__block-desc">Sin medir el antes no podrás demostrar el después. Define qué es ganar.</p>
+        <div class="kit__template">
+          {criterios.map(([label, hint]) => (
+            <div class="kit__row">
+              <span class="kit__row-label">{label}</span>
+              <span class="kit__row-hint">{hint}</span>
+              <span class="kit__row-blank"></span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Plantilla 3 -->
+      <div class="kit__block">
+        <h2 class="kit__block-title">Plantilla 3 · Barreras y supervisión</h2>
+        <p class="kit__block-desc">Lo que separa un agente útil de una sorpresa: define qué decide solo y dónde para.</p>
+        <div class="kit__template">
+          {barreras.map(([label, hint]) => (
+            <div class="kit__row">
+              <span class="kit__row-label">{label}</span>
+              <span class="kit__row-hint">{hint}</span>
+              <span class="kit__row-blank"></span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta cta--inline kit__cta" aria-label="Pide tu diagnóstico gratuito">
+        <div class="cta__inner">
+          <h2 class="cta__title">¿Lo rellenamos juntos?</h2>
+          <p class="cta__desc">
+            Si prefieres no hacerlo en frío, en 30 minutos gratis repasamos tu proceso y te digo qué automatizar primero.
+          </p>
+          <a href={url('/#contacto')} class="btn btn--outline-white btn--lg">Reservar mi llamada gratuita</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+(function () {
+  var btn = document.getElementById('kit-print');
+  if (btn) btn.addEventListener('click', function () { window.print(); });
+})();
+</script>
+
+</BaseLayout>

@@ -1,0 +1,607 @@
+// ==========================================================================
+// Playbook — guía abierta de IA agéntica para pymes + kit descargable
+// ==========================================================================
+// Página pública e indexable (autoridad/GEO) con captación de email a cambio
+// del kit práctico. El kit vive en /playbook/kit/ y está optimizado para
+// imprimir o guardar como PDF.
+
+// --------------------------------------------------------------------------
+// Cabecera
+// --------------------------------------------------------------------------
+.pb-hero {
+  position: relative;
+  overflow: hidden;
+  padding: $space-10 0 $space-8;
+  background: linear-gradient(135deg, $color-dark, darken($color-dark, 4%));
+  color: $color-white;
+  text-align: center;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -40%;
+    background: radial-gradient(
+      circle,
+      rgba($color-accent, 0.22) 0%,
+      rgba($color-primary, 0.08) 35%,
+      transparent 60%
+    );
+    pointer-events: none;
+  }
+}
+
+.pb-hero__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 $space-5;
+}
+
+.pb-hero__title {
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-weight: $font-weight-extrabold;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin: $space-5 0 $space-4;
+  color: $color-white;
+}
+
+.pb-hero__subtitle {
+  font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+  color: rgba($color-white, 0.85);
+  line-height: $line-height-base;
+  margin: 0 auto $space-6;
+  max-width: 620px;
+}
+
+.pb-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2 $space-4;
+  margin-bottom: $space-6;
+  font-size: $font-size-sm;
+  color: rgba($color-white, 0.65);
+
+  a {
+    color: rgba($color-white, 0.92);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    &:hover { color: $color-accent-bright; }
+  }
+}
+
+// --------------------------------------------------------------------------
+// Respuesta directa (GEO) — recuadro de definición citable
+// --------------------------------------------------------------------------
+.pb-answer {
+  background: $color-white;
+  border: 1px solid $color-border;
+  border-left: 4px solid $color-primary;
+  border-radius: $border-radius-lg;
+  padding: $space-6;
+  box-shadow: $shadow-sm;
+
+  p { margin-bottom: $space-4; &:last-child { margin-bottom: 0; } }
+
+  strong { color: $color-dark; }
+}
+
+.pb-answer__label {
+  display: block;
+  font-family: $font-code;
+  font-size: $font-size-xs;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $color-primary;
+  margin-bottom: $space-3;
+}
+
+// --------------------------------------------------------------------------
+// Índice (tabla de contenidos)
+// --------------------------------------------------------------------------
+.pb-toc {
+  background: $color-bg-alt;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-lg;
+  padding: $space-6;
+}
+
+.pb-toc__title {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: $color-muted;
+  margin: 0 0 $space-4;
+}
+
+.pb-toc__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: $space-2;
+  counter-reset: pb-toc;
+
+  @media (min-width: $bp-md) {
+    grid-template-columns: 1fr 1fr;
+    gap: $space-2 $space-6;
+  }
+}
+
+.pb-toc__list li { counter-increment: pb-toc; }
+
+.pb-toc__list a {
+  display: flex;
+  gap: $space-3;
+  padding: $space-2 0;
+  font-weight: $font-weight-medium;
+  color: $color-text;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+
+  &::before {
+    content: counter(pb-toc, decimal-leading-zero);
+    font-family: $font-code;
+    font-size: $font-size-xs;
+    color: $color-primary;
+    padding-top: 0.2em;
+  }
+
+  &:hover { color: $color-primary; border-bottom-color: rgba($color-primary, 0.3); }
+}
+
+// --------------------------------------------------------------------------
+// Cuerpo de la guía (prosa)
+// --------------------------------------------------------------------------
+.pb-prose {
+  font-size: $font-size-lg;
+  line-height: 1.75;
+  color: $color-text;
+
+  > h2 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    line-height: $line-height-tight;
+    color: $color-dark;
+    margin: $space-9 0 $space-4;
+    scroll-margin-top: $space-9;
+  }
+
+  > h2 .pb-prose__num {
+    display: block;
+    font-family: $font-code;
+    font-size: $font-size-sm;
+    font-style: normal;
+    letter-spacing: 0.04em;
+    color: $color-primary;
+    margin-bottom: $space-1;
+  }
+
+  h3 {
+    font-size: $font-size-xl;
+    color: $color-dark;
+    margin: $space-7 0 $space-3;
+  }
+
+  p { margin-bottom: $space-5; }
+
+  a {
+    color: $color-primary;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    &:hover { color: $color-primary-dark; }
+  }
+
+  ul, ol { margin: 0 0 $space-5 $space-5; }
+  li { margin-bottom: $space-2; }
+
+  strong { color: $color-dark; }
+
+  blockquote {
+    margin: $space-6 0;
+    padding: $space-4 $space-5;
+    border-left: 4px solid $color-accent;
+    background: $color-bg-alt;
+    border-radius: $border-radius;
+    font-family: $font-heading;
+    font-style: italic;
+    font-size: $font-size-xl;
+    line-height: $line-height-tight;
+    color: $color-dark;
+  }
+}
+
+// Frase citable destacada (GEO)
+.pb-pullquote {
+  margin: $space-7 0;
+  padding: $space-5 $space-6;
+  border-radius: $border-radius-lg;
+  background: linear-gradient(135deg, rgba($color-primary, 0.06), rgba($color-accent, 0.06));
+  border: 1px solid $color-border;
+  font-family: $font-heading;
+  font-style: italic;
+  font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+  line-height: $line-height-tight;
+  color: $color-dark;
+}
+
+// --------------------------------------------------------------------------
+// Tabla de decisión / comparativas
+// --------------------------------------------------------------------------
+.pb-table-wrap {
+  margin: $space-6 0;
+  overflow-x: auto;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-lg;
+}
+
+.pb-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: $font-size-base;
+  background: $color-white;
+
+  th, td {
+    padding: $space-3 $space-4;
+    text-align: left;
+    border-bottom: 1px solid $color-border;
+    vertical-align: top;
+  }
+
+  thead th {
+    font-size: $font-size-sm;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: $color-muted;
+    background: $color-bg-alt;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  td:first-child { font-weight: $font-weight-semibold; color: $color-dark; }
+}
+
+// --------------------------------------------------------------------------
+// Buenas prácticas (lista numerada en tarjetas)
+// --------------------------------------------------------------------------
+.pb-practices {
+  list-style: none;
+  margin: $space-6 0;
+  padding: 0;
+  counter-reset: pb-practice;
+  display: grid;
+  gap: $space-4;
+
+  @media (min-width: $bp-md) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.pb-practice {
+  counter-increment: pb-practice;
+  position: relative;
+  background: $color-white;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-lg;
+  padding: $space-5 $space-5 $space-5 $space-9;
+
+  &::before {
+    content: counter(pb-practice);
+    position: absolute;
+    left: $space-4;
+    top: $space-5;
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: $border-radius-full;
+    background: rgba($color-primary, 0.1);
+    color: $color-primary;
+    font-family: $font-code;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+.pb-practice__title {
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $color-dark;
+  margin: 0 0 $space-2;
+}
+
+.pb-practice__desc {
+  font-size: $font-size-sm;
+  color: $color-text-light;
+  line-height: $line-height-base;
+  margin: 0;
+}
+
+// --------------------------------------------------------------------------
+// Banderas rojas (humo)
+// --------------------------------------------------------------------------
+.pb-flags {
+  list-style: none;
+  margin: $space-6 0;
+  padding: 0;
+  display: grid;
+  gap: $space-3;
+}
+
+.pb-flag {
+  display: flex;
+  gap: $space-3;
+  padding: $space-4 $space-5;
+  background: rgba($color-primary, 0.05);
+  border: 1px solid rgba($color-primary, 0.18);
+  border-radius: $border-radius;
+  font-size: $font-size-base;
+  color: $color-text;
+
+  &::before {
+    content: '\26A0'; // warning sign
+    flex: 0 0 auto;
+    color: $color-primary;
+  }
+}
+
+// --------------------------------------------------------------------------
+// Captación del kit (el gancho de email)
+// --------------------------------------------------------------------------
+.pb-capture {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, $color-primary, darken($color-primary, 15%));
+  color: $color-white;
+  border-radius: $border-radius-xl;
+  padding: $space-8;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 380px;
+    height: 380px;
+    background: rgba($color-accent, 0.16);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+}
+
+.pb-capture__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: $space-7;
+
+  @media (min-width: $bp-lg) {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+}
+
+.pb-capture__title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: $font-weight-bold;
+  margin: 0 0 $space-3;
+  color: $color-white;
+}
+
+.pb-capture__desc {
+  color: rgba($color-white, 0.85);
+  line-height: $line-height-base;
+  margin: 0 0 $space-5;
+}
+
+.pb-capture__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: $space-2;
+
+  li {
+    display: flex;
+    gap: $space-2;
+    font-size: $font-size-sm;
+    color: rgba($color-white, 0.92);
+
+    &::before {
+      content: '';
+      flex: 0 0 auto;
+      width: 8px;
+      height: 8px;
+      margin-top: 0.45em;
+      border-radius: 50%;
+      background: $color-accent;
+      box-shadow: 0 0 8px rgba($color-accent, 0.6);
+    }
+  }
+}
+
+.pb-capture__card {
+  background: $color-white;
+  border-radius: $border-radius-lg;
+  padding: $space-6;
+  box-shadow: $shadow-lg;
+  color: $color-text;
+}
+
+.pb-capture__field { margin-bottom: $space-4; }
+
+.pb-capture__label {
+  display: block;
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-sm;
+  color: $color-dark;
+  margin-bottom: $space-2;
+}
+
+.pb-capture__input,
+.pb-capture__select {
+  width: 100%;
+  font-family: $font-body;
+  font-size: $font-size-base;
+  color: $color-text;
+  background: $color-light;
+  border: 1px solid $color-border;
+  border-radius: $border-radius;
+  padding: $space-3 $space-4;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
+  }
+}
+
+.pb-capture__note {
+  font-size: $font-size-xs;
+  color: $color-muted;
+  text-align: center;
+  margin: $space-3 0 0;
+}
+
+.pb-capture__feedback {
+  margin: $space-4 0 0;
+  padding: $space-3 $space-4;
+  border-radius: $border-radius;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  text-align: center;
+
+  &.is-success { background: rgba($color-sage, 0.18); color: darken($color-sage, 26%); }
+  &.is-error   { background: rgba($color-primary, 0.1); color: $color-primary-dark; }
+}
+
+// Acceso inmediato que se revela tras enviar el formulario
+.pb-capture__unlock {
+  margin-top: $space-4;
+  padding: $space-4 $space-5;
+  border: 1px dashed $color-border;
+  border-radius: $border-radius;
+  background: $color-light;
+  text-align: center;
+
+  p { margin: 0 0 $space-3; font-size: $font-size-sm; color: $color-text-light; }
+}
+
+// ==========================================================================
+// Kit práctico (/playbook/kit/) — checklist + plantillas imprimibles
+// ==========================================================================
+.kit {
+  max-width: $container-narrow;
+  margin: 0 auto;
+}
+
+.kit__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-3;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $space-6;
+}
+
+.kit__block {
+  background: $color-white;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-lg;
+  padding: $space-6;
+  margin-bottom: $space-6;
+  page-break-inside: avoid;
+}
+
+.kit__block-title {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $color-dark;
+  margin: 0 0 $space-2;
+}
+
+.kit__block-desc {
+  font-size: $font-size-sm;
+  color: $color-text-light;
+  margin: 0 0 $space-5;
+}
+
+.kit__check {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: $space-3;
+}
+
+.kit__check li {
+  display: flex;
+  gap: $space-3;
+  align-items: flex-start;
+  font-size: $font-size-base;
+  color: $color-text;
+
+  &::before {
+    content: '';
+    flex: 0 0 auto;
+    width: 20px;
+    height: 20px;
+    margin-top: 0.15em;
+    border: 2px solid $color-primary;
+    border-radius: $border-radius-sm;
+  }
+}
+
+.kit__template {
+  display: grid;
+  gap: $space-3;
+}
+
+.kit__row {
+  display: grid;
+  gap: $space-1;
+  padding-bottom: $space-3;
+  border-bottom: 1px dashed $color-border;
+}
+
+.kit__row-label {
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-sm;
+  color: $color-dark;
+}
+
+.kit__row-hint {
+  font-size: $font-size-sm;
+  color: $color-muted;
+}
+
+.kit__row-blank {
+  margin-top: $space-2;
+  height: 1px;
+  border-bottom: 1px solid $color-border;
+}
+
+// --------------------------------------------------------------------------
+// Estilos de impresión / guardar como PDF
+// --------------------------------------------------------------------------
+@media print {
+  .header,
+  .footer,
+  .skip-link,
+  .kit__toolbar,
+  .kit__cta { display: none !important; }
+
+  body { background: #fff; }
+
+  .kit__block {
+    border: 1px solid #ccc;
+    box-shadow: none;
+  }
+
+  .section { padding: 0 !important; }
+}
