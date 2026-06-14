@@ -54,7 +54,23 @@ const orgSchema = {
         'Consultoría de IA y automatización para asesorías, gestorías y despachos de abogados. Precio cerrado, resultados medibles y sin humo.',
       url: siteUrl,
       email: CONTACT_EMAIL,
-      areaServed: [{ '@type': 'Country', name: 'España' }],
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Bilbao',
+        addressRegion: 'Bizkaia',
+        addressCountry: 'ES',
+      },
+      geo: { '@type': 'GeoCoordinates', latitude: 43.263, longitude: -2.935 },
+      areaServed: [
+        { '@type': 'City', name: 'Bilbao' },
+        { '@type': 'AdministrativeArea', name: 'Bizkaia' },
+        { '@type': 'AdministrativeArea', name: 'País Vasco' },
+        { '@type': 'City', name: 'Córdoba' },
+        { '@type': 'City', name: 'Sevilla' },
+        { '@type': 'City', name: 'Málaga' },
+        { '@type': 'AdministrativeArea', name: 'Andalucía' },
+        { '@type': 'Country', name: 'España' },
+      ],
       serviceType: [
         'Automatización con IA para asesorías y gestorías',
         'Automatización con IA para despachos de abogados',
@@ -67,6 +83,7 @@ const orgSchema = {
       '@id': `${siteUrl}#gorka`,
       name: AUTHOR,
       jobTitle: 'Consultor de IA para pymes',
+      homeLocation: { '@type': 'Place', name: 'Bilbao, País Vasco' },
       worksFor: { '@id': `${siteUrl}#eraldia` },
       ...(LINKEDIN_URL ? { sameAs: [LINKEDIN_URL] } : {}),
     },
@@ -189,6 +206,17 @@ const currentYear = new Date().getFullYear();
                 <li><a href={url('/casos/clinicas/')} class="footer__nav-link">Clínicas y centros de salud</a></li>
                 <li><a href={url('/casos/gimnasios/')} class="footer__nav-link">Gimnasios y centros deportivos</a></li>
                 <li><a href={url('/casos/inmobiliarias/')} class="footer__nav-link">Inmobiliarias</a></li>
+              </ul>
+            </div>
+
+            <div class="footer__nav-group">
+              <div class="footer__nav-title">Zonas</div>
+              <ul class="footer__nav-list">
+                <li><a href={url('/consultor-ia-bilbao/')} class="footer__nav-link">IA en Bilbao</a></li>
+                <li><a href={url('/consultor-ia-pais-vasco/')} class="footer__nav-link">IA en el País Vasco</a></li>
+                <li><a href={url('/consultor-ia-cordoba/')} class="footer__nav-link">IA en Córdoba</a></li>
+                <li><a href={url('/consultor-ia-sevilla/')} class="footer__nav-link">IA en Sevilla</a></li>
+                <li><a href={url('/consultor-ia-malaga/')} class="footer__nav-link">IA en Málaga</a></li>
               </ul>
             </div>
 

@@ -1,0 +1,48 @@
+# Eraldia — robots.txt
+# Web abierta a buscadores y, explícitamente, a los crawlers de motores
+# generativos (GEO). Sin acceso de estos bots no hay citas en ChatGPT,
+# Perplexity, Gemini ni en los AI Overviews de Google.
+
+# --- Buscadores y crawlers generales ---
+User-agent: *
+Allow: /
+
+# --- OpenAI (ChatGPT / SearchGPT) ---
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+
+# --- Anthropic (Claude) ---
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-SearchBot
+Allow: /
+User-agent: Claude-User
+Allow: /
+User-agent: anthropic-ai
+Allow: /
+
+# --- Perplexity ---
+User-agent: PerplexityBot
+Allow: /
+User-agent: Perplexity-User
+Allow: /
+
+# --- Google (IA: Gemini, AI Overviews / Vertex) ---
+User-agent: Google-Extended
+Allow: /
+
+# --- Otros motores con IA ---
+User-agent: Applebot-Extended
+Allow: /
+User-agent: Amazonbot
+Allow: /
+User-agent: Bytespider
+Allow: /
+User-agent: CCBot
+Allow: /
+
+Sitemap: https://eraldia.com/sitemap-index.xml

@@ -1,0 +1,187 @@
+---
+import { url } from '../utils';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+import { SITE_TITLE, CONTACT_EMAIL } from '../consts';
+
+export async function getStaticPaths() {
+  const lugares = await getCollection('lugares');
+  return lugares.map((lugar) => ({
+    params: { lugar: lugar.slug },
+    props: { lugar },
+  }));
+}
+
+const { lugar } = Astro.props;
+const d = lugar.data;
+const { Content } = await render(lugar);
+
+const updated = '2026-06-14';
+const siteUrl = new URL(url('/'), Astro.url).href;
+
+// ProfessionalService con áreas de servicio locales, para SEO local + GEO.
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: `${SITE_TITLE} — Consultor de IA en ${d.ciudad}`,
+  description: d.metaDescription,
+  url: new URL(url(`/consultor-ia-${lugar.slug}/`), Astro.url).href,
+  email: CONTACT_EMAIL,
+  parentOrganization: { '@type': 'ProfessionalService', name: SITE_TITLE, url: siteUrl },
+  areaServed: [
+    { '@type': 'City', name: d.ciudad },
+    { '@type': 'AdministrativeArea', name: d.region },
+  ],
+  serviceType: 'Automatización de procesos con IA para pymes',
+  ...(d.geo ? { geo: { '@type': 'GeoCoordinates', latitude: d.geo.lat, longitude: d.geo.lng } } : {}),
+};
+
+const faqSchema = d.faqs.length
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: d.faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    }
+  : null;
+---
+
+<BaseLayout title={d.title} description={d.metaDescription} ogType="article" publishedTime={updated}>
+
+<script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+{faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
+
+<!-- Cabecera -->
+<section class="pb-hero">
+  <div class="pb-hero__inner">
+    <span class="hero__badge">IA para pymes · {d.ciudad}</span>
+    <h1 class="pb-hero__title">{d.title}</h1>
+    <p class="pb-hero__subtitle">{d.intro}</p>
+    <div class="hero__actions">
+      <a href={url('/#contacto')} class="btn btn--primary btn--lg">Pide tu diagnóstico gratuito</a>
+      <a href={url('/diagnostico-express/')} class="btn btn--outline-white btn--lg">Diagnóstico exprés (1 min)</a>
+    </div>
+    <p class="pb-hero__meta">
+      <span>Base en Bilbao</span><span>·</span><span>atención en {d.ciudad} y {d.region}</span><span>·</span><span>en remoto</span>
+    </p>
+  </div>
+</section>
+
+<!-- Respuesta directa (GEO) -->
+<section class="section">
+  <div class="container container--narrow">
+    <div class="pb-answer reveal">
+      <span class="pb-answer__label">En una frase</span>
+      <p>{d.intro}</p>
+    </div>
+  </div>
+</section>
+
+<!-- Sectores fuertes de la zona -->
+{d.sectores.length > 0 && (
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section__header">
+        <h2 class="section__title">Dónde rinde más la IA en {d.ciudad}</h2>
+        <p class="section__subtitle">Los sectores de la zona donde la automatización paga antes, por volumen y repetición.</p>
+      </div>
+      <div class="grid grid--2 reveal-stagger">
+        {d.sectores.map((s) => (
+          <div class="card reveal">
+            <h3 class="card__title">{s.title}</h3>
+            <p class="card__desc">{s.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<!-- Ayudas de la zona -->
+{d.ayudas.length > 0 && (
+  <section class="section">
+    <div class="container container--narrow">
+      <div class="section__header">
+        <h2 class="section__title">Ayudas a la digitalización en {d.region}</h2>
+        <p class="section__subtitle">Parte del coste puede cubrirse con ayudas públicas. Verifica siempre la convocatoria vigente: cambian cada año.</p>
+      </div>
+      <ul class="pb-flags">
+        {d.ayudas.map((a) => (
+          <li class="pb-flag"><strong>{a.name}.</strong> {a.desc}</li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+
+<!-- Frase citable -->
+{d.citable && (
+  <section class="section section--alt">
+    <div class="container container--narrow">
+      <div class="pb-pullquote" style="text-align:center;">{d.citable}</div>
+    </div>
+  </section>
+)}
+
+<!-- Cuerpo libre (opcional) + cercanía -->
+<section class="section">
+  <div class="container container--narrow">
+    <div class="content">
+      <Content />
+    </div>
+    {d.cercanas.length > 0 && (
+      <p style="margin-top:1.5rem; color: var(--muted, #6b6354);">
+        <strong>También en la zona:</strong> {d.cercanas.join(' · ')}. Trabajo en remoto para toda España, con base en Bilbao.
+      </p>
+    )}
+  </div>
+</section>
+
+<!-- FAQ -->
+{d.faqs.length > 0 && (
+  <section class="section section--alt">
+    <div class="container container--narrow">
+      <div class="section__header">
+        <h2 class="section__title">Preguntas frecuentes</h2>
+      </div>
+      <div class="faq__list">
+        {d.faqs.map((f) => (
+          <details class="faq__item">
+            <summary class="faq__question">{f.q}</summary>
+            <p class="faq__answer">{f.a}</p>
+          </details>
+        ))}
+      </div>
+
+      <nav class="related-sectores" aria-label="Más">
+        <h2 class="related-sectores__title">Seguir leyendo</h2>
+        <ul class="related-sectores__list">
+          <li><a href={url('/ia-para-asesorias/')} class="related-sectores__link">IA para asesorías y gestorías</a></li>
+          <li><a href={url('/ia-para-abogados/')} class="related-sectores__link">IA para despachos de abogados</a></li>
+          <li><a href={url('/servicios/')} class="related-sectores__link">Servicios</a></li>
+          <li><a href={url('/playbook/')} class="related-sectores__link">Playbook de IA</a></li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+)}
+
+<!-- CTA final -->
+<section class="section">
+  <div class="container">
+    <div class="cta cta--inline cta--dark reveal" aria-label="Contacto">
+      <div class="cta__inner">
+        <h2 class="cta__title">¿Lo vemos en tu negocio de {d.ciudad}?</h2>
+        <p class="cta__desc">
+          Cuéntame en dos líneas qué proceso te quita más tiempo y te digo, sin humo, si la IA puede ayudarte y cuánto costaría.
+        </p>
+        <a href={url('/#contacto')} class="btn btn--primary btn--lg">Hablamos 30 minutos, gratis</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</BaseLayout>

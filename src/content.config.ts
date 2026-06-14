@@ -50,4 +50,35 @@ const sectores = defineCollection({
   }),
 });
 
-export const collections = { blog, servicios, sectores };
+// Landings locales permanentes (SEO local + GEO): una por ciudad/zona.
+// El slug del fichero (p. ej. `bilbao.md`) genera la ruta /consultor-ia-bilbao/.
+const lugares = defineCollection({
+  type: 'content',
+  schema: z.object({
+    // H1 de la landing (p. ej. "Consultor de IA para pymes en Bilbao")
+    title: z.string(),
+    // Ciudad y región, para el schema ProfessionalService/areaServed
+    ciudad: z.string(),
+    region: z.string(),
+    // Meta description para SEO
+    metaDescription: z.string(),
+    // Respuesta directa (GEO): 2-3 frases al inicio
+    intro: z.string(),
+    // Orden en listados (menor = primero)
+    weight: z.number().default(99),
+    // Coordenadas para el schema (opcional)
+    geo: z.object({ lat: z.number(), lng: z.number() }).optional(),
+    // Sectores fuertes de la zona
+    sectores: z.array(z.object({ title: z.string(), desc: z.string() })).default([]),
+    // Ayudas/subvenciones de la zona (citadas de forma genérica; verificar convocatoria)
+    ayudas: z.array(z.object({ name: z.string(), desc: z.string() })).default([]),
+    // Localidades/comarcas cercanas, para relevancia local
+    cercanas: z.array(z.string()).default([]),
+    // Frase citable (GEO)
+    citable: z.string().optional(),
+    // Preguntas frecuentes (se vuelcan a schema FAQPage)
+    faqs: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
+  }),
+});
+
+export const collections = { blog, servicios, sectores, lugares };

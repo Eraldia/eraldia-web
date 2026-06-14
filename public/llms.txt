@@ -1,0 +1,48 @@
+# Eraldia
+
+> Consultoría de IA y automatización para pymes españolas, operada por Gorka Alapont (consultor independiente con base en Bilbao). Eraldia ayuda sobre todo a asesorías, gestorías y despachos de abogados a quitarse el trabajo repetitivo —facturas, nóminas, plazos, consultas, expedientes— con automatizaciones e IA a medida. Proyectos pequeños y cerrados, con precio cerrado por escrito, resultados medibles y lenguaje llano: el anti-humo.
+
+## Qué es y cómo trabaja
+
+- Modelo: proyectos cerrados (no por horas), alcance firmado por escrito, herramientas (Make, n8n, Zapier, APIs de Claude/GPT) contratadas a nombre del cliente.
+- Escalera de servicios: llamada de diagnóstico gratuita (30 min) → diagnóstico de IA y automatización (2 semanas) → automatización a medida (2–4 semanas) → acompañamiento mensual sin permanencia.
+- Precio: cerrado y acordado por escrito antes de empezar, según el alcance. El importe exacto se concreta en la llamada gratuita.
+
+## Zonas de actividad
+
+- Base en **Bilbao (Bizkaia, País Vasco)**; atención presencial puntual y remota en todo Euskadi (Bilbao, Donostia-San Sebastián, Vitoria-Gasteiz).
+- **Andalucía**: actividad regular y atención en remoto, con foco en **Córdoba, Sevilla y Málaga**.
+- Resto de España: en remoto.
+
+## Servicios
+
+- [Diagnóstico de IA y automatización](https://eraldia.com/servicios/diagnostico-ia/): en dos semanas, qué procesos automatizar, con qué ahorro y a qué coste cerrado.
+- [Automatización a medida](https://eraldia.com/servicios/automatizacion/): implantación en 2–4 semanas con el equipo formado y las herramientas a nombre del cliente.
+- [Acompañamiento mensual](https://eraldia.com/servicios/acompanamiento/): mantenimiento, mejoras y formación continua, sin permanencia.
+
+## Por sector
+
+- [IA para asesorías y gestorías](https://eraldia.com/ia-para-asesorias/): picado de facturas y nóminas, recordatorios de plazos, respuestas a consultas y onboarding.
+- [IA para despachos de abogados](https://eraldia.com/ia-para-abogados/): resumen y búsqueda en expedientes, control de plazos procesales e intake, con el secreto profesional por delante.
+- [Otros sectores](https://eraldia.com/casos/): clínicas, gimnasios e inmobiliarias.
+
+## Por zona
+
+- [Consultor de IA en Bilbao](https://eraldia.com/consultor-ia-bilbao/)
+- [Consultor de IA en el País Vasco](https://eraldia.com/consultor-ia-pais-vasco/)
+- [Consultor de IA en Córdoba](https://eraldia.com/consultor-ia-cordoba/)
+- [Consultor de IA en Sevilla](https://eraldia.com/consultor-ia-sevilla/)
+- [Consultor de IA en Málaga](https://eraldia.com/consultor-ia-malaga/)
+
+## Guías y recursos
+
+- [Playbook de IA agéntica para pymes](https://eraldia.com/playbook/): guía gratuita sobre qué automatizar primero y cómo detectar el humo.
+- [Cuánto cuesta automatizar con IA en una pyme (2026)](https://eraldia.com/blog/cuanto-cuesta-automatizacion-ia-pyme/): rangos orientativos de precios.
+- [Qué hace un consultor de IA para pymes](https://eraldia.com/blog/que-hace-consultor-ia-pyme/).
+- [Blog](https://eraldia.com/blog/) · [Sobre Gorka Alapont](https://eraldia.com/sobre-mi/)
+
+## Contacto
+
+- Web: https://eraldia.com
+- Email: hola@eraldia.com
+- Formulario "¿Qué te quita tiempo?": https://eraldia.com/#contacto (respuesta en menos de 24 h laborables)
