@@ -1,0 +1,534 @@
+---
+import { url } from '../utils';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { CONTACT_EMAIL } from '../consts';
+
+const title = 'Playbook de IA agéntica para pymes';
+const description =
+  'Guía gratuita y sin humo para poner agentes de IA a trabajar en tu pyme: qué proceso automatizar primero, las 10 buenas prácticas de IA agéntica en 2026 y cómo detectar a quien te vende humo. Con kit descargable.';
+
+const updated = '2026-06-14';
+const updatedLabel = 'junio de 2026';
+
+// Secciones del índice (id + título). El número se pinta con counter en CSS.
+const toc = [
+  { id: 'agente-vs-chatbot', label: 'Agente, chatbot o automatización: no es lo mismo' },
+  { id: 'regla-de-oro', label: 'La regla de oro: no uses un agente si te basta un flujo' },
+  { id: 'donde-empezar', label: 'Los 6 procesos donde la IA agéntica ya rinde' },
+  { id: 'anatomia', label: 'Anatomía de un agente que funciona' },
+  { id: 'buenas-practicas', label: 'Las 10 buenas prácticas de IA agéntica' },
+  { id: 'humo', label: 'Banderas rojas: cómo detectar el humo' },
+  { id: 'coste', label: 'Coste real y retorno (sin promesas mágicas)' },
+  { id: 'rgpd', label: 'RGPD y tus datos: lo mínimo imprescindible' },
+  { id: 'plan-30-dias', label: 'Tu primer agente en 30 días' },
+];
+
+// FAQs (también van en el schema FAQPage).
+const faqs = [
+  {
+    q: '¿Qué es un agente de IA para una pyme?',
+    a: 'Es un programa que usa un modelo de lenguaje (como Claude o GPT) para hacer una tarea de principio a fin: entiende una petición, decide los pasos, usa tus herramientas (correo, agenda, hoja de cálculo, CRM) y devuelve un resultado, pidiendo ayuda a una persona cuando hace falta. La diferencia con un chatbot es que el agente actúa, no solo responde.',
+  },
+  {
+    q: '¿Necesito un agente o me basta con una automatización normal?',
+    a: 'Si la tarea siempre sigue los mismos pasos, te basta con una automatización clásica (un flujo de Make, n8n o Zapier): es más barata, más predecible y más fácil de mantener. El agente solo merece la pena cuando hay que interpretar texto libre o decidir entre varios caminos. La regla de oro: no uses un agente si te basta un flujo.',
+  },
+  {
+    q: '¿Es seguro meter IA con los datos de mis clientes?',
+    a: 'Sí, si se hace bien: contrata las herramientas a nombre de tu empresa, usa planes de empresa que no entrenen con tus datos, da al agente acceso solo a lo que necesita y firma el contrato de encargado de tratamiento (RGPD). Nunca pegues datos personales en versiones gratuitas de un chatbot público.',
+  },
+  {
+    q: '¿Cuánto cuesta poner el primer agente en una pyme en 2026?',
+    a: 'Un diagnóstico de IA para saber qué automatizar primero ronda los 490 € y se descuenta del proyecto. Una automatización a medida bien acotada suele costar entre 1.900 y 4.500 € (precios de 2026). Lo importante no es el precio de la herramienta, sino el alcance cerrado por escrito y el ahorro de horas que mides antes y después.',
+  },
+  {
+    q: '¿Por dónde empiezo si no tengo conocimientos técnicos?',
+    a: 'Por el proceso que más horas repetitivas te come y que sea fácil de medir. Empieza pequeño, con una persona supervisando, y automatiza del todo solo cuando te fíes del resultado. Este playbook incluye un kit con la checklist y las plantillas para hacerlo paso a paso.',
+  },
+];
+
+const sectorOptions = [
+  ['gestoria', 'Gestoría o asesoría'],
+  ['clinica', 'Clínica (dental, fisio, veterinaria)'],
+  ['hosteleria', 'Hostelería, restaurante o gimnasio'],
+  ['inmo', 'Inmobiliaria o despacho profesional'],
+  ['comercio', 'Comercio o tienda online'],
+  ['otro', 'Otro tipo de negocio'],
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  inLanguage: 'es',
+  datePublished: '2026-06-14',
+  dateModified: updated,
+  author: { '@type': 'Person', name: 'Gorka Alapont', url: new URL(url('/sobre-mi/'), Astro.url).href },
+  publisher: { '@type': 'Organization', name: 'Eraldia', url: new URL(url('/'), Astro.url).href },
+  mainEntityOfPage: Astro.url.href,
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<BaseLayout title={title} description={description} ogType="article" publishedTime={updated}>
+
+<script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<!-- ================================================================ -->
+<!-- Cabecera                                                          -->
+<!-- ================================================================ -->
+<section class="pb-hero">
+  <div class="pb-hero__inner">
+    <span class="hero__badge">Guía gratuita · IA agéntica · 2026</span>
+    <h1 class="pb-hero__title">Playbook de IA agéntica para pymes</h1>
+    <p class="pb-hero__subtitle">
+      Pon agentes de IA a trabajar en tu negocio sin humo: qué proceso automatizar primero,
+      las buenas prácticas que de verdad importan y cómo no caer en lo que te venden a peso.
+    </p>
+    <div class="pb-hero__meta">
+      <span>Por <a href={url('/sobre-mi/')}>Gorka Alapont</a></span>
+      <span>·</span>
+      <span>Actualizado en {updatedLabel}</span>
+      <span>·</span>
+      <span>Lectura: 14 min</span>
+    </div>
+    <div class="hero__actions">
+      <a href="#agente-vs-chatbot" class="btn btn--primary btn--lg">Empezar a leer</a>
+      <a href="#kit" class="btn btn--outline-white btn--lg">Descargar el kit</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- Respuesta directa (GEO) + Índice                                  -->
+<!-- ================================================================ -->
+<section class="section">
+  <div class="container container--narrow">
+    <div class="pb-answer reveal">
+      <span class="pb-answer__label">En una frase</span>
+      <p>
+        <strong>Un agente de IA es un programa que usa un modelo de lenguaje para hacer una tarea
+        de principio a fin</strong> —entiende lo que le pides, decide los pasos, usa tus herramientas
+        (correo, agenda, hoja de cálculo, CRM) y avisa a una persona cuando hace falta—. Para una pyme
+        en 2026, lo rentable no es «poner IA» en todo, sino delegar a un agente <em>un</em> proceso
+        repetitivo, medible y bien acotado, y crecer desde ahí.
+      </p>
+      <p>
+        Esta guía es el método que uso en Eraldia. No vende ninguna herramienta concreta: te da el
+        criterio para decidir <strong>qué automatizar, cómo hacerlo bien y a quién no creer</strong>.
+      </p>
+    </div>
+
+    <div class="pb-toc reveal" style="margin-top: 2rem;">
+      <p class="pb-toc__title">Lo que vas a encontrar</p>
+      <ul class="pb-toc__list">
+        {toc.map((s) => (
+          <li><a href={`#${s.id}`}>{s.label}</a></li>
+        ))}
+        <li><a href="#kit">Kit descargable: checklist + plantillas</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- Cuerpo de la guía                                                 -->
+<!-- ================================================================ -->
+<section class="section section--alt">
+  <div class="container container--narrow">
+    <div class="pb-prose">
+
+      <h2 id="agente-vs-chatbot"><span class="pb-prose__num">01</span>Agente, chatbot o automatización: no es lo mismo</h2>
+      <p>
+        Casi todo el «humo» de la IA nace de mezclar tres cosas distintas. Antes de invertir un euro,
+        conviene saber cuál necesitas, porque cada una cuesta y rinde de forma muy diferente:
+      </p>
+      <div class="pb-table-wrap">
+        <table class="pb-table">
+          <thead>
+            <tr><th>Tipo</th><th>Qué hace</th><th>Buen ejemplo en una pyme</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Automatización clásica</td>
+              <td>Sigue siempre los mismos pasos fijos. No «piensa».</td>
+              <td>Cuando llega un formulario, crea la ficha en el CRM y manda un email de bienvenida.</td>
+            </tr>
+            <tr>
+              <td>Chatbot / asistente</td>
+              <td>Responde preguntas con texto. No actúa por su cuenta.</td>
+              <td>Contesta dudas frecuentes en la web a partir de tus FAQ.</td>
+            </tr>
+            <tr>
+              <td>Agente de IA</td>
+              <td>Interpreta, decide pasos y <strong>usa herramientas</strong> para terminar la tarea.</td>
+              <td>Lee el correo de un cliente, busca su pedido, redacta la respuesta y, si todo cuadra, la envía.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        La mayoría de pymes creen que necesitan un agente y en realidad les sobra con una buena
+        automatización clásica. Eso es una buena noticia: es más barato, más fiable y se rompe menos.
+      </p>
+
+      <h2 id="regla-de-oro"><span class="pb-prose__num">02</span>La regla de oro: no uses un agente si te basta un flujo</h2>
+      <p>
+        Es la mejor práctica número uno de toda la industria de IA agéntica, y la que más dinero ahorra:
+        <strong>empieza por el sistema más simple que resuelva el problema</strong> y solo sube de
+        complejidad cuando el simple se quede corto. Un agente que «razona» es más potente, pero también
+        más lento, más caro por uso, más difícil de predecir y más difícil de depurar cuando falla.
+      </p>
+      <div class="pb-pullquote">
+        Si la tarea siempre se hace igual, no necesitas inteligencia: necesitas un flujo.
+        La IA agéntica solo gana cuando hay que interpretar o decidir.
+      </div>
+      <p>Una forma sencilla de decidir, de menos a más:</p>
+      <div class="pb-table-wrap">
+        <table class="pb-table">
+          <thead>
+            <tr><th>¿Cómo es la tarea?</th><th>Qué usar</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Pasos siempre iguales, datos estructurados</td><td>Automatización clásica (Make, n8n, Zapier)</td></tr>
+            <tr><td>Hay que entender texto libre, pero la acción es una</td><td>Un paso de IA dentro del flujo (clasificar, resumir, extraer)</td></tr>
+            <tr><td>Hay que decidir entre varios caminos según el caso</td><td>Un agente con herramientas y límites claros</td></tr>
+            <tr><td>Varios pasos encadenados con criterio en cada uno</td><td>Agente con persona supervisando los pasos críticos</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        En la práctica, casi todos los proyectos buenos son <strong>híbridos</strong>: un flujo normal
+        que llama a la IA solo en el punto donde de verdad hace falta criterio. Eso es lo barato y lo robusto.
+      </p>
+
+      <h2 id="donde-empezar"><span class="pb-prose__num">03</span>Los 6 procesos donde la IA agéntica ya rinde</h2>
+      <p>
+        No hace falta inventar nada exótico. Estos seis procesos se repiten en casi cualquier pyme y son
+        los que antes devuelven la inversión, porque mezclan volumen, repetición y algo de criterio:
+      </p>
+      <ol>
+        <li><strong>Atención a preguntas repetidas.</strong> Un asistente que responde lo de siempre por
+          web, email o WhatsApp a cualquier hora y solo te pasa lo que necesita tu mano.</li>
+        <li><strong>Triaje y respuesta de correo.</strong> Clasifica los emails entrantes, redacta el
+          borrador de respuesta y lo deja listo para que tú solo revises y envíes.</li>
+        <li><strong>Presupuestos y facturas.</strong> A partir de los datos del cliente, genera el
+          presupuesto o pasa la factura en minutos en vez de horas.</li>
+        <li><strong>Captación y seguimiento.</strong> Un CRM ligero que da seguimiento a cada contacto
+          nuevo para que ningún lead se enfríe ni se pierda.</li>
+        <li><strong>Informes y traspaso de datos.</strong> Mueve datos entre tus programas y arma los
+          informes solo, sin copiar y pegar.</li>
+        <li><strong>Conciliación y revisión.</strong> Cruza pedidos, pagos o documentos y te marca solo
+          lo que no cuadra para que mires lo justo.</li>
+      </ol>
+      <p>
+        ¿Cuál es el tuyo? Suele ser el que más te suena al leerlo. Si quieres una pista al instante,
+        haz el <a href={url('/diagnostico-express/')}>diagnóstico exprés (1 minuto)</a> o mira ejemplos
+        por sector en <a href={url('/casos/')}>casos de uso</a>.
+      </p>
+
+      <h2 id="anatomia"><span class="pb-prose__num">04</span>Anatomía de un agente que funciona</h2>
+      <p>
+        Sin tecnicismos, un agente útil tiene cuatro piezas. Si falta cualquiera, falla o da miedo usarlo:
+      </p>
+      <ul>
+        <li><strong>Instrucciones claras.</strong> Qué debe hacer, con qué tono, y sobre todo qué
+          <em>no</em> debe hacer. Con ejemplos reales, no buenas intenciones.</li>
+        <li><strong>Acceso a tus datos y herramientas.</strong> Solo a lo que necesita para esa tarea:
+          la agenda, una hoja de cálculo, el CRM, la bandeja de un buzón. Ni más, ni «por si acaso».</li>
+        <li><strong>Límites y barreras.</strong> Qué puede decidir solo y dónde tiene que parar y
+          preguntar. Cuánto puede gastar. Qué nunca toca.</li>
+        <li><strong>Una persona que supervisa.</strong> Alguien revisa los primeros casos y los casos
+          dudosos. La IA propone; al principio, una persona dispone.</li>
+      </ul>
+      <p>
+        La forma sensata de construirlo es <strong>empezar simple y añadir</strong>: una sola tarea, un
+        solo dato, un solo canal. Cuando eso funciona de verdad, se amplía. Lo contrario —querer un
+        «cerebro» que lo haga todo desde el día uno— es la receta del proyecto que no se termina nunca.
+      </p>
+
+      <h2 id="buenas-practicas"><span class="pb-prose__num">05</span>Las 10 buenas prácticas de IA agéntica</h2>
+      <p>
+        Estas son las prácticas que separan un proyecto que ahorra horas de uno que da problemas. Son las
+        mismas que aplican los equipos serios de IA, traducidas a una pyme:
+      </p>
+      <ol class="pb-practices">
+        <li class="pb-practice">
+          <p class="pb-practice__title">1. Empieza por un proceso pequeño y medible</p>
+          <p class="pb-practice__desc">Elige una tarea concreta y cuenta las horas que cuesta hoy. Si no puedes medir el antes, no podrás demostrar el después.</p>
+        </li>
+        <li class="pb-practice">
+          <p class="pb-practice__title">2. Un agente, un trabajo</p>
+          <p class="pb-practice__desc">Alcance estrecho. Un agente que hace una cosa bien es fiable; uno que «hace de todo» se vuelve impredecible y nadie se fía de él.</p>
+        </li>
+        <li class="pb-practice">
+          <p class="pb-practice__title">3. Humano en el bucle donde importa</p>
+          <p class="pb-practice__desc">Las acciones con consecuencias (enviar, cobrar, borrar, prometer) pasan por una persona hasta que la confianza esté ganada.</p>
+        </li>
+        <li class="pb-practice">
+          <p class="pb-practice__title">4. Mide antes y después</p>
+          <p class="pb-practice__desc">Define qué es «bien» con ejemplos y revisa una muestra de resultados cada semana. Sin criterios de éxito no hay mejora, hay fe.</p>
+        </li>
+        <li class="pb-practice">
+          <p class="pb-practice__title">5. Buenas instrucciones y ejemplos, no magia</p>
+          <p class="pb-practice__desc">El 80 % del resultado depende de instrucciones claras y de 3-4 ejemplos reales de cómo quieres que quede. Ahí se gana o se pierde.</p>
+        </li>
+        <li class="pb-practice">
+          <p class="pb-practice__title">6. Mínimo privilegio (y RGPD)</p>
+          <p class="pb-practice__desc">El agente accede solo a los datos que necesita para su tarea. Menos acceso es menos riesgo y más fácil de explicar a un cliente.</p>
+        </li>
+        <li class="pb-practice">
+          <p class="pb-practice__title">7. Pon barreras y un tope de gasto</p>
+          <p class="pb-practice__desc">Define qué no puede hacer nunca y un límite de coste por uso. Un agente sin tope es una sorpresa esperando a pasar.</p>
+        </li>
+        <li class="pb-practice">
+          <p class="pb-practice__title">8. Herramientas a tu nombre</p>
+          <p class="pb-practice__desc">Las cuentas y las llaves (Make, n8n, APIs de Claude o GPT) van a nombre de tu empresa. No dependas de que el consultor «tenga la suya».</p>
+        </li>
+        <li class="pb-practice">
+          <p class="pb-practice__title">9. Empieza asistido, automatiza al fiarte</p>
+          <p class="pb-practice__desc">Primero el agente propone y tú apruebas; cuando lleva semanas acertando, le sueltas la correa. La autonomía se gana, no se regala.</p>
+        </li>
+        <li class="pb-practice">
+          <p class="pb-practice__title">10. Ten un plan para cuando se equivoca</p>
+          <p class="pb-practice__desc">Registro de lo que hace, aviso cuando duda y un camino claro para que un humano retome. No es «si» falla, es «cuándo».</p>
+        </li>
+      </ol>
+
+      <h2 id="humo"><span class="pb-prose__num">06</span>Banderas rojas: cómo detectar el humo</h2>
+      <p>
+        El sector está lleno de quien vende IA como si fuera magia. Estas son las señales de que te están
+        vendiendo humo. Con una sola que aparezca, pregunta dos veces:
+      </p>
+      <ul class="pb-flags">
+        <li class="pb-flag">Te prometen un porcentaje de ahorro («un 80 % menos») antes de mirar tus procesos.</li>
+        <li class="pb-flag">No hay alcance por escrito ni plazo: «lo vamos viendo sobre la marcha».</li>
+        <li class="pb-flag">Hablan de la herramienta de moda, pero no de qué proceso tuyo resuelve.</li>
+        <li class="pb-flag">Las cuentas y las llaves quedan a su nombre, y sin ellos no funciona nada.</li>
+        <li class="pb-flag">No proponen forma de medir si ha funcionado.</li>
+        <li class="pb-flag">Cobran por horas indefinidas en vez de por un resultado cerrado.</li>
+      </ul>
+      <p>
+        Lo contrario del humo es aburrido y tranquilizador: un proceso concreto, un precio cerrado, un
+        plazo corto y una forma de medir el resultado.
+      </p>
+
+      <h2 id="coste"><span class="pb-prose__num">07</span>Coste real y retorno (sin promesas mágicas)</h2>
+      <p>
+        Nadie honesto puede prometerte un porcentaje de ahorro sin ver tu negocio. Lo que sí puedes hacer
+        es <strong>estimarlo tú mismo</strong> en cinco minutos, con esta cuenta:
+      </p>
+      <ol>
+        <li>Horas a la semana que cuesta hoy la tarea × tu coste por hora = <strong>coste actual</strong>.</li>
+        <li>Multiplícalo por 52: el coste al año de seguir haciéndolo a mano.</li>
+        <li>Resta lo que costaría tras automatizar (rara vez baja a cero: queda la supervisión).</li>
+        <li>Compáralo con la inversión del proyecto. Eso es tu retorno, y el plazo en que se paga.</li>
+      </ol>
+      <p>
+        Como referencia de mercado en 2026, una <a href={url('/servicios/diagnostico-ia/')}>diagnóstico de IA</a>
+        para saber qué automatizar primero ronda los <strong>490&nbsp;€</strong> (y se descuenta del proyecto);
+        una <a href={url('/servicios/automatizacion/')}>automatización a medida</a> bien acotada,
+        entre <strong>1.900 y 4.500&nbsp;€</strong>; y el
+        <a href={url('/servicios/acompanamiento/')}>acompañamiento mensual</a> para mantenerla y mejorarla,
+        desde <strong>390&nbsp;€/mes</strong>. Lo que mueve la aguja no es el precio de la herramienta, sino
+        elegir bien el proceso y cerrar el alcance por escrito.
+      </p>
+
+      <h2 id="rgpd"><span class="pb-prose__num">08</span>RGPD y tus datos: lo mínimo imprescindible</h2>
+      <p>
+        Meter IA con datos de clientes es seguro si cumples unas pocas cosas. No es opcional, pero tampoco
+        es complicado:
+      </p>
+      <ul>
+        <li><strong>Cuentas de empresa y planes que no entrenen con tus datos.</strong> Nada de pegar datos
+          de clientes en la versión gratuita de un chatbot público.</li>
+        <li><strong>Contrato de encargado de tratamiento</strong> con cada proveedor que toque datos
+          personales (lo ofrecen las herramientas serias).</li>
+        <li><strong>Mínimo dato posible.</strong> Si la tarea no necesita el DNI o el teléfono, no se lo des.</li>
+        <li><strong>Registro y trazabilidad.</strong> Saber qué hizo el agente y con qué datos, por si hay
+          que rendir cuentas.</li>
+      </ul>
+      <p>
+        Si trabajas en un sector regulado (salud, jurídico, financiero) hay matices, pero la base es la
+        misma: control sobre quién accede a qué, y por qué.
+      </p>
+
+      <h2 id="plan-30-dias"><span class="pb-prose__num">09</span>Tu primer agente en 30 días</h2>
+      <p>Un plan realista para una pyme que parte de cero, semana a semana:</p>
+      <ul>
+        <li><strong>Semana 1 — Elegir y medir.</strong> Escoge el proceso (el que más horas repetidas te come),
+          mídelo y define qué sería «bien hecho» con ejemplos reales.</li>
+        <li><strong>Semana 2 — Construir lo mínimo.</strong> El flujo o agente más simple que resuelva ese caso,
+          con acceso solo a lo necesario y una persona aprobando cada paso.</li>
+        <li><strong>Semana 3 — Probar en real, supervisado.</strong> Úsalo con casos de verdad pero con red:
+          revisas todo, corriges instrucciones, ajustas las barreras.</li>
+        <li><strong>Semana 4 — Soltar correa y medir.</strong> Automatiza lo que ya acierta solo, deja
+          supervisión solo en lo crítico y compara las horas de ahora con las del principio.</li>
+      </ul>
+      <p>
+        Cuatro semanas, un proceso, un resultado medible. Desde ahí se decide el siguiente. Eso es,
+        exactamente, cómo trabajo en Eraldia.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- Captación del kit (gancho de email)                               -->
+<!-- ================================================================ -->
+<section class="section" id="kit">
+  <div class="container container--narrow">
+    <div class="pb-capture reveal">
+      <div class="pb-capture__inner">
+        <div>
+          <h2 class="pb-capture__title">Llévate el kit práctico</h2>
+          <p class="pb-capture__desc">
+            La teoría ya la tienes arriba, abierta y gratis. El kit es el atajo para aplicarla esta misma
+            semana, sin newsletters: solo el recurso.
+          </p>
+          <ul class="pb-capture__list">
+            <li>Checklist «¿está mi proceso listo para un agente?»</li>
+            <li>Plantilla de brief para acotar la automatización</li>
+            <li>Plantilla de criterios de éxito y medición</li>
+            <li>Plantilla de barreras y supervisión</li>
+          </ul>
+        </div>
+
+        <div class="pb-capture__card">
+          <form class="pb-capture__form" id="kit-form" action={url('/api/lead/')} method="POST" data-kit={url('/playbook/kit/')}>
+            <input type="hidden" name="source" value="playbook">
+            <div class="pb-capture__field">
+              <label class="pb-capture__label" for="kit-nombre">Nombre</label>
+              <input class="pb-capture__input" type="text" id="kit-nombre" name="nombre" required autocomplete="name">
+            </div>
+            <div class="pb-capture__field">
+              <label class="pb-capture__label" for="kit-email">Email</label>
+              <input class="pb-capture__input" type="email" id="kit-email" name="email" required autocomplete="email">
+            </div>
+            <div class="pb-capture__field">
+              <label class="pb-capture__label" for="kit-sector">¿A qué se dedica tu pyme?</label>
+              <select class="pb-capture__select" id="kit-sector" name="sector">
+                <option value="" selected disabled>Elige una opción…</option>
+                {sectorOptions.map(([value, label]) => (
+                  <option value={label}>{label}</option>
+                ))}
+              </select>
+            </div>
+            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+            <button type="submit" class="btn btn--primary btn--full btn--lg">Acceder al kit</button>
+            <p class="pb-capture__note">Al enviar aceptas que use estos datos solo para responderte. Nada de spam.</p>
+            <p class="pb-capture__feedback" id="kit-feedback" role="status" aria-live="polite" hidden></p>
+          </form>
+
+          <div class="pb-capture__unlock" id="kit-unlock" hidden>
+            <p>¡Listo! Aquí tienes el kit. Ábrelo y guárdalo o imprímelo como PDF.</p>
+            <a class="btn btn--secondary btn--full" id="kit-link" href={url('/playbook/kit/')}>Abrir el kit práctico →</a>
+          </div>
+
+          <noscript>
+            <p class="pb-capture__note" style="margin-top:1rem;">
+              ¿Sin JavaScript? Puedes <a href={url('/playbook/kit/')}>abrir el kit directamente aquí</a>.
+            </p>
+          </noscript>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- FAQ                                                               -->
+<!-- ================================================================ -->
+<section class="section section--alt" id="faq">
+  <div class="container container--narrow">
+    <div class="section__header">
+      <h2 class="section__title">Preguntas frecuentes</h2>
+    </div>
+    <div class="faq__list">
+      {faqs.map((f) => (
+        <details class="faq__item">
+          <summary class="faq__question">{f.q}</summary>
+          <p class="faq__answer">{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- CTA final                                                         -->
+<!-- ================================================================ -->
+<section class="section">
+  <div class="container">
+    <div class="cta cta--inline reveal" aria-label="Pide tu diagnóstico gratuito">
+      <div class="cta__inner">
+        <h2 class="cta__title">¿Quieres saber cuál es tu primer agente?</h2>
+        <p class="cta__desc">
+          Te leíste el playbook. El siguiente paso es 30 minutos, gratis: repasamos tu negocio y te digo
+          con honestidad qué proceso automatizar primero y con qué retorno. Si la IA no te va a ayudar, también te lo digo.
+        </p>
+        <div class="hero__actions">
+          <a href={url('/#contacto')} class="btn btn--outline-white btn--lg">Reservar mi llamada gratuita</a>
+          <a href={url('/diagnostico-express/')} class="btn btn--outline-white btn--lg">Diagnóstico exprés (1 min)</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+(function () {
+  var form = document.getElementById('kit-form');
+  if (!form) return;
+  var feedback = document.getElementById('kit-feedback');
+  var unlock = document.getElementById('kit-unlock');
+  var link = document.getElementById('kit-link');
+  var btn = form.querySelector('button[type="submit"]');
+  var kitHref = form.getAttribute('data-kit');
+  if (link && kitHref) link.setAttribute('href', kitHref);
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (btn) { btn.disabled = true; btn.textContent = 'Enviando…'; }
+    if (feedback) { feedback.hidden = true; feedback.className = 'pb-capture__feedback'; }
+
+    fetch(form.action, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: new FormData(form)
+    })
+      .then(function (r) { return r.json().catch(function () { return { ok: r.ok }; }); })
+      .then(function (data) {
+        if (!data || !data.ok) throw new Error('Error');
+        form.hidden = true;
+        if (unlock) unlock.hidden = false;
+        if (feedback) {
+          feedback.textContent = '¡Hecho! Te he tomado nota y te escribo en menos de 24 horas laborables.';
+          feedback.classList.add('is-success');
+          feedback.hidden = false;
+        }
+      })
+      .catch(function () {
+        if (feedback) {
+          feedback.textContent = 'No se pudo enviar. Inténtalo de nuevo en un momento.';
+          feedback.classList.add('is-error');
+          feedback.hidden = false;
+        }
+        if (btn) { btn.disabled = false; btn.textContent = 'Acceder al kit'; }
+      });
+  });
+})();
+</script>
+
+</BaseLayout>
