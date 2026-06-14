@@ -27,7 +27,7 @@
     {
       "binding": "DB",
       "database_name": "eraldia-leads",
-      "database_id": "57d52d04-21f0-46ae-b22e-c56eebd0ffa3",
+      "database_id": "e109e041-40f2-4bd0-aa86-c35d377b07eb",
       "migrations_dir": "migrations"
     }
   ]
