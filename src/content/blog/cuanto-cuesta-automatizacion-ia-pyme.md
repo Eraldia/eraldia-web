@@ -37,7 +37,7 @@ A estos precios hay que sumar el coste de las herramientas (suscripciones de IA 
 - No te saben decir qué pasa si la IA se equivoca.
 - El presupuesto no distingue entre implantación y mantenimiento.
 
-En [Eraldia](/servicios/) trabajo siempre con precio cerrado: [diagnóstico](/servicios/diagnostico-ia/) por 490 €, [automatización a medida](/servicios/automatizacion/) desde 1.900 € y [acompañamiento mensual](/servicios/acompanamiento/) desde 390 €/mes, sin permanencia. Atiendo en remoto a toda España, con base en Bilbao y actividad regular en Andalucía.
+En [Eraldia](/servicios/) trabajo siempre con precio cerrado y acordado por escrito antes de empezar: un [diagnóstico](/servicios/diagnostico-ia/) de entrada que se descuenta del proyecto, la [automatización a medida](/servicios/automatizacion/) según el alcance y un [acompañamiento mensual](/servicios/acompanamiento/) opcional, sin permanencia. El importe exacto depende de tu caso; lo aterrizamos en la llamada. Atiendo en remoto a toda España, con base en Bilbao y actividad regular en Andalucía.
 
 ## Preguntas frecuentes
 

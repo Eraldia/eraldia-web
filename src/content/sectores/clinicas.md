@@ -2,7 +2,7 @@
 title: "IA para clínicas y centros de salud"
 badge: "Salud"
 description: "Dentistas, fisios, veterinarias... Los pacientes esperan respuesta inmediata y el personal no da abasto. La IA atiende lo repetitivo y reduce las ausencias."
-metaDescription: "Automatización con IA para clínicas dentales, de fisioterapia y veterinarias: citas con recordatorios que reducen ausencias, asistente para dudas frecuentes y seguimiento de tratamientos. Precio cerrado desde 1.900 €."
+metaDescription: "Automatización con IA para clínicas dentales, de fisioterapia y veterinarias: citas con recordatorios que reducen ausencias, asistente para dudas frecuentes y seguimiento de tratamientos. Con precio cerrado y herramientas a tu nombre."
 image: "/images/use-cases/healthcare.jpg"
 imageAlt: "Equipo de una clínica usando herramientas digitales"
 weight: 2
@@ -44,4 +44,4 @@ El flujo de una clínica dental, una de fisioterapia o una veterinaria es muy pa
 
 ## Cómo lo hacemos
 
-Empezamos por un [diagnóstico](/servicios/diagnostico-ia/) (desde 490 €): en dos semanas tienes claras las 2-3 automatizaciones con más impacto y su coste cerrado. Si seguimos, la [implantación](/servicios/automatizacion/) va de 1.900 € a 4.500 € (precios de 2026), con el equipo formado y un mes de soporte. Las herramientas se contratan a tu nombre.
+Empezamos por un [diagnóstico](/servicios/diagnostico-ia/): en dos semanas tienes claras las 2-3 automatizaciones con más impacto y su coste cerrado. Si seguimos, la [implantación](/servicios/automatizacion/) se hace con precio cerrado por escrito, el equipo formado y un mes de soporte. Las herramientas se contratan a tu nombre.

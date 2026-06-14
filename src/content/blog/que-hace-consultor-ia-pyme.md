@@ -31,7 +31,7 @@ Un consultor de IA para pymes hace tres cosas: **identifica qué procesos de tu 
 
 ## Cuánto cuesta (2026)
 
-Con precios de 2026, un diagnóstico ronda los 400 € – 700 € y cada automatización implantada entre 1.900 € y 4.500 €. Publiqué los rangos completos en [la guía de precios](/blog/cuanto-cuesta-automatizacion-ia-pyme/).
+Los precios de mercado en 2026 se mueven en rangos amplios según el proyecto: un diagnóstico de entrada cuesta unos cientos de euros y cada automatización implantada, una horquilla de unos pocos miles. Publiqué el desglose completo, con sus rangos orientativos, en [la guía de precios](/blog/cuanto-cuesta-automatizacion-ia-pyme/).
 
 En mi caso: trabajo en solitario, con precio cerrado y sin intermediarios, desde Bilbao y en remoto para toda España — con especial actividad en el País Vasco y Andalucía. Puedes ver [cómo trabajo](/sobre-mi/) o empezar por un [diagnóstico](/servicios/diagnostico-ia/).
 

@@ -2,7 +2,7 @@
 title: "IA para gimnasios y centros deportivos"
 badge: "Deporte"
 description: "El crecimiento depende del seguimiento constante y de la retención de socios. La IA hace ese seguimiento que, con el día a día, siempre se queda a medias."
-metaDescription: "Automatización con IA para gimnasios y centros deportivos: seguimiento automático de interesados, bienvenida personalizada y señales de abandono para reducir bajas. Precio cerrado desde 1.900 €."
+metaDescription: "Automatización con IA para gimnasios y centros deportivos: seguimiento automático de interesados, bienvenida personalizada y señales de abandono para reducir bajas. Con precio cerrado y herramientas a tu nombre."
 image: "/images/use-cases/fitness.jpg"
 imageAlt: "Socio de gimnasio entrenando con su monitor"
 weight: 3
@@ -20,7 +20,7 @@ faqs:
   - q: "¿Cómo detecta que un socio se va a dar de baja?"
     a: "Con señales como la caída de asistencia o la falta de reserva de clases. Cuando aparecen, salta un aviso para que el equipo actúe a tiempo, en vez de enterarse cuando ya ha pedido la baja."
   - q: "¿Cuánto cuesta y en cuánto tiempo funciona?"
-    a: "El diagnóstico (desde 490 €) prioriza en dos semanas lo que más mueve la aguja. La implantación va de 1.900 € a 4.500 €, precio cerrado, en 2-4 semanas (precios de 2026)."
+    a: "El diagnóstico prioriza en dos semanas lo que más mueve la aguja y cierra su coste. La implantación se hace con precio cerrado por escrito, en 2-4 semanas."
 ---
 
 ## El crecimiento de un gimnasio se cae por el seguimiento
@@ -37,4 +37,4 @@ La automatización se ocupa de ese seguimiento constante que nunca falla por fal
 
 ## Cómo lo hacemos
 
-Empezamos por un [diagnóstico](/servicios/diagnostico-ia/) (desde 490 €) que prioriza dónde está el mayor retorno: captación, conversión o retención. La [implantación](/servicios/automatizacion/) va de 1.900 € a 4.500 € (precios de 2026), con el equipo formado y las herramientas a tu nombre.
+Empezamos por un [diagnóstico](/servicios/diagnostico-ia/) que prioriza dónde está el mayor retorno: captación, conversión o retención. La [implantación](/servicios/automatizacion/) se hace con precio cerrado por escrito, el equipo formado y las herramientas a tu nombre.

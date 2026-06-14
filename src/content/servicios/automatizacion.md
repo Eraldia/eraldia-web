@@ -1,6 +1,6 @@
 ---
 title: "Automatización a medida"
-description: "Implanto la automatización en tu negocio en 2-4 semanas: atención al cliente, presupuestos, facturación, informes... Proyecto cerrado en alcance, plazo y precio. Desde 1.900 €."
+description: "Implanto la automatización en tu negocio en 2-4 semanas: atención al cliente, presupuestos, facturación, informes... Proyecto cerrado en alcance, plazo y precio."
 weight: 2
 icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>'
 ---
@@ -27,6 +27,6 @@ Aquí es donde el plan se convierte en realidad. Cojo una de las automatizacione
 
 ## Precio y condiciones
 
-**Desde 1.900 € (IVA aparte) por proyecto, precio cerrado.** El plazo habitual es de 2 a 4 semanas según la complejidad. Si vienes del [diagnóstico](/servicios/diagnostico-ia/), su importe se descuenta.
+**Precio cerrado por proyecto (IVA aparte), acordado por escrito antes de empezar.** El importe depende del alcance y de cuántos sistemas haya que conectar; el plazo habitual es de 2 a 4 semanas según la complejidad. Si vienes del [diagnóstico](/servicios/diagnostico-ia/), su importe se descuenta.
 
 Las herramientas que se usen (suscripciones de Make, APIs de IA, etc.) se contratan **a tu nombre**: el sistema es tuyo, no me necesitas para que siga funcionando.

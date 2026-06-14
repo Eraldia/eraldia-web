@@ -1,6 +1,6 @@
 ---
 title: "Diagnóstico de IA y Automatización"
-description: "En dos semanas te digo exactamente qué procesos de tu negocio merece la pena automatizar, cuánto cuesta hacerlo y qué ahorro puedes esperar. Precio cerrado: desde 490 €."
+description: "En dos semanas te digo exactamente qué procesos de tu negocio merece la pena automatizar, cuánto cuesta hacerlo y qué ahorro puedes esperar. Con un presupuesto cerrado, sin sorpresas."
 weight: 1
 icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>'
 ---
@@ -28,6 +28,6 @@ Eso es exactamente lo que entrego con el diagnóstico.
 
 ## Precio y condiciones
 
-**Desde 490 € (IVA aparte), precio cerrado.** Dos semanas de plazo. Si después contratas la implantación conmigo, **el diagnóstico se descuenta del proyecto**.
+**Precio cerrado (IVA aparte) y dos semanas de plazo.** Te paso el importe exacto antes de empezar, sin sorpresas. Si después contratas la implantación conmigo, **el diagnóstico se descuenta del proyecto**.
 
 ¿Dudas de si te encaja? Empieza por la [llamada gratuita de 30 minutos](/#contacto): si veo que un diagnóstico no te va a aportar, te lo digo y no perdemos el tiempo ninguno de los dos.

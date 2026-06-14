@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const title = 'IA para despachos de abogados';
 const description =
-  'Automatización con IA para despachos de abogados: resumen y búsqueda en expedientes, control de plazos procesales, intake de clientes y consultas repetitivas. Menos horas administrativas, más horas facturables. Precio cerrado desde 1.900 € (2026).';
+  'Automatización con IA para despachos de abogados: resumen y búsqueda en expedientes, control de plazos procesales, intake de clientes y consultas repetitivas. Menos horas administrativas, más horas facturables. Proyectos con precio cerrado, sin humo.';
 
 const updated = '2026-06-14';
 
@@ -53,7 +53,7 @@ const faqs = [
   },
   {
     q: '¿Cuánto cuesta y cuánto tarda?',
-    a: 'El diagnóstico (desde 490 €) prioriza en dos semanas las automatizaciones con más retorno. La implantación va de 1.900 € a 4.500 €, precio cerrado, en 2-4 semanas (precios de 2026).',
+    a: 'El diagnóstico prioriza en dos semanas las automatizaciones con más retorno y cierra el presupuesto de cada una. La implantación se hace en 2-4 semanas, siempre con el precio acordado por escrito antes de empezar.',
   },
   {
     q: '¿Sirve para un despacho pequeño o un abogado individual?',
@@ -73,12 +73,6 @@ const serviceSchema = {
   description,
   areaServed: { '@type': 'Country', name: 'España' },
   provider: { '@type': 'ProfessionalService', name: 'Eraldia', url: new URL(url('/'), Astro.url).href },
-  offers: {
-    '@type': 'Offer',
-    priceCurrency: 'EUR',
-    price: '490',
-    description: 'Diagnóstico de IA desde 490 € (precios de 2026); implantación de 1.900 € a 4.500 €.',
-  },
 };
 
 const faqSchema = {
@@ -197,18 +191,18 @@ const faqSchema = {
 <section class="section">
   <div class="container container--narrow">
     <div class="section__header">
-      <h2 class="section__title">Cómo lo hacemos (y qué cuesta)</h2>
-      <p class="section__subtitle">Una escalera con precio cerrado en cada escalón. Empiezas por el primero y decides después.</p>
+      <h2 class="section__title">Cómo lo hacemos</h2>
+      <p class="section__subtitle">Una escalera de tres pasos, con precio cerrado por escrito en cada uno. Empiezas por el primero y decides después.</p>
     </div>
     <div class="pb-table-wrap">
       <table class="pb-table">
         <thead>
-          <tr><th>Paso</th><th>Qué recibes</th><th>Precio 2026</th></tr>
+          <tr><th>Paso</th><th>Qué recibes</th></tr>
         </thead>
         <tbody>
-          <tr><td><a href={url('/servicios/diagnostico-ia/')}>Diagnóstico de IA</a></td><td>En 2 semanas: el mapa de tus procesos, las automatizaciones con más retorno y qué información puede tratarse.</td><td>desde 490 €</td></tr>
-          <tr><td><a href={url('/servicios/automatizacion/')}>Automatización a medida</a></td><td>Implantación en 2-4 semanas, equipo formado y herramientas a tu nombre.</td><td>1.900 – 4.500 €</td></tr>
-          <tr><td><a href={url('/servicios/acompanamiento/')}>Acompañamiento</a></td><td>Mantenimiento, mejoras y formación continua, sin permanencia.</td><td>desde 390 €/mes</td></tr>
+          <tr><td><a href={url('/servicios/diagnostico-ia/')}>Diagnóstico de IA</a></td><td>En 2 semanas: el mapa de tus procesos, las automatizaciones con más retorno y qué información puede tratarse.</td></tr>
+          <tr><td><a href={url('/servicios/automatizacion/')}>Automatización a medida</a></td><td>Implantación en 2-4 semanas, equipo formado y herramientas a tu nombre.</td></tr>
+          <tr><td><a href={url('/servicios/acompanamiento/')}>Acompañamiento</a></td><td>Mantenimiento, mejoras y formación continua, sin permanencia.</td></tr>
         </tbody>
       </table>
     </div>

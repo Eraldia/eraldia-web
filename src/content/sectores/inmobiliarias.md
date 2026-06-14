@@ -2,7 +2,7 @@
 title: "IA para inmobiliarias y agentes"
 badge: "Inmobiliario"
 description: "Quien responde primero, se lleva la operación. La IA cualifica y sigue cada contacto al momento, para que ningún lead se enfríe en la bandeja de entrada."
-metaDescription: "Automatización con IA para inmobiliarias y agentes: respuesta inmediata y cualificación de leads, seguimiento automático de interesados y publicación de inmuebles sin picar datos. Precio cerrado desde 1.900 €."
+metaDescription: "Automatización con IA para inmobiliarias y agentes: respuesta inmediata y cualificación de leads, seguimiento automático de interesados y publicación de inmuebles sin picar datos. Con precio cerrado y herramientas a tu nombre."
 weight: 4
 featured: false
 bullets:
@@ -35,4 +35,4 @@ La automatización con IA cubre exactamente ese hueco: atención inmediata y seg
 
 ## Cómo lo hacemos
 
-Empezamos por un [diagnóstico](/servicios/diagnostico-ia/) (desde 490 €) que identifica dónde se te escapan más operaciones. La [implantación](/servicios/automatizacion/) va de 1.900 € a 4.500 € (precios de 2026), precio cerrado, con las herramientas a tu nombre. ¿Encaja en tu agencia? [Hablamos 30 minutos, gratis](/#contacto).
+Empezamos por un [diagnóstico](/servicios/diagnostico-ia/) que identifica dónde se te escapan más operaciones. La [implantación](/servicios/automatizacion/) se hace con precio cerrado por escrito y las herramientas a tu nombre. ¿Encaja en tu agencia? [Hablamos 30 minutos, gratis](/#contacto).
