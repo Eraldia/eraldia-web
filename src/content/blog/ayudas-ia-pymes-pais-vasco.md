@@ -1,7 +1,7 @@
 ---
 title: "Ayudas para digitalizar tu pyme vasca con IA: por dónde empezar en 2026"
 description: "Qué ayudas puede aprovechar una pyme del País Vasco para automatizar con IA en 2026: Kit Digital, programas del Grupo SPRI y apoyo de las diputaciones, explicado sin letra pequeña."
-date: 2026-01-01
+date: 2026-06-16
 tags: ["ayudas", "subvenciones", "ia", "pymes", "país vasco"]
 categories: ["guías"]
 ---
