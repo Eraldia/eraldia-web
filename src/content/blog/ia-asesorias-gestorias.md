@@ -1,7 +1,7 @@
 ---
 title: "IA en asesorías y gestorías: 4 automatizaciones que liberan horas en cada cierre"
 description: "Cuatro automatizaciones con IA que funcionan hoy en asesorías y gestorías españolas: registro de facturas, respuestas a clientes, recopilación de documentación y alertas de plazos. Con costes y plazos de 2026."
-date: 2026-01-01
+date: 2026-06-19
 tags: ["asesorías", "gestorías", "ia", "automatización"]
 categories: ["sectores"]
 ---
