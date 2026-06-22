@@ -1,7 +1,7 @@
 ---
 title: "IA para pymes andaluzas: por dónde empezar en 2026"
 description: "Guía práctica para pymes de Andalucía que quieren empezar con IA en 2026: qué automatizar primero según tu sector, qué cuesta y qué apoyos públicos existen."
-date: 2026-01-01
+date: 2026-06-22
 tags: ["andalucía", "ia", "pymes", "automatización"]
 categories: ["guías"]
 ---
