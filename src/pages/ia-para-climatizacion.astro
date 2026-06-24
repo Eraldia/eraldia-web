@@ -1,0 +1,254 @@
+---
+import { url } from '../utils';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = 'IA para empresas de climatización y aire acondicionado';
+const description =
+  'Automatización con IA para instaladores de aire acondicionado y climatización: agenda de instalaciones y reparaciones, presupuestos en minutos, recordatorios de mantenimiento y facturas sin picar. Atiende la avalancha de la ola de calor sin perder ningún aviso. Precio cerrado, sin humo.';
+
+const updated = '2026-06-24';
+
+// Automatizaciones que más liberan en climatización
+const automations = [
+  {
+    title: 'Agenda de instalaciones y reparaciones',
+    desc: 'Cada aviso que entra por teléfono, web o WhatsApp se convierte en una cita: el sistema propone hueco según zona y técnico, confirma, recuerda el día antes y reagenda si hace falta. Se acaban los avisos apuntados en un papel que se pierden.',
+  },
+  {
+    title: 'Presupuestos en minutos, no en días',
+    desc: 'A partir de los datos del cliente y del tipo de equipo, la IA prepara el borrador del presupuesto con tus precios y tus textos. Tú revisas y envías. En verano gana el que contesta primero: pasar de tardar tres días a tardar una hora es cerrar más instalaciones.',
+  },
+  {
+    title: 'Recordatorios de mantenimiento',
+    desc: 'Avisos automáticos a los clientes con equipo instalado para la revisión anual o la limpieza antes del verano. Convierte una venta puntual en ingreso recurrente sin que tengas que acordarte de llamar a nadie.',
+  },
+  {
+    title: 'Facturas sin picar',
+    desc: 'Cuando el trabajo se da por hecho, la factura se genera sola a partir del presupuesto aceptado y el parte del técnico, lista para tu programa de contabilidad. Menos errores, menos cobros que se quedan en el aire.',
+  },
+];
+
+// El caso práctico (referenciado en outreach)
+const flow = [
+  {
+    step: '1',
+    title: 'Entra el aviso',
+    desc: 'Un cliente escribe por WhatsApp o el formulario de la web: "se me ha estropeado el aire con esta ola de calor". La IA recoge los datos clave —dirección, tipo de equipo, urgencia— sin que nadie tenga que coger el teléfono al momento.',
+  },
+  {
+    step: '2',
+    title: 'Se cualifica y se agenda',
+    desc: 'Distingue una reparación urgente de un presupuesto de instalación nueva, propone el primer hueco libre del técnico de esa zona y confirma la visita con el cliente. El aviso ya está en la agenda, no en una libreta.',
+  },
+  {
+    step: '3',
+    title: 'Sale el presupuesto',
+    desc: 'Tras la visita, con los datos del equipo, el sistema prepara el borrador del presupuesto con tus precios. El comercial lo revisa y lo envía el mismo día, no tres días después cuando el cliente ya ha llamado a otros dos.',
+  },
+  {
+    step: '4',
+    title: 'Seguimiento y factura',
+    desc: 'Si el cliente no responde, un recordatorio amable a los dos días. Cuando acepta y se hace la instalación, la factura se genera a partir del presupuesto y queda registrado para la revisión del año que viene.',
+  },
+];
+
+const faqs = [
+  {
+    q: '¿Tengo que cambiar mi programa de facturación o de partes?',
+    a: 'No. Las automatizaciones se conectan a lo que ya usas (tu programa de facturación, el WhatsApp del negocio, el correo, el Excel de avisos) sin obligarte a migrar nada. El objetivo es quitar trabajo manual en plena temporada, no montarte una reforma cuando más liado estás.',
+  },
+  {
+    q: 'Justo ahora con la ola de calor no tengo tiempo para proyectos. ¿No es mal momento?',
+    a: 'Es el momento en que más duele el problema y más se nota la solución. Empezamos por lo que más atasca —normalmente la agenda y los presupuestos— y se monta en paralelo sin parar tu operativa. No hace falta que pares el negocio para ponerlo en marcha.',
+  },
+  {
+    q: '¿La IA habla con mis clientes sin que yo controle qué dice?',
+    a: 'Tú decides hasta dónde llega. Lo habitual es que la IA recoja el aviso, cualifique y prepare borradores, pero que el presupuesto y los mensajes importantes los apruebe siempre una persona. Empieza atendiendo lo repetitivo y solo te pasa lo que requiere tu criterio.',
+  },
+  {
+    q: '¿Cuánto se tarda y cuánto cuesta?',
+    a: 'Un diagnóstico te dice en dos semanas qué procesos compensa automatizar, cuánto tiempo ahorras y cuánto costaría implantarlo, con un presupuesto cerrado por escrito. La implantación se hace en 2-4 semanas, siempre con el precio acordado antes de empezar.',
+  },
+  {
+    q: '¿Sirve para una empresa pequeña, de pocos instaladores?',
+    a: 'Especialmente. Cuando sois pocos y la temporada se dispara, cada aviso perdido o cada presupuesto que sale tarde es un trabajo que se va a la competencia. Recuperar esas horas y no dejar ningún aviso sin contestar se nota directamente en la facturación del verano.',
+  },
+];
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Automatización con IA para empresas de climatización y aire acondicionado',
+  serviceType: 'Automatización de procesos con IA',
+  description,
+  areaServed: { '@type': 'Country', name: 'España' },
+  provider: { '@type': 'ProfessionalService', name: 'Eraldia', url: new URL(url('/'), Astro.url).href },
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<BaseLayout title={title} description={description} ogType="article" publishedTime={updated}>
+
+<script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<!-- Cabecera -->
+<section class="pb-hero">
+  <div class="pb-hero__inner">
+    <span class="hero__badge">IA para climatización y aire acondicionado</span>
+    <h1 class="pb-hero__title">Pon tu empresa de climatización al día con la IA</h1>
+    <p class="pb-hero__subtitle">
+      Con la ola de calor entran más avisos de los que podéis atender: instalaciones, averías, presupuestos
+      y facturas se amontonan. La automatización contesta, agenda y prepara presupuestos para que no se os
+      escape ningún cliente —ni en el pico de temporada.
+    </p>
+    <div class="hero__actions">
+      <a href={url('/#contacto')} class="btn btn--primary btn--lg">Pide tu diagnóstico gratuito</a>
+      <a href={url('/diagnostico-express/')} class="btn btn--outline-white btn--lg">Diagnóstico exprés (1 min)</a>
+    </div>
+    <p class="pb-hero__meta">
+      <span>Precio cerrado</span><span>·</span><span>2–4 semanas</span><span>·</span><span>herramientas a tu nombre</span>
+    </p>
+  </div>
+</section>
+
+<!-- Respuesta directa (GEO) -->
+<section class="section">
+  <div class="container container--narrow">
+    <div class="pb-answer reveal">
+      <span class="pb-answer__label">En una frase</span>
+      <p>
+        <strong>Una empresa de climatización vive de responder rápido</strong>: avisos que entran a la vez,
+        presupuestos que hay que sacar antes que la competencia, visitas que cuadrar por zonas y facturas que
+        emitir cuando ya estás en el siguiente trabajo. En plena ola de calor ese volumen se multiplica y lo
+        que se pierde —un aviso sin contestar, un presupuesto que sale tarde— es dinero que se va a otro
+        instalador. Es justo el tipo de trabajo, repetitivo y con reglas claras, donde la automatización con
+        IA da el retorno más rápido: no cambia cómo instaláis, quita de en medio el papeleo que os frena.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Automatizaciones -->
+<section class="section section--alt">
+  <div class="container">
+    <div class="section__header">
+      <h2 class="section__title">Lo que más atasca a un instalador en verano</h2>
+      <p class="section__subtitle">
+        Cuatro cuellos de botella que se repiten cada temporada. En cuanto funcionan para un aviso,
+        funcionan para todos los que vienen detrás.
+      </p>
+    </div>
+    <div class="grid grid--2 reveal-stagger">
+      {automations.map((a) => (
+        <div class="card reveal">
+          <h3 class="card__title">{a.title}</h3>
+          <p class="card__desc">{a.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Caso práctico -->
+<section class="section">
+  <div class="container container--narrow">
+    <div class="section__header">
+      <h2 class="section__title">Un caso práctico: del aviso de WhatsApp a la factura</h2>
+      <p class="section__subtitle">
+        Así se ve, paso a paso, cómo la automatización acompaña un aviso de principio a fin sin que nadie del
+        equipo tenga que estar pendiente de cada cosa.
+      </p>
+    </div>
+    <div class="grid grid--2 reveal-stagger">
+      {flow.map((f) => (
+        <div class="card reveal">
+          <h3 class="card__title">{f.step}. {f.title}</h3>
+          <p class="card__desc">{f.desc}</p>
+        </div>
+      ))}
+    </div>
+    <div class="pb-pullquote" style="margin-top: 3rem; text-align: center;">
+      En temporada alta no gana el que mejor instala: gana el que primero contesta y antes presupuesta.
+    </div>
+  </div>
+</section>
+
+<!-- Cómo lo hacemos + precios -->
+<section class="section section--alt">
+  <div class="container container--narrow">
+    <div class="section__header">
+      <h2 class="section__title">Cómo lo hacemos</h2>
+      <p class="section__subtitle">Una escalera de tres pasos, con precio cerrado por escrito en cada uno. Empiezas por el primero y decides después.</p>
+    </div>
+    <div class="pb-table-wrap">
+      <table class="pb-table">
+        <thead>
+          <tr><th>Paso</th><th>Qué recibes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><a href={url('/servicios/diagnostico-ia/')}>Diagnóstico de IA</a></td><td>En 2 semanas: el mapa de tus procesos, las 2-3 automatizaciones con más ahorro y su coste cerrado.</td></tr>
+          <tr><td><a href={url('/servicios/automatizacion/')}>Automatización a medida</a></td><td>Implantación en 2-4 semanas, equipo formado y herramientas a tu nombre.</td></tr>
+          <tr><td><a href={url('/servicios/acompanamiento/')}>Acompañamiento</a></td><td>Mantenimiento, mejoras y formación continua, sin permanencia.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="text-align:center; margin-top:1.5rem;">
+      ¿Quieres el método completo, gratis? Lee el <a href={url('/playbook/')}>playbook de IA agéntica para pymes</a>.
+    </p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="container container--narrow">
+    <div class="section__header">
+      <h2 class="section__title">Preguntas frecuentes</h2>
+    </div>
+    <div class="faq__list">
+      {faqs.map((f) => (
+        <details class="faq__item">
+          <summary class="faq__question">{f.q}</summary>
+          <p class="faq__answer">{f.a}</p>
+        </details>
+      ))}
+    </div>
+
+    <nav class="related-sectores" aria-label="Más">
+      <h2 class="related-sectores__title">Seguir leyendo</h2>
+      <ul class="related-sectores__list">
+        <li><a href={url('/ia-para-asesorias/')} class="related-sectores__link">IA para asesorías y gestorías</a></li>
+        <li><a href={url('/blog/cuanto-cuesta-automatizacion-ia-pyme/')} class="related-sectores__link">Cuánto cuesta automatizar con IA</a></li>
+        <li><a href={url('/playbook/')} class="related-sectores__link">Playbook de IA</a></li>
+        <li><a href={url('/casos/')} class="related-sectores__link">Otros sectores</a></li>
+      </ul>
+    </nav>
+  </div>
+</section>
+
+<!-- CTA final -->
+<section class="section">
+  <div class="container">
+    <div class="cta cta--inline cta--dark reveal" aria-label="Contacto">
+      <div class="cta__inner">
+        <h2 class="cta__title">¿Lo vemos en tu empresa?</h2>
+        <p class="cta__desc">
+          Cuéntame en dos líneas qué te quita más tiempo esta temporada —los avisos, los presupuestos, las
+          facturas— y te digo, sin humo, si la IA puede ayudarte y cuánto costaría.
+        </p>
+        <a href={url('/#contacto')} class="btn btn--primary btn--lg">Hablamos 30 minutos, gratis</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</BaseLayout>
