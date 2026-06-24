@@ -78,6 +78,34 @@ hola@eraldia.com
 
 ---
 
+## Envío automático al desplegar a Cloudflare
+
+El envío está enganchado al deploy mediante el hook `postdeploy` de
+`package.json`. Al ejecutar `npm run deploy` (build + `wrangler deploy`), después
+se ejecuta `node tools/send-outreach.mjs --send`.
+
+Tres salvaguardas para que un deploy normal **nunca** mande spam:
+
+1. **Clave:** toma `RESEND_API_KEY` del entorno o de `.dev.vars` (el mismo
+   fichero que usa wrangler). Sin clave, no envía.
+2. **Verificación:** solo manda a filas con `verified=yes` en
+   `tools/outreach-climatizacion.csv`. Por defecto están todas en `no`, así que
+   hasta que no edites el CSV no sale ningún correo.
+3. **Idempotencia:** cada dirección enviada se anota en `tools/.outreach-sent.json`
+   (ignorado por git). En sucesivos deploys se salta a quien ya recibió el correo,
+   así que nadie recibe la campaña dos veces.
+
+### Para lanzar la campaña
+
+1. Verifica el correo real de cada empresa y ponlo en el CSV con `verified=yes`.
+2. Asegúrate de que `RESEND_API_KEY` está en `.dev.vars` y de que `eraldia.com`
+   está verificado en Resend (el remitente es `hola@eraldia.com`).
+3. Previsualiza: `npm run outreach:preview` (dry run, no envía).
+4. Prueba a ti mismo: `node tools/send-outreach.mjs --send --to=alapontgorka@gmail.com`.
+5. Despliega: `npm run deploy` → al terminar, se envían los pendientes.
+
+> Para resetear y reenviar a alguien, borra su entrada de `tools/.outreach-sent.json`.
+
 ### Notas de uso
 
 - **Personalizar siempre** el primer párrafo con un detalle real (zona, años,
