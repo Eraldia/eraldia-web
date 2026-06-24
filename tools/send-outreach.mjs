@@ -2,37 +2,67 @@
 // ==========================================================================
 // Envío de la campaña de prospección (climatización / ola de calor) vía Resend.
 //
-// SEGURO POR DEFECTO: sin argumentos hace DRY RUN (no envía nada, solo imprime
-// lo que se enviaría). Para enviar de verdad hace falta, todo a la vez:
-//   - RESEND_API_KEY en el entorno
-//   - la bandera --send
-//   - que cada fila esté marcada como verified=yes en el CSV
+// Pensado para ejecutarse en el deploy a Cloudflare (hook `postdeploy` de
+// package.json), pero seguro por defecto:
+//
+//   - Sin --send: DRY RUN. Imprime lo que se enviaría, no envía nada.
+//   - Con --send: envía SOLO las filas marcadas verified=yes en el CSV
+//     que NO estén ya en el registro de enviados (idempotente: cada dirección
+//     recibe el correo una sola vez, aunque se redespliegue muchas veces).
+//
+// La clave de Resend se toma de RESEND_API_KEY o, si no está, de .dev.vars
+// (el mismo fichero que usa `wrangler dev`). El remitente por defecto es el
+// dominio verificado en Resend (LEAD_NOTIFY_FROM).
 //
 // Uso:
-//   node tools/send-outreach.mjs                 # dry run (recomendado)
-//   node tools/send-outreach.mjs --send          # envía SOLO filas verified=yes
-//   node tools/send-outreach.mjs --to=tu@correo  # prueba: manda todo a tu correo
+//   node tools/send-outreach.mjs                 # dry run
+//   node tools/send-outreach.mjs --send          # envía verified=yes pendientes
+//   node tools/send-outreach.mjs --to=tu@correo  # prueba: todo a tu correo
 //
 // Sin dependencias (Node >=18, usa fetch nativo).
 // ==========================================================================
 
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(__dirname, '..');
 
 // --- Config de la campaña ---------------------------------------------------
-const FROM = process.env.OUTREACH_FROM || 'Gorka Alapont <onboarding@resend.dev>';
+// Remitente: dominio verificado en Resend (mismo que el aviso de leads).
+const FROM = process.env.OUTREACH_FROM || 'Gorka Alapont — Eraldia <hola@eraldia.com>';
 const REPLY_TO = 'hola@eraldia.com';
 const LANDING = 'https://eraldia.com/ia-para-climatizacion/';
 const SUBJECT = 'Con esta ola de calor, ¿se os escapan avisos y presupuestos?';
 const CSV = join(__dirname, 'outreach-climatizacion.csv');
+const LEDGER = join(__dirname, '.outreach-sent.json'); // ignorado por git (.dev.vars* no, este sí hay que añadirlo)
 
 // --- Args -------------------------------------------------------------------
 const args = process.argv.slice(2);
 const SEND = args.includes('--send');
 const overrideTo = (args.find((a) => a.startsWith('--to=')) || '').split('=')[1] || null;
+
+// --- Clave de Resend: env o .dev.vars ---------------------------------------
+function loadApiKey() {
+  if (process.env.RESEND_API_KEY) return process.env.RESEND_API_KEY;
+  const devVars = join(ROOT, '.dev.vars');
+  if (existsSync(devVars)) {
+    const m = readFileSync(devVars, 'utf8').match(/^\s*RESEND_API_KEY\s*=\s*(.+)\s*$/m);
+    if (m) return m[1].trim().replace(/^["']|["']$/g, '');
+  }
+  return null;
+}
+
+// --- Registro de enviados (idempotencia) ------------------------------------
+function loadLedger() {
+  if (!existsSync(LEDGER)) return new Set();
+  try { return new Set(JSON.parse(readFileSync(LEDGER, 'utf8'))); }
+  catch { return new Set(); }
+}
+function saveLedger(set) {
+  writeFileSync(LEDGER, JSON.stringify([...set], null, 2) + '\n');
+}
 
 // --- CSV parser mínimo (soporta comillas) -----------------------------------
 function parseCsv(text) {
@@ -85,45 +115,51 @@ Si prefieres no recibir más correos míos, respóndeme con "baja" y no te escri
 
 // --- Main -------------------------------------------------------------------
 const rows = parseCsv(readFileSync(CSV, 'utf8'));
-const apiKey = process.env.RESEND_API_KEY;
+const apiKey = loadApiKey();
 const willSend = SEND && !!apiKey;
+const ledger = loadLedger();
 
 console.log('='.repeat(72));
 console.log(willSend ? '🚀 MODO ENVÍO (Resend)' : '🧪 DRY RUN — no se envía nada');
 console.log(`From:     ${FROM}`);
 console.log(`Reply-To: ${REPLY_TO}`);
 console.log(`Asunto:   ${SUBJECT}`);
-console.log(`Destinos: ${rows.length} empresas en el CSV`);
+console.log(`Empresas: ${rows.length} en el CSV · ya enviados: ${ledger.size}`);
 if (overrideTo) console.log(`Override: todo se enviaría a ${overrideTo} (modo prueba)`);
-if (SEND && !apiKey) console.log('⚠  --send ignorado: falta RESEND_API_KEY en el entorno.');
+if (SEND && !apiKey) console.log('⚠  --send ignorado: no se encontró RESEND_API_KEY (ni en entorno ni en .dev.vars).');
 console.log('='.repeat(72));
 
 let sent = 0, skipped = 0;
 for (const row of rows) {
   const to = overrideTo || row.email;
   const verified = row.verified.toLowerCase() === 'yes';
+  const already = !overrideTo && ledger.has(to);
   const body = renderText(row);
 
-  console.log(`\n──── ${row.company}  →  ${to}  ${verified ? '' : '⚠ unverified'}`);
-  console.log(body);
+  const flags = [verified ? '' : '⚠ unverified', already ? '✓ ya enviado' : ''].filter(Boolean).join(' ');
+  console.log(`\n──── ${row.company}  →  ${to}  ${flags}`);
+  if (!willSend) { console.log(body); skipped++; continue; }
 
-  if (!willSend) { skipped++; continue; }
-  if (!overrideTo && !verified) {
-    console.log('   ⏭  saltada: email sin verificar (verified=no).');
-    skipped++;
-    continue;
-  }
+  if (already) { console.log('   ⏭  saltada: ya estaba en el registro de enviados.'); skipped++; continue; }
+  if (!overrideTo && !verified) { console.log('   ⏭  saltada: email sin verificar (verified=no).'); skipped++; continue; }
 
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ from: FROM, to: [to], reply_to: REPLY_TO, subject: SUBJECT, text: body }),
   });
-  if (res.ok) { console.log('   ✅ enviado'); sent++; }
-  else { console.log(`   ❌ error ${res.status}: ${await res.text()}`); skipped++; }
+  if (res.ok) {
+    console.log('   ✅ enviado');
+    if (!overrideTo) { ledger.add(to); saveLedger(ledger); }
+    sent++;
+  } else {
+    console.log(`   ❌ error ${res.status}: ${await res.text()}`);
+    skipped++;
+  }
 }
 
 console.log('\n' + '='.repeat(72));
-console.log(willSend ? `Enviados: ${sent} · Saltados: ${skipped}` : `Dry run: ${skipped} emails renderizados, 0 enviados.`);
-if (!willSend) console.log('Para enviar de verdad: exporta RESEND_API_KEY, marca verified=yes y añade --send.');
+console.log(willSend ? `Enviados: ${sent} · Saltados: ${skipped}` : `Dry run: ${rows.length} renderizados, 0 enviados.`);
+if (!willSend && SEND) console.log('No se envió: falta la clave de Resend. Ponla en .dev.vars o RESEND_API_KEY.');
+if (!SEND) console.log('Para enviar de verdad: marca verified=yes en el CSV y ejecuta con --send (o despliega con `npm run deploy`).');
 console.log('='.repeat(72));
