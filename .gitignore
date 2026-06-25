@@ -16,5 +16,6 @@ __pycache__/
 .env*
 !.env.example
 
-# registro de envíos de la campaña de prospección (idempotencia)
+# registro de envíos de las campañas de prospección (idempotencia)
 tools/.outreach-sent.json
+tools/.outreach-asesorias-sent.json
