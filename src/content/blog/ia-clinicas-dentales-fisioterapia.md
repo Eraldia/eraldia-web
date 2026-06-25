@@ -1,7 +1,7 @@
 ---
 title: "IA en clínicas dentales y de fisioterapia: menos citas perdidas, menos teléfono"
 description: "Las automatizaciones con IA que mejor funcionan en clínicas dentales, de fisioterapia y veterinarias: recordatorios que reducen no-shows, gestión de citas por WhatsApp y recuperación de pacientes inactivos. Costes de 2026."
-date: 2026-01-01
+date: 2026-06-25
 tags: ["clínicas", "salud", "ia", "automatización"]
 categories: ["sectores"]
 ---
