@@ -113,6 +113,30 @@ ${REPLY_TO}
 Si prefieres no recibir más correos míos, respóndeme con "baja" y no te escribo de nuevo.`;
 }
 
+// --- Envío con reintento ante rate-limit (429) ------------------------------
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function sendWithRetry(to, body, apiKey, attempts = 4) {
+  for (let i = 1; i <= attempts; i++) {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from: FROM, to: [to], reply_to: REPLY_TO, subject: SUBJECT, text: body }),
+    });
+    if (res.ok) return true;
+    const text = await res.text();
+    if (res.status === 429 && i < attempts) {
+      const wait = 1000 * i; // backoff: 1s, 2s, 3s
+      console.log(`   ⏳ rate limit (429), reintento ${i}/${attempts - 1} en ${wait}ms`);
+      await sleep(wait);
+      continue;
+    }
+    console.log(`   error ${res.status}: ${text}`);
+    return false;
+  }
+  return false;
+}
+
 // --- Main -------------------------------------------------------------------
 const rows = parseCsv(readFileSync(CSV, 'utf8'));
 const apiKey = loadApiKey();
@@ -143,19 +167,16 @@ for (const row of rows) {
   if (already) { console.log('   ⏭  saltada: ya estaba en el registro de enviados.'); skipped++; continue; }
   if (!overrideTo && !verified) { console.log('   ⏭  saltada: email sin verificar (verified=no).'); skipped++; continue; }
 
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from: FROM, to: [to], reply_to: REPLY_TO, subject: SUBJECT, text: body }),
-  });
-  if (res.ok) {
+  const ok = await sendWithRetry(to, body, apiKey);
+  if (ok) {
     console.log('   ✅ enviado');
     if (!overrideTo) { ledger.add(to); saveLedger(ledger); }
     sent++;
   } else {
-    console.log(`   ❌ error ${res.status}: ${await res.text()}`);
+    console.log('   ❌ no enviado tras reintentos');
     skipped++;
   }
+  await sleep(300); // Resend: máx. 5 req/s. 300ms deja margen de sobra.
 }
 
 console.log('\n' + '='.repeat(72));
