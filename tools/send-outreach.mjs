@@ -99,6 +99,33 @@ Si te encaja, te invito a una llamada de 30 minutos, gratis y sin compromiso: te
 ${FOOTER}`;
     },
   },
+
+  dentistas: {
+    csv: 'outreach-dentistas.csv',
+    ledger: '.outreach-dentistas-sent.json',
+    subject: '¿Cuántos huecos perdéis por ausencias cada semana?',
+    landing: 'https://eraldia.com/casos/clinicas/',
+    render({ company, contact_name, custom_line }, landing) {
+      const saludo = contact_name ? `Hola ${contact_name}:` : `Hola:`;
+      const apertura = custom_line ? `${custom_line} ` : '';
+      return `${saludo}
+
+${apertura}El teléfono de la consulta no para mientras tenéis pacientes en el sillón: llamadas sin contestar, WhatsApp que se acumula y huecos que se pierden por ausencias que nadie llegó a confirmar.
+
+Soy Gorka, de Eraldia (Bilbao). Ayudo a clínicas a quitarse de encima ese trabajo repetitivo con automatización e IA, con proyectos pequeños, de precio cerrado y sin humo. Lo que más impacto suele tener:
+
+- Confirmación y recordatorio de citas que reducen las ausencias: cada hueco vacío es una franja que ya no vuelve.
+- Un asistente que responde por WhatsApp o web las dudas de siempre (horarios, precios orientativos, primera visita) y solo os pasa a una persona lo que lo necesita.
+- Avisos automáticos de revisiones y de seguimiento de tratamientos, para que el paciente vuelva.
+
+Lo he resumido aquí, con ejemplos concretos para una clínica:
+${landing}
+
+Si te encaja, te invito a una llamada de 30 minutos, gratis y sin compromiso: te digo sin rodeos qué se puede automatizar en tu clínica y cuánto costaría. Y si no lo veo claro, también te lo digo.
+
+${FOOTER}`;
+    },
+  },
 };
 
 // --- Args -------------------------------------------------------------------

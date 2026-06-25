@@ -19,3 +19,4 @@ __pycache__/
 # registro de envíos de las campañas de prospección (idempotencia)
 tools/.outreach-sent.json
 tools/.outreach-asesorias-sent.json
+tools/.outreach-dentistas-sent.json
