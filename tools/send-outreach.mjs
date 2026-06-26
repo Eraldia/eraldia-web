@@ -103,14 +103,14 @@ ${FOOTER}`;
   dentistas: {
     csv: 'outreach-dentistas.csv',
     ledger: '.outreach-dentistas-sent.json',
-    subject: '¿Os fallan muchos pacientes a última hora?',
+    subject: '¿Qué es lo que más tiempo os quita en la clínica?',
     landing: 'https://eraldia.com/casos/clinicas/',
     render(_row, landing) {
       return `Hola:
 
-Soy Gorka, de Eraldia (Bilbao). Ayudo a clínicas dentales con una cosa muy concreta: que no se pierdan citas. Pongo recordatorios automáticos por WhatsApp para que la gente no falte, y un sistema que contesta los mensajes de siempre cuando estáis con un paciente.
+Soy Gorka, de Eraldia (Bilbao). Ayudo a clínicas dentales a quitarse de encima el lío del día a día: presupuestos y facturas que salgan en un momento, los recordatorios para que la gente no falte, y la web y los mensajes con los pacientes funcionando solos.
 
-Sencillo y a precio cerrado. ¿Te llamo 10 minutos esta semana y te lo enseño? Si no encaja, me lo dices y no insisto.
+Lo monto sencillo y a precio cerrado, empezando por lo que más os apriete. ¿Te llamo 10 minutos esta semana y lo vemos? Si no encaja, me lo dices y no insisto.
 
 Por si quieres echar un ojo: ${landing}
 
