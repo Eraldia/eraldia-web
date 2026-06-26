@@ -65,6 +65,39 @@ node tools/send-outreach.mjs --campaign=fisios                 # dry run
 RESEND_API_KEY=... node tools/send-outreach.mjs --campaign=fisios --send
 ```
 
+## Calentamiento de IP/dominio (warm-up)
+
+Mandar mucho de golpe desde un dominio nuevo dispara el rechazo (spam/rebotes).
+Por eso el envío arranca bajo y sube poco a poco.
+
+- **`tools/warmup.json`** — rampa: `start` (día que enciendes el envío) y `steps`
+  con el cupo TOTAL de correos por día. Por defecto: 10 → 15 → 25 → 40 → 55 → 70
+  a lo largo de ~4 semanas. Antes de `start`, el cupo es 0 (no se envía).
+- **`tools/warmup-cap.mjs`** — calcula el cupo de hoy. El GitHub Action lo reparte
+  entre los sectores y para al agotarlo.
+- **IMPORTANTE:** pon `start` en `warmup.json` al **día real** en que mergeas a main
+  y añades el secreto. Si lo dejas en el pasado, la rampa ya irá "adelantada".
+- Para forzar un cupo puntual: *Run workflow* → `budget_override`.
+
+### Higiene de entregabilidad (para que baje el rechazo)
+
+1. **Autenticación del dominio** (lo más importante; se hace en el DNS de
+   eraldia.com, panel de Resend → Domains): **SPF, DKIM y DMARC**. Empieza el
+   DMARC en `p=none` y endurece cuando esté limpio.
+2. **Rebotes bajos:** los emails de la cola son públicos y reales, pero alguno
+   rebotará. Vigila en **Resend → Emails** y quita de los CSV los que reboten
+   (bounce). Si el rebote pasa de ~3–4%, baja el cupo y limpia antes de seguir.
+3. **Quejas bajas:** mantener el opt-out fácil (el mensaje ya invita a responder
+   "no me interesa"). Si suben las quejas, parar y revisar copy/segmentación.
+4. **Cadencia constante:** mejor 15/día todos los días que 100 un día y 0 cinco.
+   La rampa + el cron diario ya lo hacen.
+5. **Contenido sano:** texto plano, personal, sin imágenes pesadas ni muchos
+   enlaces (el mensaje actual ya cumple).
+
+> Aviso honesto: esto es prospección **en frío**, con engagement bajo por
+> naturaleza. El warm-up + la higiene reducen el rechazo, pero no lo eliminan;
+> la mejor señal es responder rápido a quien contesta y retirar a quien no.
+
 ## Cuota / rate limit
 
 El script envía secuencialmente con 300 ms entre correos (~3/seg, por debajo del

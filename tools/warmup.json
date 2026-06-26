@@ -1,0 +1,12 @@
+{
+  "_doc": "Rampa de calentamiento de envío (deliverability). 'start' = día en que se ENCIENDE el envío real (ponlo al día que mergees y añadas el secreto). Cada 'step' fija el máximo de correos TOTALES al día hasta 'throughDay' (días desde start, empezando en 1). Antes de 'start' el cupo es 0 (no se envía nada). tools/warmup-cap.mjs calcula el cupo de hoy y el GitHub Action lo reparte entre los sectores.",
+  "start": "2026-06-27",
+  "steps": [
+    { "throughDay": 3,    "perDay": 10 },
+    { "throughDay": 7,    "perDay": 15 },
+    { "throughDay": 14,   "perDay": 25 },
+    { "throughDay": 21,   "perDay": 40 },
+    { "throughDay": 28,   "perDay": 55 },
+    { "throughDay": 99999, "perDay": 70 }
+  ]
+}

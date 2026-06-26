@@ -16,9 +16,8 @@ on:
     - cron: '11 8 * * *' # 08:11 UTC cada día
   workflow_dispatch:
     inputs:
-      max_per_campaign:
-        description: 'Máximo de envíos por sector en esta ejecución'
-        default: '10'
+      budget_override:
+        description: 'Cupo TOTAL de envíos hoy (deja vacío para usar la rampa de warm-up)'
         required: false
 
 permissions:
@@ -40,18 +39,31 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Enviar campañas de salud (verified=yes pendientes)
+      - name: Enviar campañas de salud (cupo diario según warm-up)
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          MAX: ${{ github.event.inputs.max_per_campaign || '10' }}
+          OVERRIDE: ${{ github.event.inputs.budget_override }}
         run: |
           if [ -z "$RESEND_API_KEY" ]; then
             echo "::error::Falta el secreto RESEND_API_KEY; no se envía nada."
             exit 1
           fi
+          # Cupo TOTAL de hoy: override manual si se indica, si no la rampa de warm-up.
+          BUDGET="${OVERRIDE:-$(node tools/warmup-cap.mjs)}"
+          echo "Cupo de envío para hoy (warm-up): $BUDGET"
+          if [ "$BUDGET" -le 0 ]; then
+            echo "Cupo 0 (aún no ha empezado el warm-up o rampa a 0). No se envía."
+            exit 0
+          fi
+          # Reparte el presupuesto entre sectores, parando al agotarlo.
           for c in dentistas fisios esteticas nutricion; do
-            echo "::group::$c"
-            node tools/send-outreach.mjs --campaign="$c" --send --max="$MAX"
+            if [ "$BUDGET" -le 0 ]; then echo "Presupuesto del día agotado."; break; fi
+            echo "::group::$c (cupo restante: $BUDGET)"
+            OUT=$(node tools/send-outreach.mjs --campaign="$c" --send --max="$BUDGET")
+            echo "$OUT"
+            SENT=$(echo "$OUT" | grep -oE 'Enviados: [0-9]+' | grep -oE '[0-9]+' | head -1)
+            SENT=${SENT:-0}
+            BUDGET=$((BUDGET - SENT))
             echo "::endgroup::"
           done
 
