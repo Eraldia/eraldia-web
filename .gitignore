@@ -16,11 +16,6 @@ __pycache__/
 .env*
 !.env.example
 
-# registro de envíos de las campañas de prospección (idempotencia)
-tools/.outreach-sent.json
-tools/.outreach-asesorias-sent.json
-tools/.outreach-dentistas-sent.json
-
-tools/.outreach-fisios-sent.json
-tools/.outreach-esteticas-sent.json
-tools/.outreach-nutricion-sent.json
+# Nota: los registros de envío (tools/.outreach-*-sent.json) y los logs A/B
+# (tools/.outreach-*-log.csv) SÍ se versionan a propósito, para que el loop
+# diario deduplique y conserve los resultados aunque el contenedor se recicle.

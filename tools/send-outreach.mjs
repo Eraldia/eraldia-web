@@ -1,30 +1,29 @@
 #!/usr/bin/env node
 // ==========================================================================
-// Envío de campañas de prospección por correo (Resend).
+// Envío de campañas de prospección por correo (Resend), con A/B testing.
 //
-// Soporta varias campañas (climatización, asesorías…). Se elige con
-// --campaign=<nombre>; por defecto, "climatizacion" (la del hook postdeploy).
+// Cada campaña define una o varias VARIANTES de mensaje (A, B…), cada una con
+// su asunto y su cuerpo. El script las reparte de forma equilibrada entre los
+// destinatarios y registra qué variante recibió cada uno, para poder medir
+// luego qué mensaje funciona mejor por sector. Además etiqueta cada envío en
+// Resend (campaign + variant) para ver aperturas/clics por variante en el panel.
 //
 // Seguro por defecto:
 //   - Sin --send: DRY RUN. Imprime lo que se enviaría, no envía nada.
-//   - Con --send: envía SOLO las filas verified=yes del CSV de la campaña que
-//     NO estén ya en su registro de enviados (idempotente: cada dirección
-//     recibe el correo una sola vez, aunque se reejecute o se redespliegue).
+//   - Con --send: envía SOLO las filas verified=yes que NO estén ya en el
+//     registro de enviados (idempotente: cada dirección recibe un único correo).
 //
 // La clave de Resend se toma de RESEND_API_KEY o, si no está, de .dev.vars.
-// El remitente por defecto es el dominio verificado en Resend.
 //
 // Uso:
-//   node tools/send-outreach.mjs                              # dry run (climatización)
-//   node tools/send-outreach.mjs --send                       # envía climatización
-//   node tools/send-outreach.mjs --campaign=asesorias         # dry run asesorías
-//   node tools/send-outreach.mjs --campaign=asesorias --send  # envía asesorías
-//   node tools/send-outreach.mjs --send --to=tu@correo        # prueba: todo a tu correo
+//   node tools/send-outreach.mjs --campaign=dentistas            # dry run
+//   node tools/send-outreach.mjs --campaign=dentistas --send     # envía
+//   node tools/send-outreach.mjs --campaign=fisios --send --to=tu@correo  # prueba
 //
 // Sin dependencias (Node >=18, usa fetch nativo).
 // ==========================================================================
 
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, appendFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -35,7 +34,7 @@ const ROOT = join(__dirname, '..');
 const FROM = process.env.OUTREACH_FROM || 'Gorka Alapont — Eraldia <hola@eraldia.com>';
 const REPLY_TO = 'hola@eraldia.com';
 
-// Pie común: firma + línea de baja (RGPD/LSSI).
+// Pie común para las campañas "largas" (climatización, asesorías).
 const FOOTER = `Un saludo,
 Gorka Alapont — Eraldia
 Pon tu pyme al día con la IA
@@ -44,15 +43,30 @@ ${REPLY_TO}
 —
 Si prefieres no recibir más correos míos, respóndeme con "baja" y no te escribo de nuevo.`;
 
-// Mensaje común para sectores de salud (tono natural y directo). `who` es el
-// tipo de centro ("clínicas dentales", "clínicas de fisioterapia"…) y `people`
-// cómo llamar a quien atienden ("los pacientes", "los clientes").
-function healthMessage(who, landing, people = 'los pacientes') {
+const CLINICAS_LANDING = 'https://eraldia.com/casos/clinicas/';
+
+// --- Variantes de mensaje para sectores de salud (A/B) ----------------------
+// `who` = tipo de centro; `people` = cómo llamar a quien atienden.
+// Variante A: ángulo "agenda" (citas/ausencias/comunicación).
+function healthA(who, landing, people = 'los pacientes') {
   return `Hola:
 
-Soy Gorka, de Eraldia (Bilbao). Ayudo a ${who} a quitarse de encima el lío del día a día: presupuestos y facturas que salgan en un momento, los recordatorios para que la gente no falte, y la web y los mensajes con ${people} funcionando solos.
+Soy Gorka, de Eraldia (Bilbao). Ayudo a ${who} a que no se os escape ni una cita: recordatorios automáticos por WhatsApp para que la gente no falte, y los mensajes con ${people} contestados aunque estéis a tope.
 
-Lo monto sencillo y a precio cerrado, empezando por lo que más os apriete. ¿Te llamo 10 minutos esta semana y lo vemos? Si no encaja, me lo dices y no insisto.
+Lo monto sencillo y a precio cerrado. ¿Te llamo 10 minutos esta semana y lo vemos? Si no encaja, me lo dices y no insisto.
+
+Por si quieres echar un ojo: ${landing}
+
+Gorka
+hola@eraldia.com`;
+}
+// Variante B: ángulo "dinero" (presupuestos/facturación).
+function healthB(who, landing, _people) {
+  return `Hola:
+
+Soy Gorka, de Eraldia (Bilbao). Ayudo a ${who} con el papeleo que come horas: presupuestos que salen al momento y con seguimiento para que se cierren más, y las facturas sin picarlas a mano.
+
+Lo monto sencillo y a precio cerrado. ¿Te llamo 10 minutos esta semana y lo vemos? Si no encaja, me lo dices y no insisto.
 
 Por si quieres echar un ojo: ${landing}
 
@@ -60,19 +74,29 @@ Gorka
 hola@eraldia.com`;
 }
 
-const CLINICAS_LANDING = 'https://eraldia.com/casos/clinicas/';
+// Construye las dos variantes A/B de un sector de salud.
+function healthVariants(who, people) {
+  return [
+    { key: 'A', subject: '¿Os falla mucha gente a última hora?', render: (_r, l) => healthA(who, l, people) },
+    { key: 'B', subject: '¿Cuánto tiempo se os va en presupuestos y facturas?', render: (_r, l) => healthB(who, l, people) },
+  ];
+}
 
 // --- Definición de campañas -------------------------------------------------
 const CAMPAIGNS = {
   climatizacion: {
     csv: 'outreach-climatizacion.csv',
     ledger: '.outreach-sent.json',
-    subject: 'Con esta ola de calor, ¿se os escapan avisos y presupuestos?',
+    log: '.outreach-climatizacion-log.csv',
     landing: 'https://eraldia.com/ia-para-climatizacion/',
-    render({ company, contact_name, custom_line }, landing) {
-      const saludo = contact_name ? `Hola ${contact_name}:` : `Hola:`;
-      const apertura = custom_line ? `${custom_line} ` : '';
-      return `${saludo}
+    variants: [
+      {
+        key: 'A',
+        subject: 'Con esta ola de calor, ¿se os escapan avisos y presupuestos?',
+        render({ company, contact_name, custom_line }, landing) {
+          const saludo = contact_name ? `Hola ${contact_name}:` : `Hola:`;
+          const apertura = custom_line ? `${custom_line} ` : '';
+          return `${saludo}
 
 ${apertura}Con la ola de calor de estos días imagino que en ${company} estáis a tope: entran más avisos de los que se pueden atender, los presupuestos se acumulan y la facturación queda para "cuando se pueda".
 
@@ -88,18 +112,24 @@ ${landing}
 Si te encaja, te invito a una llamada de 30 minutos, gratis y sin compromiso: te digo sin rodeos si esto te ahorra tiempo este verano y cuánto costaría. Y si no lo veo claro, también te lo digo.
 
 ${FOOTER}`;
-    },
+        },
+      },
+    ],
   },
 
   asesorias: {
     csv: 'outreach-asesorias.csv',
     ledger: '.outreach-asesorias-sent.json',
-    subject: '¿La campaña de la renta os deja sin horas para asesorar?',
+    log: '.outreach-asesorias-log.csv',
     landing: 'https://eraldia.com/ia-para-asesorias/',
-    render({ company, contact_name, custom_line }, landing) {
-      const saludo = contact_name ? `Hola ${contact_name}:` : `Hola:`;
-      const apertura = custom_line ? `${custom_line} ` : '';
-      return `${saludo}
+    variants: [
+      {
+        key: 'A',
+        subject: '¿La campaña de la renta os deja sin horas para asesorar?',
+        render({ company, contact_name, custom_line }, landing) {
+          const saludo = contact_name ? `Hola ${contact_name}:` : `Hola:`;
+          const apertura = custom_line ? `${custom_line} ` : '';
+          return `${saludo}
 
 ${apertura}En plena recta final de la campaña de la renta imagino que en ${company} vais con la lengua fuera: picado de facturas, plazos que vigilar y las mismas consultas de siempre, una detrás de otra.
 
@@ -115,47 +145,41 @@ ${landing}
 Si te encaja, te invito a una llamada de 30 minutos, gratis y sin compromiso: te digo sin rodeos qué se puede automatizar en tu asesoría y cuánto costaría. Y si no lo veo claro, también te lo digo.
 
 ${FOOTER}`;
-    },
+        },
+      },
+    ],
   },
 
   dentistas: {
     csv: 'outreach-dentistas.csv',
     ledger: '.outreach-dentistas-sent.json',
-    subject: '¿Qué es lo que más tiempo os quita en la clínica?',
+    log: '.outreach-dentistas-log.csv',
     landing: CLINICAS_LANDING,
-    render(_row, landing) {
-      return healthMessage('clínicas dentales', landing);
-    },
+    variants: healthVariants('clínicas dentales', 'los pacientes'),
   },
 
   fisios: {
     csv: 'outreach-fisios.csv',
     ledger: '.outreach-fisios-sent.json',
-    subject: '¿Qué es lo que más tiempo os quita en la clínica?',
+    log: '.outreach-fisios-log.csv',
     landing: CLINICAS_LANDING,
-    render(_row, landing) {
-      return healthMessage('clínicas de fisioterapia', landing);
-    },
+    variants: healthVariants('clínicas de fisioterapia', 'los pacientes'),
   },
 
   esteticas: {
     csv: 'outreach-esteticas.csv',
     ledger: '.outreach-esteticas-sent.json',
-    subject: '¿Qué es lo que más tiempo os quita en la clínica?',
+    log: '.outreach-esteticas-log.csv',
     landing: CLINICAS_LANDING,
-    render(_row, landing) {
-      return healthMessage('clínicas de estética', landing, 'los clientes');
-    },
+    variants: healthVariants('clínicas de estética', 'los clientes'),
   },
 
   nutricion: {
     csv: 'outreach-nutricion.csv',
     ledger: '.outreach-nutricion-sent.json',
-    subject: '¿Qué es lo que más tiempo os quita en la consulta?',
+    log: '.outreach-nutricion-log.csv',
     landing: CLINICAS_LANDING,
-    render(_row, landing) {
-      return healthMessage('consultas de nutrición y dietética', landing);
-    },
+    variants: healthVariants('consultas de nutrición y dietética', 'los pacientes'),
   },
 };
 
@@ -173,8 +197,9 @@ if (!campaign) {
 
 const CSV = join(__dirname, campaign.csv);
 const LEDGER = join(__dirname, campaign.ledger);
-const SUBJECT = campaign.subject;
+const LOG = join(__dirname, campaign.log);
 const LANDING = campaign.landing;
+const VARIANTS = campaign.variants;
 
 // --- Clave de Resend: env o .dev.vars ---------------------------------------
 function loadApiKey() {
@@ -195,6 +220,13 @@ function loadLedger() {
 }
 function saveLedger(set) {
   writeFileSync(LEDGER, JSON.stringify([...set], null, 2) + '\n');
+}
+
+// --- Log de A/B: qué variante recibió cada dirección ------------------------
+function appendLog(email, variantKey, subject) {
+  if (!existsSync(LOG)) writeFileSync(LOG, 'date,email,variant,subject\n');
+  const date = new Date().toISOString().slice(0, 10);
+  appendFileSync(LOG, `${date},${email},${variantKey},"${subject.replace(/"/g, '""')}"\n`);
 }
 
 // --- CSV parser mínimo (soporta comillas) -----------------------------------
@@ -221,12 +253,12 @@ function parseCsv(text) {
 // --- Envío con reintento ante rate-limit (429) ------------------------------
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-async function sendWithRetry(to, body, apiKey, attempts = 4) {
+async function sendWithRetry(to, subject, body, tags, apiKey, attempts = 4) {
   for (let i = 1; i <= attempts; i++) {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: FROM, to: [to], reply_to: REPLY_TO, subject: SUBJECT, text: body }),
+      body: JSON.stringify({ from: FROM, to: [to], reply_to: REPLY_TO, subject, text: body, tags }),
     });
     if (res.ok) return true;
     const text = await res.text();
@@ -250,33 +282,41 @@ const ledger = loadLedger();
 
 console.log('='.repeat(72));
 console.log(willSend ? '🚀 MODO ENVÍO (Resend)' : '🧪 DRY RUN — no se envía nada');
-console.log(`Campaña:  ${campaignName}`);
+console.log(`Campaña:  ${campaignName}  ·  variantes A/B: ${VARIANTS.map((v) => v.key).join('/')}`);
 console.log(`From:     ${FROM}`);
-console.log(`Reply-To: ${REPLY_TO}`);
-console.log(`Asunto:   ${SUBJECT}`);
 console.log(`Empresas: ${rows.length} en el CSV · ya enviados: ${ledger.size}`);
 if (overrideTo) console.log(`Override: todo se enviaría a ${overrideTo} (modo prueba)`);
 if (SEND && !apiKey) console.log('⚠  --send ignorado: no se encontró RESEND_API_KEY (ni en entorno ni en .dev.vars).');
 console.log('='.repeat(72));
 
+// El reparto A/B se equilibra usando el total ya enviado como semilla.
+let vCounter = ledger.size;
 let sent = 0, skipped = 0;
+const byVariant = {};
+
 for (const row of rows) {
   const to = overrideTo || row.email;
   const verified = row.verified.toLowerCase() === 'yes';
   const already = !overrideTo && ledger.has(to);
-  const body = campaign.render(row, LANDING);
+  const isCandidate = overrideTo ? true : (verified && !already);
+
+  const variant = VARIANTS[vCounter % VARIANTS.length];
+  if (isCandidate) vCounter++;
+  const body = variant.render(row, LANDING);
 
   const flags = [verified ? '' : '⚠ unverified', already ? '✓ ya enviado' : ''].filter(Boolean).join(' ');
-  console.log(`\n──── ${row.company}  →  ${to}  ${flags}`);
-  if (!willSend) { console.log(body); skipped++; continue; }
+  console.log(`\n──── ${row.company}  →  ${to}  [${variant.key}] ${flags}`);
+  if (!willSend) { console.log(`Asunto: ${variant.subject}`); console.log(body); skipped++; continue; }
 
   if (already) { console.log('   ⏭  saltada: ya estaba en el registro de enviados.'); skipped++; continue; }
   if (!overrideTo && !verified) { console.log('   ⏭  saltada: email sin verificar (verified=no).'); skipped++; continue; }
 
-  const ok = await sendWithRetry(to, body, apiKey);
+  const tags = [{ name: 'campaign', value: campaignName }, { name: 'variant', value: variant.key }];
+  const ok = await sendWithRetry(to, variant.subject, body, tags, apiKey);
   if (ok) {
-    console.log('   ✅ enviado');
-    if (!overrideTo) { ledger.add(to); saveLedger(ledger); }
+    console.log(`   ✅ enviado [${variant.key}]`);
+    if (!overrideTo) { ledger.add(to); saveLedger(ledger); appendLog(to, variant.key, variant.subject); }
+    byVariant[variant.key] = (byVariant[variant.key] || 0) + 1;
     sent++;
   } else {
     console.log('   ❌ no enviado tras reintentos');
@@ -286,7 +326,12 @@ for (const row of rows) {
 }
 
 console.log('\n' + '='.repeat(72));
-console.log(willSend ? `Enviados: ${sent} · Saltados: ${skipped}` : `Dry run: ${rows.length} renderizados, 0 enviados.`);
+if (willSend) {
+  const reparto = Object.entries(byVariant).map(([k, n]) => `${k}:${n}`).join(' · ') || '—';
+  console.log(`Enviados: ${sent} (${reparto}) · Saltados: ${skipped}`);
+} else {
+  console.log(`Dry run: ${rows.length} renderizados, 0 enviados.`);
+}
 if (!willSend && SEND) console.log('No se envió: falta la clave de Resend. Ponla en .dev.vars o RESEND_API_KEY.');
 if (!SEND) console.log('Para enviar de verdad: marca verified=yes en el CSV y ejecuta con --send.');
 console.log('='.repeat(72));

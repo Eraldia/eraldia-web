@@ -1,0 +1,60 @@
+# Loop diario de prospección (con A/B testing)
+
+Sistema para captar clientes por email de forma automática, rotando **sectores**
+y **zonas** por toda España, y midiendo qué mensaje funciona mejor en cada sector.
+
+## Piezas
+
+- **`tools/send-outreach.mjs`** — motor de envío (Resend). Una campaña por sector;
+  cada campaña tiene **variantes A/B** (asunto + cuerpo distintos). Reparte A/B de
+  forma equilibrada, deduplica con su registro y registra qué variante recibió cada
+  uno. Etiqueta cada envío en Resend (`campaign`, `variant`) para ver aperturas/clics
+  por variante en el panel.
+- **`tools/outreach-<sector>.csv`** — lista de cada sector (`company,email,verified,
+  contact_name,custom_line`). Solo se envía a `verified=yes`.
+- **`tools/.outreach-<sector>-sent.json`** — registro de enviados (idempotencia).
+  **Versionado** para que el loop no reenvíe aunque el contenedor se recicle.
+- **`tools/.outreach-<sector>-log.csv`** — log A/B: `date,email,variant,subject`.
+- **`tools/outreach-plan.json`** — rotación diaria: matriz `combos` de (sector, zona),
+  un `index` que avanza cada día, `comboPerDay` y `maxPerDay` (tope de envíos/día
+  para no quemar la cuota de Resend).
+
+## Variantes A/B (sectores de salud)
+
+- **A — "agenda":** ángulo de citas/ausencias y comunicación con pacientes.
+  Asunto: *¿Os falla mucha gente a última hora?*
+- **B — "dinero":** ángulo de presupuestos y facturación.
+  Asunto: *¿Cuánto tiempo se os va en presupuestos y facturas?*
+
+Ambas enlazan `/casos/clinicas/`. Para añadir/editar variantes, ver `healthVariants`
+en `send-outreach.mjs`.
+
+## Qué hace el loop cada día
+
+1. Lee `outreach-plan.json` y coge los próximos `comboPerDay` combos desde `index`.
+2. Para cada combo (sector, zona): busca en la web centros de ese tipo con **email
+   real publicado**, descartando cadenas/franquicias y los ya presentes en el CSV.
+3. Los añade al `outreach-<sector>.csv` con `verified=yes`.
+4. Envía con `node tools/send-outreach.mjs --campaign=<sector> --send`
+   (respeta `maxPerDay`; el script ya limita el ritmo a ~3/seg y reintenta ante 429).
+5. Avanza `index` (con wrap) y hace commit de plan + CSVs + registros + logs.
+
+## Medir resultados
+
+- **Panel de Resend → Emails**: filtra por etiqueta `variant=A` / `variant=B` y por
+  `campaign=<sector>` para comparar entregas, aperturas y clics.
+- **Respuestas**: llegan a `hola@eraldia.com`. Cruzar el remitente con el log A/B del
+  sector dice qué variante generó la respuesta.
+
+## Lanzar a mano un sector
+
+```bash
+node tools/send-outreach.mjs --campaign=fisios                 # dry run
+RESEND_API_KEY=... node tools/send-outreach.mjs --campaign=fisios --send
+```
+
+## Cuota / rate limit
+
+El script envía secuencialmente con 300 ms entre correos (~3/seg, por debajo del
+límite de 5/seg de Resend) y reintenta con backoff ante un 429. El tope diario se
+controla con `maxPerDay` en el plan, para no superar la cuota diaria de la cuenta.
