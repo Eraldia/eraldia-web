@@ -29,15 +29,27 @@ y **zonas** por toda España, y midiendo qué mensaje funciona mejor en cada sec
 Ambas enlazan `/casos/clinicas/`. Para añadir/editar variantes, ver `healthVariants`
 en `send-outreach.mjs`.
 
+## Dos piezas que se reparten el trabajo
+
+- **Envío fiable → GitHub Action** (`.github/workflows/outreach-daily.yml`): cada
+  día envía los `verified=yes` pendientes de cada sector (con A/B y tope `--max`),
+  y commitea de vuelta los registros para no reenviar. Es determinista, no necesita
+  IA y persiste de verdad. Requiere el secreto `RESEND_API_KEY` y, por la regla de
+  GitHub, **vivir en la rama por defecto (main)** para que el `schedule` dispare.
+- **Búsqueda de nuevos emails → loop con IA** (cron de sesión de Claude): rota
+  sector × zona, busca centros con email real, los añade al CSV con `verified=yes`
+  y commitea. NO envía (de eso se encarga el Action).
+
 ## Qué hace el loop cada día
 
 1. Lee `outreach-plan.json` y coge los próximos `comboPerDay` combos desde `index`.
 2. Para cada combo (sector, zona): busca en la web centros de ese tipo con **email
    real publicado**, descartando cadenas/franquicias y los ya presentes en el CSV.
 3. Los añade al `outreach-<sector>.csv` con `verified=yes`.
-4. Envía con `node tools/send-outreach.mjs --campaign=<sector> --send`
-   (respeta `maxPerDay`; el script ya limita el ritmo a ~3/seg y reintenta ante 429).
-5. Avanza `index` (con wrap) y hace commit de plan + CSVs + registros + logs.
+4. Avanza `index` (con wrap) y hace commit/push de plan + CSVs.
+5. El **GitHub Action** los envía en su próxima tirada diaria (con A/B y `--max`).
+   El loop también puede enviar a mano si hace falta:
+   `node tools/send-outreach.mjs --campaign=<sector> --send --max=N`.
 
 ## Medir resultados
 

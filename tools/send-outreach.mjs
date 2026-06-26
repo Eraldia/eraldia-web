@@ -46,27 +46,30 @@ Si prefieres no recibir más correos míos, respóndeme con "baja" y no te escri
 const CLINICAS_LANDING = 'https://eraldia.com/casos/clinicas/';
 
 // --- Variantes de mensaje para sectores de salud (A/B) ----------------------
-// `who` = tipo de centro; `people` = cómo llamar a quien atienden.
-// Variante A: ángulo "agenda" (citas/ausencias/comunicación).
-function healthA(who, landing, people = 'los pacientes') {
+// Ambas variantes cubren TODO el offering (citas, presupuestos/facturas y web);
+// lo que cambia es el ángulo de entrada, el orden y el asunto, para medir cuál
+// engancha mejor por sector. `who` = tipo de centro; `noun` = "pacientes"/"clientes".
+//
+// Variante A: entra por "ahorrar tiempo" (citas primero, luego dinero y web).
+function healthA(who, landing, noun = 'pacientes') {
   return `Hola:
 
-Soy Gorka, de Eraldia (Bilbao). Ayudo a ${who} a que no se os escape ni una cita: recordatorios automáticos por WhatsApp para que la gente no falte, y los mensajes con ${people} contestados aunque estéis a tope.
+Soy Gorka, de Eraldia (Bilbao). Ayudo a ${who} a quitarse de encima el lío del día a día: recordatorios para que no se pierdan citas, presupuestos y facturas que salen al momento, y la web trabajando para traeros ${noun}.
 
-Lo monto sencillo y a precio cerrado. ¿Te llamo 10 minutos esta semana y lo vemos? Si no encaja, me lo dices y no insisto.
+Lo monto sencillo y a precio cerrado, empezando por lo que más os apriete. ¿Te llamo 10 minutos esta semana y lo vemos? Si no encaja, me lo dices y no insisto.
 
 Por si quieres echar un ojo: ${landing}
 
 Gorka
 hola@eraldia.com`;
 }
-// Variante B: ángulo "dinero" (presupuestos/facturación).
-function healthB(who, landing, _people) {
+// Variante B: entra por "presupuestos y dinero" (luego citas y web).
+function healthB(who, landing, noun = 'pacientes') {
   return `Hola:
 
-Soy Gorka, de Eraldia (Bilbao). Ayudo a ${who} con el papeleo que come horas: presupuestos que salen al momento y con seguimiento para que se cierren más, y las facturas sin picarlas a mano.
+Soy Gorka, de Eraldia (Bilbao). Ayudo a ${who} con lo que más se atasca: presupuestos que salen al momento y con seguimiento para que se cierren más, facturas sin picar a mano, los recordatorios para que la gente no falte y una web que os trae ${noun}.
 
-Lo monto sencillo y a precio cerrado. ¿Te llamo 10 minutos esta semana y lo vemos? Si no encaja, me lo dices y no insisto.
+Lo monto sencillo y a precio cerrado, empezando por lo que más os apriete. ¿Te llamo 10 minutos esta semana y lo vemos? Si no encaja, me lo dices y no insisto.
 
 Por si quieres echar un ojo: ${landing}
 
@@ -75,10 +78,10 @@ hola@eraldia.com`;
 }
 
 // Construye las dos variantes A/B de un sector de salud.
-function healthVariants(who, people) {
+function healthVariants(who, noun = 'pacientes', place = 'la clínica') {
   return [
-    { key: 'A', subject: '¿Os falla mucha gente a última hora?', render: (_r, l) => healthA(who, l, people) },
-    { key: 'B', subject: '¿Cuánto tiempo se os va en presupuestos y facturas?', render: (_r, l) => healthB(who, l, people) },
+    { key: 'A', subject: `¿Qué es lo que más tiempo os quita en ${place}?`, render: (_r, l) => healthA(who, l, noun) },
+    { key: 'B', subject: `Una forma de que ${place} os deje más tiempo (y dinero)`, render: (_r, l) => healthB(who, l, noun) },
   ];
 }
 
@@ -155,7 +158,7 @@ ${FOOTER}`;
     ledger: '.outreach-dentistas-sent.json',
     log: '.outreach-dentistas-log.csv',
     landing: CLINICAS_LANDING,
-    variants: healthVariants('clínicas dentales', 'los pacientes'),
+    variants: healthVariants('clínicas dentales', 'pacientes'),
   },
 
   fisios: {
@@ -163,7 +166,7 @@ ${FOOTER}`;
     ledger: '.outreach-fisios-sent.json',
     log: '.outreach-fisios-log.csv',
     landing: CLINICAS_LANDING,
-    variants: healthVariants('clínicas de fisioterapia', 'los pacientes'),
+    variants: healthVariants('clínicas de fisioterapia', 'pacientes'),
   },
 
   esteticas: {
@@ -171,7 +174,7 @@ ${FOOTER}`;
     ledger: '.outreach-esteticas-sent.json',
     log: '.outreach-esteticas-log.csv',
     landing: CLINICAS_LANDING,
-    variants: healthVariants('clínicas de estética', 'los clientes'),
+    variants: healthVariants('clínicas de estética', 'clientes'),
   },
 
   nutricion: {
@@ -179,7 +182,7 @@ ${FOOTER}`;
     ledger: '.outreach-nutricion-sent.json',
     log: '.outreach-nutricion-log.csv',
     landing: CLINICAS_LANDING,
-    variants: healthVariants('consultas de nutrición y dietética', 'los pacientes'),
+    variants: healthVariants('consultas de nutrición y dietética', 'pacientes', 'la consulta'),
   },
 };
 
@@ -188,6 +191,7 @@ const args = process.argv.slice(2);
 const SEND = args.includes('--send');
 const overrideTo = (args.find((a) => a.startsWith('--to=')) || '').split('=')[1] || null;
 const campaignName = (args.find((a) => a.startsWith('--campaign=')) || '').split('=')[1] || 'climatizacion';
+const MAX = parseInt((args.find((a) => a.startsWith('--max=')) || '').split('=')[1], 10) || Infinity;
 
 const campaign = CAMPAIGNS[campaignName];
 if (!campaign) {
@@ -310,6 +314,7 @@ for (const row of rows) {
 
   if (already) { console.log('   ⏭  saltada: ya estaba en el registro de enviados.'); skipped++; continue; }
   if (!overrideTo && !verified) { console.log('   ⏭  saltada: email sin verificar (verified=no).'); skipped++; continue; }
+  if (sent >= MAX) { console.log('   ⏭  tope --max alcanzado, queda para la próxima ejecución.'); skipped++; continue; }
 
   const tags = [{ name: 'campaign', value: campaignName }, { name: 'variant', value: variant.key }];
   const ok = await sendWithRetry(to, variant.subject, body, tags, apiKey);
