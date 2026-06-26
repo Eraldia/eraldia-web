@@ -1,0 +1,68 @@
+name: Prospección diaria (envío)
+
+# Envía cada día los prospectos verified=yes que estén pendientes en cada
+# sector de salud, repartiendo A/B, y commitea de vuelta los registros de
+# enviados para no reenviar. La parte de BUSCAR nuevos emails la hace el loop
+# con IA en una sesión de Claude; este workflow solo ENVÍA lo ya encolado.
+#
+# Requisitos:
+#   - Secreto del repo: RESEND_API_KEY (Settings → Secrets and variables → Actions).
+#   - El dominio eraldia.com verificado en Resend.
+# Nota: los workflows 'schedule' SOLO se disparan desde la rama por defecto
+# (main), así que esto empieza a funcionar cuando se mergee a main.
+
+on:
+  schedule:
+    - cron: '11 8 * * *' # 08:11 UTC cada día
+  workflow_dispatch:
+    inputs:
+      max_per_campaign:
+        description: 'Máximo de envíos por sector en esta ejecución'
+        default: '10'
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: outreach-daily
+  cancel-in-progress: false
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Enviar campañas de salud (verified=yes pendientes)
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          MAX: ${{ github.event.inputs.max_per_campaign || '10' }}
+        run: |
+          if [ -z "$RESEND_API_KEY" ]; then
+            echo "::error::Falta el secreto RESEND_API_KEY; no se envía nada."
+            exit 1
+          fi
+          for c in dentistas fisios esteticas nutricion; do
+            echo "::group::$c"
+            node tools/send-outreach.mjs --campaign="$c" --send --max="$MAX"
+            echo "::endgroup::"
+          done
+
+      - name: Commit de registros y logs actualizados
+        run: |
+          git config user.name "eraldia-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add tools/.outreach-*-sent.json tools/.outreach-*-log.csv
+          if git diff --cached --quiet; then
+            echo "Sin cambios: no se envió nada nuevo."
+          else
+            git commit -m "Prospección diaria: registros de envío actualizados [skip ci]"
+            git push
+          fi
