@@ -44,6 +44,24 @@ ${REPLY_TO}
 —
 Si prefieres no recibir más correos míos, respóndeme con "baja" y no te escribo de nuevo.`;
 
+// Mensaje común para sectores de salud (tono natural y directo). `who` es el
+// tipo de centro ("clínicas dentales", "clínicas de fisioterapia"…) y `people`
+// cómo llamar a quien atienden ("los pacientes", "los clientes").
+function healthMessage(who, landing, people = 'los pacientes') {
+  return `Hola:
+
+Soy Gorka, de Eraldia (Bilbao). Ayudo a ${who} a quitarse de encima el lío del día a día: presupuestos y facturas que salgan en un momento, los recordatorios para que la gente no falte, y la web y los mensajes con ${people} funcionando solos.
+
+Lo monto sencillo y a precio cerrado, empezando por lo que más os apriete. ¿Te llamo 10 minutos esta semana y lo vemos? Si no encaja, me lo dices y no insisto.
+
+Por si quieres echar un ojo: ${landing}
+
+Gorka
+hola@eraldia.com`;
+}
+
+const CLINICAS_LANDING = 'https://eraldia.com/casos/clinicas/';
+
 // --- Definición de campañas -------------------------------------------------
 const CAMPAIGNS = {
   climatizacion: {
@@ -104,18 +122,39 @@ ${FOOTER}`;
     csv: 'outreach-dentistas.csv',
     ledger: '.outreach-dentistas-sent.json',
     subject: '¿Qué es lo que más tiempo os quita en la clínica?',
-    landing: 'https://eraldia.com/casos/clinicas/',
+    landing: CLINICAS_LANDING,
     render(_row, landing) {
-      return `Hola:
+      return healthMessage('clínicas dentales', landing);
+    },
+  },
 
-Soy Gorka, de Eraldia (Bilbao). Ayudo a clínicas dentales a quitarse de encima el lío del día a día: presupuestos y facturas que salgan en un momento, los recordatorios para que la gente no falte, y la web y los mensajes con los pacientes funcionando solos.
+  fisios: {
+    csv: 'outreach-fisios.csv',
+    ledger: '.outreach-fisios-sent.json',
+    subject: '¿Qué es lo que más tiempo os quita en la clínica?',
+    landing: CLINICAS_LANDING,
+    render(_row, landing) {
+      return healthMessage('clínicas de fisioterapia', landing);
+    },
+  },
 
-Lo monto sencillo y a precio cerrado, empezando por lo que más os apriete. ¿Te llamo 10 minutos esta semana y lo vemos? Si no encaja, me lo dices y no insisto.
+  esteticas: {
+    csv: 'outreach-esteticas.csv',
+    ledger: '.outreach-esteticas-sent.json',
+    subject: '¿Qué es lo que más tiempo os quita en la clínica?',
+    landing: CLINICAS_LANDING,
+    render(_row, landing) {
+      return healthMessage('clínicas de estética', landing, 'los clientes');
+    },
+  },
 
-Por si quieres echar un ojo: ${landing}
-
-Gorka
-hola@eraldia.com`;
+  nutricion: {
+    csv: 'outreach-nutricion.csv',
+    ledger: '.outreach-nutricion-sent.json',
+    subject: '¿Qué es lo que más tiempo os quita en la consulta?',
+    landing: CLINICAS_LANDING,
+    render(_row, landing) {
+      return healthMessage('consultas de nutrición y dietética', landing);
     },
   },
 };
