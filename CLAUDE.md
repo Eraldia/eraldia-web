@@ -90,6 +90,22 @@ Detalle en [`docs/PIPELINE-CONTENIDOS.md`](docs/PIPELINE-CONTENIDOS.md).
 - Todo el contenido público va en castellano, en el tono de la marca: llano,
   concreto, sin humo.
 
+## Reglas de ingeniería
+
+- **Cambios quirúrgicos.** El diff debe ser tan pequeño como permita la tarea:
+  no tocar código fuera de lo pedido, no reformatear de paso, mantener el
+  estilo existente.
+- **Simplicidad ante todo.** Escribir el mínimo código que resuelve el
+  problema actual, no el que cubriría hipotéticos casos futuros. Sin
+  abstracciones, manejo de errores ni configuración que no tengan una
+  necesidad real ya presente.
+- **Verificar, no asumir.** Al arreglar un bug, reproducirlo primero y
+  comprobar que el cambio lo soluciona (test, build, o prueba manual en
+  `npm run dev`/`npm run build`) antes de darlo por cerrado.
+- **Depurar la causa, no el síntoma.** Ante un fallo, leer el error completo
+  y entender por qué ocurre antes de cambiar nada; no envolver el problema en
+  comprobaciones que lo oculten.
+
 ## Identidad visual «Tierra Nocturna»
 
 Terracota `#B95536` + ámbar `#D69A2C` + salvia `#8FA277` sobre tierra (negro
