@@ -1,7 +1,7 @@
 ---
 title: "IA en hostelería y restauración: 5 automatizaciones que funcionan igual en Bilbao y en Málaga"
 description: "Cinco automatizaciones con IA para bares, restaurantes y alojamientos: reservas y no-shows, respuestas a reseñas, consultas en varios idiomas, pedidos a proveedores y cuadrantes. Costes de 2026."
-date: 2026-01-01
+date: 2026-06-28
 tags: ["hostelería", "restaurantes", "turismo", "ia"]
 categories: ["sectores"]
 ---
