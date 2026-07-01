@@ -1,7 +1,7 @@
 ---
 title: "Cómo elegir consultor de IA: 7 señales de humo y las preguntas que lo destapan"
 description: "Checklist para elegir consultor de IA para tu pyme: las 7 señales de vendedor de humo, las preguntas que debes hacer antes de firmar y los entregables innegociables."
-date: 2026-01-01
+date: 2026-07-01
 tags: ["consultoría", "ia", "pymes"]
 categories: ["guías"]
 ---
