@@ -1,7 +1,7 @@
 ---
 title: "¿Funciona la IA en euskera? Estado real en 2026 y qué significa para tu negocio"
 description: "Qué nivel tienen los modelos de IA en euskera en 2026, qué proyectos lo están mejorando y qué puede automatizar hoy con garantías un negocio que atiende en euskera y castellano."
-date: 2026-01-01
+date: 2026-07-04
 tags: ["euskera", "ia", "país vasco", "pymes"]
 categories: ["análisis"]
 ---
