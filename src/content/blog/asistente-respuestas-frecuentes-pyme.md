@@ -1,7 +1,7 @@
 ---
 title: "\"Respondo lo mismo 30 veces al día\": cómo montar un asistente de respuestas en 2 semanas"
 description: "Cómo una pyme monta un asistente de IA que responde las consultas repetidas por correo y WhatsApp: qué necesita, cuánto cuesta en 2026, qué riesgos tiene y cómo se controlan."
-date: 2026-01-01
+date: 2026-07-07
 tags: ["atención al cliente", "automatización", "ia", "pymes"]
 categories: ["guías"]
 ---
