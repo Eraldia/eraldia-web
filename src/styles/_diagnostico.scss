@@ -78,6 +78,13 @@
     margin: 0 0 $space-5;
   }
 
+  // Pista para los pasos multi-selección ("puedes marcar varias").
+  &__hint {
+    margin: -#{$space-3} 0 $space-5;
+    font-size: $font-size-sm;
+    color: $color-muted;
+  }
+
   // --- Opciones ------------------------------------------------------------
   &__options {
     display: grid;
@@ -162,6 +169,20 @@
 
     &:hover { color: $color-primary; }
     &[hidden] { visibility: hidden; }
+  }
+
+  // Botón "Continuar" de los pasos multi-selección. Solo se muestra cuando el
+  // paso admite varias respuestas; el resto avanza solo.
+  &__next {
+    margin-left: auto;
+
+    &[hidden] { display: none; }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
   }
 
   // --- Resultado -----------------------------------------------------------
