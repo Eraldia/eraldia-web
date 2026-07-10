@@ -1,7 +1,7 @@
 ---
 title: "IA en la campaña de Renta: cómo una asesoría llega a junio sin contratar refuerzos"
 description: "Cómo usar IA para sobrevivir a la campaña de Renta en una asesoría: recogida automática de documentación, respuestas a las consultas repetidas y control de quién falta. Con plazos y costes de 2026."
-date: 2026-01-01
+date: 2026-07-10
 tags: ["asesorías", "gestorías", "renta", "ia", "automatización"]
 categories: ["sectores"]
 ---
