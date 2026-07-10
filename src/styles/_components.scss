@@ -1013,6 +1013,25 @@
   }
 }
 
+// Motion (motion.dev): estado inicial oculto para la entrada del hero.
+// Solo se aplica cuando el script marca <html class="motion-ready"> antes de
+// pintar, de modo que sin JS (o con reduced-motion) el hero se ve normal.
+.motion-ready {
+  .hero__badge,
+  .hero__title,
+  .hero__subtitle,
+  .hero__actions,
+  .hero__actions-note,
+  .hero__stat {
+    opacity: 0;
+  }
+}
+
+.hero__word {
+  display: inline-block;
+  will-change: opacity, transform;
+}
+
 // --------------------------------------------------------------------------
 // Contact form (captación de leads)
 // --------------------------------------------------------------------------

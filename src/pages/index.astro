@@ -10,6 +10,16 @@ import { SITE_TITLE, SITE_DESCRIPTION, TAGLINE, CONTACT_EMAIL } from '../consts'
   isHome={true}
 >
 
+<!-- Marca de motion: se ejecuta antes de pintar el hero para evitar destellos.
+     Si el usuario prefiere menos movimiento, no se oculta nada. -->
+<script is:inline>
+  try {
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('motion-ready');
+    }
+  } catch (e) {}
+</script>
+
 <!-- ================================================================ -->
 <!-- Hero Section                                                       -->
 <!-- ================================================================ -->
@@ -37,7 +47,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, TAGLINE, CONTACT_EMAIL } from '../consts'
     </p>
     <div class="hero__stats">
       <div class="hero__stat">
-        <span class="hero__stat-number">30</span>
+        <span class="hero__stat-number" data-count="30">30</span>
         <span class="hero__stat-unit">min</span>
         <span class="hero__stat-label">de llamada inicial, gratis y sin compromiso</span>
       </div>
@@ -47,7 +57,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, TAGLINE, CONTACT_EMAIL } from '../consts'
         <span class="hero__stat-label">por proyecto, de la idea a funcionando</span>
       </div>
       <div class="hero__stat">
-        <span class="hero__stat-number">100%</span>
+        <span class="hero__stat-number" data-count="100" data-suffix="%">100%</span>
         <span class="hero__stat-unit"></span>
         <span class="hero__stat-label">precio cerrado antes de empezar</span>
       </div>
@@ -333,6 +343,88 @@ import { SITE_TITLE, SITE_DESCRIPTION, TAGLINE, CONTACT_EMAIL } from '../consts'
       });
   });
 })();
+</script>
+
+<!-- ================================================================ -->
+<!-- Motion (motion.dev): entrada del hero, contadores y parallax       -->
+<!-- ================================================================ -->
+<script>
+  import { animate, stagger, inView } from 'motion';
+
+  const easeOut = [0.16, 1, 0.3, 1];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 1) Contadores de las cifras del hero — se disparan al entrar en pantalla.
+  //    Con reduced-motion se dejan tal cual (el HTML ya muestra el valor final).
+  document.querySelectorAll('.hero__stat-number[data-count]').forEach((el) => {
+    const to = parseFloat(el.dataset.count);
+    const suffix = el.dataset.suffix || '';
+    if (reduce || Number.isNaN(to)) return;
+    el.textContent = '0' + suffix;
+    inView(el, () => {
+      animate(0, to, {
+        duration: 1.4,
+        ease: easeOut,
+        onUpdate: (v) => { el.textContent = Math.round(v) + suffix; },
+      });
+    }, { amount: 0.6 });
+  });
+
+  // El resto solo se ejecuta si marcamos motion-ready (JS activo, sin reduced-motion).
+  if (document.documentElement.classList.contains('motion-ready')) {
+    // 2) Título palabra a palabra.
+    const title = document.querySelector('.hero__title');
+    if (title) {
+      const words = title.textContent.trim().split(/\s+/);
+      title.textContent = '';
+      words.forEach((w, i) => {
+        const span = document.createElement('span');
+        span.className = 'hero__word';
+        span.textContent = w;
+        title.appendChild(span);
+        if (i < words.length - 1) title.appendChild(document.createTextNode(' '));
+      });
+      title.style.opacity = '1';
+      animate(
+        '.hero__word',
+        { opacity: [0, 1], transform: ['translateY(28px)', 'translateY(0)'] },
+        { duration: 0.7, ease: easeOut, delay: stagger(0.05, { startDelay: 0.15 }) },
+      );
+    }
+
+    // La insignia solo se atenúa (su animación pulseBadge sigue con el scale).
+    const badge = document.querySelector('.hero__badge');
+    if (badge) {
+      animate(badge, { opacity: [0, 1] }, { duration: 0.6, ease: easeOut, delay: 0.1 });
+    }
+
+    // 3) Entrada escalonada del resto del bloque.
+    const seq = document.querySelectorAll(
+      '.hero__subtitle, .hero__actions, .hero__actions-note, .hero__stat',
+    );
+    if (seq.length) {
+      animate(
+        seq,
+        { opacity: [0, 1], transform: ['translateY(20px)', 'translateY(0)'] },
+        { duration: 0.7, ease: easeOut, delay: stagger(0.08, { startDelay: 0.35 }) },
+      );
+    }
+
+    // 4) Parallax suave de los orbes/rejilla al mover el puntero.
+    const hero = document.querySelector('.hero');
+    const fx = document.querySelector('.hero__fx');
+    if (hero && fx && matchMedia('(pointer: fine)').matches) {
+      hero.addEventListener('pointermove', (e) => {
+        const r = hero.getBoundingClientRect();
+        const dx = ((e.clientX - r.left) / r.width - 0.5) * 24;
+        const dy = ((e.clientY - r.top) / r.height - 0.5) * 24;
+        animate(fx, { x: dx, y: dy }, { duration: 0.9, ease: 'easeOut' });
+      });
+      hero.addEventListener('pointerleave', () => {
+        animate(fx, { x: 0, y: 0 }, { duration: 1.2, ease: 'easeOut' });
+      });
+    }
+  }
 </script>
 
 </BaseLayout>
