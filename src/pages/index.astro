@@ -23,13 +23,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, TAGLINE, CONTACT_EMAIL } from '../consts'
 <!-- ================================================================ -->
 <!-- Hero Section                                                       -->
 <!-- ================================================================ -->
-<section class="hero" style={`background-image: url('${url('/images/hero/hero-background.jpg')}')`}>
-  <div class="hero__fx" aria-hidden="true">
-    <span class="hero__orb hero__orb--one"></span>
-    <span class="hero__orb hero__orb--two"></span>
-    <span class="hero__orb hero__orb--three"></span>
-    <span class="hero__grid"></span>
-  </div>
+<section class="hero hero--editorial" style={`background-image: url('${url('/images/hero/hero-background.jpg')}')`}>
   <div class="container hero__inner">
     <span class="hero__badge">Estrategia de IA para medianas empresas</span>
     <h1 class="hero__title">
@@ -70,7 +64,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, TAGLINE, CONTACT_EMAIL } from '../consts'
 <!-- ================================================================ -->
 <section class="section">
   <div class="container">
-    <div class="section__header reveal">
+    <div class="section__header section__header--left reveal">
       <h2 class="section__title">A tu empresa no le falta IA. Le falta sistema.</h2>
       <p class="section__subtitle">
         ChatGPT por libre, pilotos que no despegan, herramientas sin dueño. El problema no son las herramientas: es que nadie ha decidido el qué, el cómo y el quién. Eso es lo que diseño contigo.
@@ -84,37 +78,48 @@ import { SITE_TITLE, SITE_DESCRIPTION, TAGLINE, CONTACT_EMAIL } from '../consts'
 <!-- ================================================================ -->
 <section class="section section--alt">
   <div class="container">
-    <div class="section__header">
+    <div class="section__header section__header--left">
       <h2 class="section__title">Qué es un sistema operativo de IA</h2>
       <p class="section__subtitle">
         No es una herramienta que se compra: son las cuatro capas que hacen que la IA funcione en toda la empresa.
       </p>
     </div>
 
-    <div class="grid grid--4 reveal-stagger">
-      <div class="card reveal">
-        <h3 class="card__title">Estrategia y gobierno</h3>
-        <p class="card__desc">Dónde aporta la IA, con qué prioridades y con qué límites.</p>
+    <div class="os-stack reveal-stagger" role="list">
+      <div class="os-stack__layer os-stack__layer--1 reveal" role="listitem">
+        <span class="os-stack__num" aria-hidden="true">01</span>
+        <div class="os-stack__body">
+          <h3 class="os-stack__title">Estrategia y gobierno</h3>
+          <p class="os-stack__desc">Dónde aporta la IA, con qué prioridades y con qué límites.</p>
+        </div>
       </div>
-      <div class="card reveal">
-        <h3 class="card__title">Datos y conocimiento</h3>
-        <p class="card__desc">Tu información, ordenada y segura, lista para que la IA trabaje con ella.</p>
+      <div class="os-stack__layer os-stack__layer--2 reveal" role="listitem">
+        <span class="os-stack__num" aria-hidden="true">02</span>
+        <div class="os-stack__body">
+          <h3 class="os-stack__title">Datos y conocimiento</h3>
+          <p class="os-stack__desc">Tu información, ordenada y segura, lista para que la IA trabaje con ella.</p>
+        </div>
       </div>
-      <div class="card reveal">
-        <h3 class="card__title">Procesos y automatización</h3>
-        <p class="card__desc">IA en los flujos reales de cada departamento, con resultados que se miden.</p>
+      <div class="os-stack__layer os-stack__layer--3 reveal" role="listitem">
+        <span class="os-stack__num" aria-hidden="true">03</span>
+        <div class="os-stack__body">
+          <h3 class="os-stack__title">Procesos y automatización</h3>
+          <p class="os-stack__desc">IA en los flujos reales de cada departamento, con resultados que se miden.</p>
+        </div>
       </div>
-      <div class="card reveal">
-        <h3 class="card__title">Personas y adopción</h3>
-        <p class="card__desc">Formación por rol y dirección alineada: lo que decide si se usa o se abandona.</p>
+      <div class="os-stack__layer os-stack__layer--4 reveal" role="listitem">
+        <span class="os-stack__num" aria-hidden="true">04</span>
+        <div class="os-stack__body">
+          <h3 class="os-stack__title">Personas y adopción</h3>
+          <p class="os-stack__desc">Formación por rol y dirección alineada: lo que decide si se usa o se abandona.</p>
+        </div>
       </div>
     </div>
 
-    <div class="pb-pullquote" style="margin-top: 3rem; text-align: center;">
-      Ninguna empresa funciona sin sistema de gestión. Ninguna funcionará bien sin su sistema operativo de IA.
-    </div>
-
-    <div style="text-align: center; margin-top: 2rem;">
+    <div class="os-stack__footer">
+      <p class="pb-pullquote" style="margin: 0;">
+        Ninguna empresa funciona sin sistema de gestión. Ninguna funcionará bien sin su sistema operativo de IA.
+      </p>
       <a href={url('/servicios/sistema-operativo-ia/')} class="btn btn--primary">Cómo diseño tu AI OS</a>
     </div>
   </div>
@@ -125,7 +130,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, TAGLINE, CONTACT_EMAIL } from '../consts'
 <!-- ================================================================ -->
 <section class="section">
   <div class="container">
-    <div class="section__header">
+    <div class="section__header section__header--left">
       <h2 class="section__title">Tres servicios, una escalera</h2>
       <p class="section__subtitle">
         Empieza por el primero y decide después. Todo cerrado por escrito antes de empezar; nunca por horas.
@@ -135,12 +140,8 @@ import { SITE_TITLE, SITE_DESCRIPTION, TAGLINE, CONTACT_EMAIL } from '../consts'
     <div class="grid grid--3 reveal-stagger">
       <!-- Pilar 1: Diagnóstico de madurez -->
       <a href={url('/servicios/diagnostico-madurez-ia/')} class="card card--link reveal">
-        <div class="card__icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-        </div>
-        <h3 class="card__title">1. Diagnóstico de madurez en IA</h3>
+        <span class="card__num" aria-hidden="true">1</span>
+        <h3 class="card__title">Diagnóstico de madurez en IA</h3>
         <p class="card__desc">
           Dónde está tu empresa hoy: qué tenéis, qué falta y por dónde empezar.
         </p>
@@ -149,12 +150,8 @@ import { SITE_TITLE, SITE_DESCRIPTION, TAGLINE, CONTACT_EMAIL } from '../consts'
 
       <!-- Pilar 2: Diseño del AI OS -->
       <a href={url('/servicios/sistema-operativo-ia/')} class="card card--link reveal">
-        <div class="card__icon card__icon--accent">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/>
-          </svg>
-        </div>
-        <h3 class="card__title">2. Diseño de tu sistema operativo de IA</h3>
+        <span class="card__num card__num--accent" aria-hidden="true">2</span>
+        <h3 class="card__title">Diseño de tu sistema operativo de IA</h3>
         <p class="card__desc">
           El servicio central: estrategia, gobierno y una hoja de ruta que dirección puede aprobar.
         </p>
@@ -163,12 +160,8 @@ import { SITE_TITLE, SITE_DESCRIPTION, TAGLINE, CONTACT_EMAIL } from '../consts'
 
       <!-- Pilar 3: Acompañamiento estratégico -->
       <a href={url('/servicios/acompanamiento-estrategico/')} class="card card--link reveal">
-        <div class="card__icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-          </svg>
-        </div>
-        <h3 class="card__title">3. Acompañamiento estratégico</h3>
+        <span class="card__num" aria-hidden="true">3</span>
+        <h3 class="card__title">Acompañamiento estratégico</h3>
         <p class="card__desc">
           Dirección de IA externa, mes a mes. Sin permanencia.
         </p>
@@ -183,29 +176,55 @@ import { SITE_TITLE, SITE_DESCRIPTION, TAGLINE, CONTACT_EMAIL } from '../consts'
 <!-- ================================================================ -->
 <section class="section">
   <div class="container">
-    <div class="section__header">
+    <div class="section__header section__header--left">
       <h2 class="section__title">Cómo trabajo</h2>
       <p class="section__subtitle">
         Cuatro pasos. En cada uno sabes qué recibes antes de decidir el siguiente.
       </p>
     </div>
 
-    <div class="grid grid--4 reveal-stagger">
-      <div class="card reveal">
-        <h3 class="card__title">1. Hablamos</h3>
-        <p class="card__desc">30 minutos, gratis. Te digo con honestidad si puedo aportar o no.</p>
-      </div>
-      <div class="card reveal">
-        <h3 class="card__title">2. Diagnóstico</h3>
-        <p class="card__desc">Mido la madurez de tu empresa en las cuatro capas.</p>
-      </div>
-      <div class="card reveal">
-        <h3 class="card__title">3. Diseño</h3>
-        <p class="card__desc">Estrategia y hoja de ruta, cerradas por escrito con dirección.</p>
-      </div>
-      <div class="card reveal">
-        <h3 class="card__title">4. Ejecución</h3>
-        <p class="card__desc">Avanzamos mes a mes, midiendo. Sin permanencia.</p>
+    <ol class="steps reveal-stagger">
+      <li class="steps__item reveal">
+        <span class="steps__num" aria-hidden="true">1</span>
+        <h3 class="steps__title">Hablamos</h3>
+        <p class="steps__desc">30 minutos, gratis. Te digo con honestidad si puedo aportar o no.</p>
+      </li>
+      <li class="steps__item reveal">
+        <span class="steps__num" aria-hidden="true">2</span>
+        <h3 class="steps__title">Diagnóstico</h3>
+        <p class="steps__desc">Mido la madurez de tu empresa en las cuatro capas.</p>
+      </li>
+      <li class="steps__item reveal">
+        <span class="steps__num" aria-hidden="true">3</span>
+        <h3 class="steps__title">Diseño</h3>
+        <p class="steps__desc">Estrategia y hoja de ruta, cerradas por escrito con dirección.</p>
+      </li>
+      <li class="steps__item reveal">
+        <span class="steps__num" aria-hidden="true">4</span>
+        <h3 class="steps__title">Ejecución</h3>
+        <p class="steps__desc">Avanzamos mes a mes, midiendo. Sin permanencia.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- Persona — quién está detrás                                        -->
+<!-- ================================================================ -->
+<section class="section section--alt">
+  <div class="container">
+    <div class="persona reveal">
+      {/* Monograma provisional: sustituir por una foto real de Gorka
+          (<img class="persona__photo" ...>) en cuanto haya una. */}
+      <div class="persona__photo persona__photo--placeholder" aria-hidden="true">G</div>
+      <div class="persona__body">
+        <p class="persona__lead">
+          Soy Gorka Alapont. No hay equipo júnior ni comerciales: la persona que diseña tu estrategia es la que la ejecuta contigo.
+        </p>
+        <p class="persona__note">
+          Eraldia viene de <em>eraldatu</em> —«transformar» en euskera— y de poner tu empresa al día.
+        </p>
+        <a href={url('/sobre-mi/')} class="persona__link">Sobre mí</a>
       </div>
     </div>
   </div>
@@ -374,20 +393,6 @@ import { SITE_TITLE, SITE_DESCRIPTION, TAGLINE, CONTACT_EMAIL } from '../consts'
       );
     }
 
-    // 4) Parallax suave de los orbes/rejilla al mover el puntero.
-    const hero = document.querySelector('.hero');
-    const fx = document.querySelector('.hero__fx');
-    if (hero && fx && matchMedia('(pointer: fine)').matches) {
-      hero.addEventListener('pointermove', (e) => {
-        const r = hero.getBoundingClientRect();
-        const dx = ((e.clientX - r.left) / r.width - 0.5) * 24;
-        const dy = ((e.clientY - r.top) / r.height - 0.5) * 24;
-        animate(fx, { x: dx, y: dy }, { duration: 0.9, ease: 'easeOut' });
-      });
-      hero.addEventListener('pointerleave', () => {
-        animate(fx, { x: 0, y: 0 }, { duration: 1.2, ease: 'easeOut' });
-      });
-    }
   }
 </script>
 
