@@ -23,6 +23,13 @@ la experiencia de Gorka ayudando a empresas a prepararse para la era de la IA:
 - **Ámbito: España primero.** El foco geográfico deja de ser solo local
   (Bilbao/Andalucía) y pasa a ser nacional, aunque las landings locales se
   mantienen por su valor SEO.
+- **GTM de la línea estratégica:** (1) contenido del cluster AI OS en el blog
+  (SEO/GEO nacional; ver `docs/PLAN-DE-CONTENIDOS.md`), (2) LinkedIn personal
+  de Gorka como canal de autoridad hacia dirección general, (3) referidos
+  cruzados desde la línea pyme (gestorías y despachos que asesoran a medianas
+  empresas), (4) charlas a comités de dirección y asociaciones empresariales.
+  El embudo: contenido/LinkedIn → conversación estratégica gratuita →
+  diagnóstico de madurez → diseño del AI OS → acompañamiento.
 - **La oferta pyme no desaparece: pasa a línea secundaria.** Las secciones
   siguientes de este documento (ICP de 3–50 empleados, escalera con precios,
   verticales de asesorías/abogados) describen esa línea, accesible desde
