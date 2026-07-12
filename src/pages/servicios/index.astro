@@ -6,8 +6,13 @@ import { getCollection } from 'astro:content';
 const servicios = await getCollection('servicios');
 servicios.sort((a, b) => (a.data.weight ?? 99) - (b.data.weight ?? 99));
 
+// Dos líneas de servicio: estrategia para medianas empresas (weight < 10)
+// y la línea para pymes y despachos (weight >= 10).
+const estrategia = servicios.filter((s) => (s.data.weight ?? 99) < 10);
+const pymes = servicios.filter((s) => (s.data.weight ?? 99) >= 10);
+
 const title = 'Servicios';
-const description = 'Tres servicios sencillos que funcionan como una escalera: primero entendemos tu negocio, después automatizamos lo que más te cuesta y, si quieres, te acompañamos mes a mes.';
+const description = 'Estrategia de IA para medianas empresas: diagnóstico de madurez, diseño de tu sistema operativo de IA y acompañamiento en la ejecución. Y una línea de automatización para pymes y despachos profesionales.';
 ---
 
 <BaseLayout title={title} description={description}>
@@ -21,13 +26,16 @@ const description = 'Tres servicios sencillos que funcionan como una escalera: p
 
 <section class="section">
   <div class="container">
-    <div class="content container--narrow" style="margin-bottom: 3rem;">
-      <p>Trabajo con un modelo claro en tres pasos. Puedes contratar solo el primero y decidir después: cada servicio tiene precio cerrado, plazo definido y entregables concretos. Sin permanencias y sin sorpresas en la factura.</p>
+    <div class="section__header">
+      <h2 class="section__title">Estrategia de IA para medianas empresas</h2>
+      <p class="section__subtitle">
+        Tres pasos que funcionan como una escalera: primero una foto honesta de dónde estáis, después el diseño de vuestro sistema operativo de IA y, si quieres, dirección experta mes a mes para ejecutarlo. Cada fase se cierra por escrito —alcance, plazo e importe— antes de empezar. Nunca por horas.
+      </p>
     </div>
 
-    {servicios.length > 0 ? (
+    {estrategia.length > 0 && (
       <div class="services-grid">
-        {servicios.map(servicio => (
+        {estrategia.map(servicio => (
           <a href={url(`/servicios/${servicio.slug}/`)} class="service-card">
             {servicio.data.icon && (
               <div class="service-card__icon" set:html={servicio.data.icon} />
@@ -40,9 +48,33 @@ const description = 'Tres servicios sencillos que funcionan como una escalera: p
           </a>
         ))}
       </div>
-    ) : (
-      <div class="empty-state">
-        <p class="empty-state__text">Servicios disponibles muy pronto.</p>
+    )}
+  </div>
+</section>
+
+<section class="section section--alt" id="pymes">
+  <div class="container">
+    <div class="section__header">
+      <h2 class="section__title">Para pymes y despachos profesionales</h2>
+      <p class="section__subtitle">
+        Si tu negocio es más pequeño, la línea de automatización sigue siendo para ti: proyectos concretos con precio cerrado, en semanas. Mira también las páginas de <a href={url('/ia-para-asesorias/')}>asesorías y gestorías</a> y de <a href={url('/ia-para-abogados/')}>despachos de abogados</a>.
+      </p>
+    </div>
+
+    {pymes.length > 0 && (
+      <div class="services-grid">
+        {pymes.map(servicio => (
+          <a href={url(`/servicios/${servicio.slug}/`)} class="service-card">
+            {servicio.data.icon && (
+              <div class="service-card__icon" set:html={servicio.data.icon} />
+            )}
+            <h3 class="service-card__title">{servicio.data.title}</h3>
+            {servicio.data.description && (
+              <p class="service-card__desc">{servicio.data.description}</p>
+            )}
+            <span class="service-card__action">Saber más</span>
+          </a>
+        ))}
       </div>
     )}
   </div>

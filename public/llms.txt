@@ -1,27 +1,29 @@
 # Eraldia
 
-> Consultoría de IA y automatización para pymes españolas, operada por Gorka Alapont (consultor independiente con base en Bilbao). Eraldia ayuda sobre todo a asesorías, gestorías y despachos de abogados a quitarse el trabajo repetitivo —facturas, nóminas, plazos, consultas, expedientes— con automatizaciones e IA a medida. Proyectos pequeños y cerrados, con precio cerrado por escrito, resultados medibles y lenguaje llano: el anti-humo.
+> Consultoría de estrategia de IA para medianas empresas españolas (50–500 empleados), operada por Gorka Alapont (consultor independiente con base en Bilbao). Eraldia diagnostica la madurez en IA de la empresa y diseña su **sistema operativo de IA (AI OS)** —estrategia y gobierno, datos y conocimiento, procesos y automatización, personas y adopción—, acompañando después su ejecución. Alcance, plazo e importe cerrados por escrito, resultados medibles y lenguaje llano: el anti-humo. Mantiene además una línea de automatización con IA para pymes y despachos profesionales.
 
 ## Qué es y cómo trabaja
 
-- Modelo: proyectos cerrados (no por horas), alcance firmado por escrito, herramientas (Make, n8n, Zapier, APIs de Claude/GPT) contratadas a nombre del cliente.
-- Escalera de servicios: llamada de diagnóstico gratuita (30 min) → diagnóstico de IA y automatización (2 semanas) → automatización a medida (2–4 semanas) → acompañamiento mensual sin permanencia.
-- Precio: cerrado y acordado por escrito antes de empezar, según el alcance. El importe exacto se concreta en la llamada gratuita.
+- Concepto central: el sistema operativo de IA (AI OS) de una empresa es el conjunto de decisiones, reglas y capacidades que hace que la IA funcione en toda la organización y no solo en pilotos: estrategia y gobierno, datos y conocimiento, procesos y automatización, y personas y adopción.
+- Modelo: propuestas cerradas por escrito (no por horas), fases con final definido, herramientas contratadas a nombre del cliente. Quien diseña la estrategia es quien la ejecuta: sin equipos júnior detrás.
+- Escalera principal: conversación estratégica gratuita (30 min) → diagnóstico de madurez en IA → diseño del sistema operativo de IA → acompañamiento estratégico mensual (dirección de IA externa, sin permanencia).
+- Precio: sin tarifas públicas en la línea estratégica; propuesta cerrada tras la conversación inicial. La línea pyme mantiene precios cerrados publicados en sus páginas.
 
 ## Zonas de actividad
 
-- Base en **Bilbao (Bizkaia, País Vasco)**; atención presencial puntual y remota en todo Euskadi (Bilbao, Donostia-San Sebastián, Vitoria-Gasteiz).
-- **Andalucía**: actividad regular y atención en remoto, con foco en **Córdoba, Sevilla y Málaga**.
-- Resto de España: en remoto.
+- **España**, en remoto y presencial según el caso. Base en **Bilbao (Bizkaia, País Vasco)**.
+- Actividad regular también en **Andalucía** (Córdoba, Sevilla, Málaga).
 
-## Servicios
+## Servicios (medianas empresas)
 
-- [Diagnóstico de IA y automatización](https://eraldia.com/servicios/diagnostico-ia/): en dos semanas, qué procesos automatizar, con qué ahorro y a qué coste cerrado.
-- [Automatización a medida](https://eraldia.com/servicios/automatizacion/): implantación en 2–4 semanas con el equipo formado y las herramientas a nombre del cliente.
-- [Acompañamiento mensual](https://eraldia.com/servicios/acompanamiento/): mantenimiento, mejoras y formación continua, sin permanencia.
+- [Diagnóstico de madurez en IA](https://eraldia.com/servicios/diagnostico-madurez-ia/): radiografía de la empresa frente a la IA —estrategia, datos, procesos, personas y gobierno— con oportunidades priorizadas y plan de primeros 90 días.
+- [Diseño del sistema operativo de IA](https://eraldia.com/servicios/sistema-operativo-ia/): el servicio central; estrategia, gobierno, arquitectura de herramientas y datos, y hoja de ruta por trimestres aprobable por dirección.
+- [Acompañamiento estratégico](https://eraldia.com/servicios/acompanamiento-estrategico/): dirección de IA externa mes a mes para ejecutar la hoja de ruta, medir la adopción y formar por rol.
 
-## Por sector
+## Línea para pymes y despachos
 
+- [IA para pymes y despachos](https://eraldia.com/para-pymes/): automatización concreta con precio cerrado, en semanas.
+- [Diagnóstico de IA](https://eraldia.com/servicios/diagnostico-ia/) · [Automatización a medida](https://eraldia.com/servicios/automatizacion/) · [Acompañamiento mensual](https://eraldia.com/servicios/acompanamiento/)
 - [IA para asesorías y gestorías](https://eraldia.com/ia-para-asesorias/): picado de facturas y nóminas, recordatorios de plazos, respuestas a consultas y onboarding.
 - [IA para despachos de abogados](https://eraldia.com/ia-para-abogados/): resumen y búsqueda en expedientes, control de plazos procesales e intake, con el secreto profesional por delante.
 - [Otros sectores](https://eraldia.com/casos/): clínicas, gimnasios e inmobiliarias.
@@ -38,7 +40,7 @@
 ## Guías y recursos
 
 - [Playbook de IA agéntica para pymes](https://eraldia.com/playbook/): guía gratuita sobre qué automatizar primero y cómo detectar el humo.
-- [Cuánto cuesta automatizar con IA en una pyme (2026)](https://eraldia.com/blog/cuanto-cuesta-automatizacion-ia-pyme/): rangos orientativos de precios.
+- [Cuánto cuesta automatizar con IA en una pyme (2026)](https://eraldia.com/blog/cuanto-cuesta-automatizacion-ia-pyme/): rangos orientativos de precios de la línea pyme.
 - [Qué hace un consultor de IA para pymes](https://eraldia.com/blog/que-hace-consultor-ia-pyme/).
 - [Blog](https://eraldia.com/blog/) · [Sobre Gorka Alapont](https://eraldia.com/sobre-mi/)
 
@@ -46,4 +48,4 @@
 
 - Web: https://eraldia.com
 - Email: hola@eraldia.com
-- Formulario "¿Qué te quita tiempo?": https://eraldia.com/#contacto (respuesta en menos de 24 h laborables)
+- Formulario "¿Dónde está tu empresa?": https://eraldia.com/#contacto (respuesta en menos de 24 h laborables)

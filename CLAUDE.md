@@ -1,44 +1,55 @@
 # CLAUDE.md
 
-Guía para Claude al trabajar en este repositorio. Última revisión: junio 2026.
+Guía para Claude al trabajar en este repositorio. Última revisión: julio 2026.
 
 ## Qué es este proyecto
 
-Web de **Eraldia** (eraldia.com), consultoría de transformación digital e IA para
-pymes españolas, operada por una sola persona (Gorka Alapont, autónomo, con base
-en Bilbao). Sitio estático construido con **Astro**. La web es la pieza central
-del embudo de captación de clientes: todo cambio debe servir a ese objetivo.
+Web de **Eraldia** (eraldia.com), consultoría de **estrategia de IA para
+empresas españolas**, operada por una sola persona (Gorka Alapont, autónomo, con
+base en Bilbao). Sitio estático construido con **Astro**. La web es la pieza
+central del embudo de captación de clientes: todo cambio debe servir a ese
+objetivo.
 
-- **Tagline:** *Pon tu pyme al día con la IA.*
+- **Tagline:** *El sistema operativo de IA de tu empresa.*
 - **Nombre:** de *eraldatu* ("transformar" en euskera) + IA; se lee "era / al día".
-- **Posicionamiento:** el anti-humo. Proyectos pequeños y cerrados, resultados
-  medibles, lenguaje llano. La persona que vende es la que ejecuta.
+- **Posicionamiento:** el anti-humo. Estrategia con los pies en el suelo,
+  alcance cerrado por escrito, resultados medibles, lenguaje llano. La persona
+  que vende es la que ejecuta.
 
 ## Modelo de negocio (resumen)
 
-Detalle completo en [`docs/MODELO-DE-NEGOCIO.md`](docs/MODELO-DE-NEGOCIO.md).
+Detalle completo en [`docs/MODELO-DE-NEGOCIO.md`](docs/MODELO-DE-NEGOCIO.md)
+(pivote estratégico de julio 2026 descrito en su §0).
 
-- **Cliente objetivo:** pyme española de 3–50 empleados con procesos manuales
-  que duelen. Sectores de entrada: gestorías/asesorías (multiplicadores de
-  referidos), clínicas (dental/fisio/veterinaria), hostelería y gimnasios.
-- **Foco de la web (vertical dominante, 2026):** el escaparate se dirige
-  principalmente a **asesorías/gestorías** (`/ia-para-asesorias/`) y
-  **despachos de abogados** (`/ia-para-abogados/`), con doble ángulo —ahorrar
-  horas y *hacer crecer el despacho*—. El resto de pymes son vía secundaria
-  (clínicas, gimnasios e inmobiliarias quedan como casos secundarios en
-  `/casos/`). Al crear contenido nuevo, prioriza este vertical.
-- **Escalera de servicios (precios 2026, siempre cerrados, nunca por horas):**
-  1. Llamada de diagnóstico — gratis, 30 min (cualifica).
-  2. Diagnóstico de IA y automatización — desde 490 €, 2 semanas (producto de
-     entrada; se descuenta del proyecto).
-  3. Automatización a medida — 1.900–4.500 €, 2–4 semanas (producto principal).
-  4. Acompañamiento mensual — 390–900 €/mes (la meta: ingreso recurrente).
-- **Principios:** herramientas a nombre del cliente (Make/n8n/Zapier, APIs de
-  Claude/GPT); alcance firmado por escrito; sin proyectos de >6 semanas el
-  primer año; sin SaaS hasta tener ~10 clientes de servicios.
-- **Embudo:** LinkedIn + boca a boca + blog SEO → web (formulario "¿Qué te
-  quita tiempo?") → llamada gratuita → diagnóstico → proyecto → retainer.
-  Respuesta a todo lead en <24 h laborables (la web lo promete).
+- **Cliente objetivo principal (desde julio 2026):** mediana empresa española
+  de **50–500 empleados** con presión por adoptar IA pero sin estrategia ni
+  gobierno (pilotos sueltos, *shadow AI*, herramientas dispersas). España
+  primero.
+- **Concepto bandera:** el **sistema operativo de IA (AI OS)** — el conjunto de
+  estrategia y gobierno, datos y conocimiento, procesos y automatización, y
+  personas y adopción que hace que la IA funcione en toda la empresa. Toda la
+  web cuelga de esta idea.
+- **Escalera de servicios principal (sin precios públicos; propuesta cerrada
+  por escrito, nunca por horas):**
+  1. Conversación estratégica — gratis, 30 min (cualifica).
+  2. Diagnóstico de madurez en IA (`/servicios/diagnostico-madurez-ia/`).
+  3. Diseño del sistema operativo de IA (`/servicios/sistema-operativo-ia/`) —
+     el servicio central.
+  4. Acompañamiento estratégico (`/servicios/acompanamiento-estrategico/`) —
+     dirección de IA externa, mensual, sin permanencia (la meta: recurrente).
+- **Línea secundaria (pymes y despachos):** la oferta original sigue viva en
+  `/para-pymes/` — landings de asesorías/abogados/climatización, casos de
+  `/casos/`, y la escalera de automatización con precios 2026 (diagnóstico
+  desde 490 €, proyectos 1.900–4.500 €, acompañamiento 390–900 €/mes).
+- **Principios:** herramientas a nombre del cliente; alcance firmado por
+  escrito; fases con final definido (nada de transformaciones eternas); sin
+  SaaS hasta tener ~10 clientes de servicios.
+- **Embudo:** LinkedIn + boca a boca + blog SEO → web (formulario "¿Dónde está
+  tu empresa?") → conversación gratuita → diagnóstico → diseño del AI OS →
+  acompañamiento. Respuesta a todo lead en <24 h laborables (la web lo promete).
+- Al crear contenido nuevo, **prioriza el ángulo estratégico para medianas
+  empresas** (madurez, gobierno, adopción, AI OS); el contenido pyme sigue
+  siendo válido como capa secundaria.
 
 ## Estrategia web (SEO + GEO)
 

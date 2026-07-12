@@ -4,8 +4,8 @@
 
 export const SITE_TITLE = 'Eraldia';
 export const SITE_DESCRIPTION =
-  'Consultoría de IA y automatización para asesorías, gestorías y despachos de abogados. Menos trabajo repetitivo —facturas, plazos, consultas, expedientes— y más capacidad para crecer sin contratar. Precio cerrado y sin humo.';
-export const TAGLINE = 'Pon tu pyme al día con la IA';
+  'Consultoría de estrategia de IA para medianas empresas en España. Diseño e implanto tu sistema operativo de IA: estrategia, gobierno, datos, procesos y personas preparadas para la era de la IA. Sin humo. También automatización para pymes y despachos.';
+export const TAGLINE = 'El sistema operativo de IA de tu empresa';
 export const AUTHOR = 'Gorka Alapont';
 
 // Correo público del dominio (Proton): footer, formulario, NAP.
