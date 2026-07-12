@@ -1,12 +1,44 @@
 # Eraldia — Modelo de negocio
 
-> Consultoría de transformación digital e IA para pymes, operada por una sola persona (autónomo).
-> Última revisión: junio 2026.
+> Consultoría de estrategia de IA para empresas españolas, operada por una sola persona (autónomo).
+> Última revisión: julio 2026.
+
+## 0. Pivote estratégico (julio 2026)
+
+En julio de 2026 Eraldia reposiciona su oferta principal hacia **medianas
+empresas españolas (50–500 empleados)** con un enfoque estratégico, aplicando
+la experiencia de Gorka ayudando a empresas a prepararse para la era de la IA:
+
+- **Concepto bandera: el sistema operativo de IA (AI OS).** Toda empresa va a
+  necesitar un sistema operativo de IA —estrategia y gobierno, datos y
+  conocimiento, procesos y automatización, personas y adopción—. Eraldia lo
+  diagnostica, lo diseña y acompaña su ejecución.
+- **Nueva escalera principal, sin precios públicos** (propuesta cerrada por
+  escrito tras la conversación inicial, nunca por horas):
+  1. Conversación estratégica — gratis, 30 min.
+  2. Diagnóstico de madurez en IA.
+  3. Diseño del sistema operativo de IA (servicio central).
+  4. Acompañamiento estratégico — dirección de IA externa, mensual, sin
+     permanencia.
+- **Ámbito: España primero.** El foco geográfico deja de ser solo local
+  (Bilbao/Andalucía) y pasa a ser nacional, aunque las landings locales se
+  mantienen por su valor SEO.
+- **GTM de la línea estratégica:** (1) contenido del cluster AI OS en el blog
+  (SEO/GEO nacional; ver `docs/PLAN-DE-CONTENIDOS.md`), (2) LinkedIn personal
+  de Gorka como canal de autoridad hacia dirección general, (3) referidos
+  cruzados desde la línea pyme (gestorías y despachos que asesoran a medianas
+  empresas), (4) charlas a comités de dirección y asociaciones empresariales.
+  El embudo: contenido/LinkedIn → conversación estratégica gratuita →
+  diagnóstico de madurez → diseño del AI OS → acompañamiento.
+- **La oferta pyme no desaparece: pasa a línea secundaria.** Las secciones
+  siguientes de este documento (ICP de 3–50 empleados, escalera con precios,
+  verticales de asesorías/abogados) describen esa línea, accesible desde
+  `/para-pymes/` y visible pero no dominante en la web.
 
 ## 1. La marca
 
 - **Nombre:** Eraldia — de *eraldatu* ("transformar" en euskera) + IA, y se lee "era / al día".
-- **Tagline:** *Pon tu pyme al día con la IA.*
+- **Tagline (desde julio 2026):** *El sistema operativo de IA de tu empresa.*
 - **Posicionamiento:** el anti-humo. Proyectos pequeños y cerrados, resultados medibles, lenguaje llano. La persona que vende es la que ejecuta.
 - **Dominio (pendiente de comprar):** `eraldia.com` (primera opción) y `eraldia.es` (cómpralos ambos si están libres, ~20 €/año los dos). Verifica disponibilidad en [Cloudflare Registrar](https://domains.cloudflare.com) o Namecheap.
 - **Identidad visual «Tierra Nocturna»:** terracota `#B95536` + ámbar `#D69A2C` + salvia `#8FA277` sobre tierra (negro cálido `#15120E` en secciones oscuras, crema `#F8F2E5` en claras). Tipografías: Fraunces itálica (títulos) + Inter (texto) + JetBrains Mono (código).

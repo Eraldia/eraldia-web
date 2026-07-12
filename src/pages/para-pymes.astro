@@ -1,0 +1,86 @@
+---
+import { url } from '../utils';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = 'IA para pymes y despachos';
+const description = 'La línea de automatización con la que nació Eraldia: proyectos concretos con IA, precio cerrado y semanas de plazo, para asesorías, gestorías, despachos de abogados y otras pymes.';
+---
+
+<BaseLayout title={title} description={description}>
+
+<div class="page-header">
+  <div class="container">
+    <h1 class="page-header__title">IA para pymes y despachos</h1>
+    <p class="page-header__desc">{description}</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="content container--narrow" style="margin-bottom: 3rem;">
+      <p>Eraldia nació automatizando el trabajo repetitivo de pymes y despachos profesionales, y esa línea sigue activa con el mismo método de siempre: proyectos pequeños y cerrados, resultados medibles y herramientas contratadas a tu nombre. Si tu negocio es una mediana empresa y lo que buscas es estrategia, mira mejor los <a href={url('/servicios/')}>servicios de estrategia de IA</a>.</p>
+    </div>
+
+    <div class="section__header">
+      <h2 class="section__title">Por sector</h2>
+    </div>
+
+    <div class="grid grid--3">
+      <a href={url('/ia-para-asesorias/')} class="service-card">
+        <h3 class="service-card__title">Asesorías y gestorías</h3>
+        <p class="service-card__desc">Picado de facturas y nóminas, recordatorios de plazos, respuestas a consultas repetidas y onboarding sin caos.</p>
+        <span class="service-card__action">Ver automatizaciones y precios</span>
+      </a>
+      <a href={url('/ia-para-abogados/')} class="service-card">
+        <h3 class="service-card__title">Despachos de abogados</h3>
+        <p class="service-card__desc">Resumen y búsqueda en expedientes, control de plazos procesales e intake de clientes, con el secreto profesional por delante.</p>
+        <span class="service-card__action">Ver automatizaciones y precios</span>
+      </a>
+      <a href={url('/ia-para-climatizacion/')} class="service-card">
+        <h3 class="service-card__title">Climatización y aire acondicionado</h3>
+        <p class="service-card__desc">Presupuestos que salen en minutos, partes de trabajo sin papel y avisos a clientes automatizados.</p>
+        <span class="service-card__action">Ver automatizaciones y precios</span>
+      </a>
+    </div>
+
+    <div class="content container--narrow" style="margin-top: 2rem;">
+      <p>¿Otro sector? Mira los <a href={url('/casos/')}>casos de uso</a> —clínicas, gimnasios, inmobiliarias…— o <a href={url('/#contacto')}>cuéntame tu caso</a> directamente.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="container">
+    <div class="section__header">
+      <h2 class="section__title">Cómo trabajo con pymes</h2>
+      <p class="section__subtitle">
+        Tres servicios en escalera, cada uno con precio cerrado y valor por sí mismo.
+      </p>
+    </div>
+
+    <div class="grid grid--3">
+      <a href={url('/servicios/diagnostico-ia/')} class="card card--link">
+        <h3 class="card__title">1. Diagnóstico de IA</h3>
+        <p class="card__desc">En dos semanas sabes qué procesos merece la pena automatizar, cuánto cuesta y qué ahorro esperar. Se descuenta del proyecto.</p>
+        <span class="card__link">Saber más</span>
+      </a>
+      <a href={url('/servicios/automatizacion/')} class="card card--link">
+        <h3 class="card__title">2. Automatización a medida</h3>
+        <p class="card__desc">La automatización funcionando en tu negocio en 2-4 semanas, con tu equipo formado y todo a tu nombre.</p>
+        <span class="card__link">Saber más</span>
+      </a>
+      <a href={url('/servicios/acompanamiento/')} class="card card--link">
+        <h3 class="card__title">3. Acompañamiento mensual</h3>
+        <p class="card__desc">Mantenimiento, mejoras y formación continua, mes a mes y sin permanencia.</p>
+        <span class="card__link">Saber más</span>
+      </a>
+    </div>
+
+    <div class="content container--narrow" style="margin-top: 3rem; text-align: center;">
+      <p>¿Con prisa? Haz el <a href={url('/diagnostico-express/')}>diagnóstico exprés (1 minuto)</a> o lee gratis el <a href={url('/playbook/')}>playbook de IA para pymes</a>.</p>
+      <a href={url('/#contacto')} class="btn btn--primary btn--lg">Reservar mi llamada gratuita</a>
+    </div>
+  </div>
+</section>
+
+</BaseLayout>

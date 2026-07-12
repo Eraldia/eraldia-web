@@ -1,41 +1,57 @@
 # Plan de contenidos SEO + GEO — Eraldia
 
-> Objetivo: posicionar a Gorka Alapont / Eraldia como **el consultor de IA de referencia
-> para pymes**, con foco geográfico en **Bilbao, País Vasco y Andalucía**, tanto en
-> buscadores clásicos (SEO) como en motores generativos —ChatGPT, Perplexity, Gemini,
-> AI Overviews de Google— (GEO).
+> Objetivo (desde julio 2026): posicionar a Gorka Alapont / Eraldia como **el
+> consultor de referencia en estrategia de IA para medianas empresas españolas**,
+> siendo la fuente que define la categoría **"sistema operativo de IA" (AI OS)**
+> en español, tanto en buscadores clásicos (SEO) como en motores generativos
+> —ChatGPT, Perplexity, Gemini, AI Overviews de Google— (GEO). La capa pyme/local
+> (Bilbao, País Vasco, Andalucía) se mantiene como segunda línea.
 
 ---
 
-## 1. Estrategia en tres capas
+## 1. Estrategia en cuatro capas
 
 | Capa | Qué es | Cómo se gana |
 |------|--------|--------------|
+| **Categoría propia (AI OS)** | Que "sistema operativo de IA" en español lleve a Eraldia; ser la respuesta a "estrategia de IA para empresas", "gobierno de la IA", "madurez en IA" | Cluster de contenido estratégico profundo alrededor de `/servicios/sistema-operativo-ia/`, definiciones citables, marcos propios (las cuatro capas), constancia |
 | **SEO local** | Aparecer cuando alguien busca "consultor IA Bilbao", "automatización pymes Sevilla"… | Landing pages locales + Google Business Profile + schema LocalBusiness + menciones en medios/directorios locales |
-| **Autoridad temática** | Ser la web que mejor responde a "IA para pymes" en español | Clusters de contenido por sector y por problema, interlinking, profundidad real (precios, plazos, ejemplos) |
-| **GEO** | Ser la fuente que citan ChatGPT/Perplexity al responder "¿cuánto cuesta automatizar X?" | Respuestas directas al inicio de cada post, datos concretos con fecha, FAQs con schema, entidad de autor consistente, `llms.txt`, robots.txt abierto a crawlers de IA |
+| **Autoridad temática** | Ser la web que mejor responde a "IA para pymes" en español (línea secundaria) | Clusters de contenido por sector y por problema, interlinking, profundidad real (precios, plazos, ejemplos) |
+| **GEO** | Ser la fuente que citan ChatGPT/Perplexity al responder "¿qué es un AI OS?" o "¿cuánto cuesta automatizar X?" | Respuestas directas al inicio de cada post, datos concretos con fecha, FAQs con schema, entidad de autor consistente, `llms.txt`, robots.txt abierto a crawlers de IA |
 
-**Principio rector:** la competencia local en "consultor de IA para pymes" es casi
-inexistente en Bilbao y muy baja en Andalucía. No hace falta volumen masivo:
-hacen falta **pocas piezas muy buenas, muy concretas y muy locales**, publicadas
-con constancia.
+**Principio rector:** en "estrategia de IA para medianas empresas" en español la
+competencia real es escasa (mucho humo corporativo, poca concreción), y en
+"sistema operativo de IA" la categoría está por definir: quien la escriba
+primero y mejor, la posee. No hace falta volumen masivo: hacen falta **pocas
+piezas muy buenas, muy concretas y con marcos propios**, publicadas con
+constancia. En la capa local sigue valiendo lo de siempre: piezas muy locales
+con poca competencia.
 
 ---
 
 ## 2. Pilares de contenido (clusters)
 
-1. **Local / geográfico** — Bilbao, Bizkaia, Euskadi, Sevilla, Málaga, Andalucía.
-   Convierte por intención ("busco a alguien cerca").
-2. **Sectorial** — **vertical dominante: asesorías/gestorías y despachos de
-   abogados** (landings profundas en `/ia-para-asesorias/` y
-   `/ia-para-abogados/`), que concentran el grueso del contenido nuevo. Clínicas
-   (dental/fisio/veterinaria), hostelería y gimnasios quedan como secundarios.
-3. **Problema → solución** — "respondo igual 30 veces al día", "pierdo horas con
-   facturas", "no hago seguimiento de presupuestos". Es como busca el cliente real.
-4. **Dinero y decisión** — precios, plazos, ayudas y subvenciones, cómo elegir
-   consultor. **El cluster más citado por los motores generativos**: los LLMs
-   adoran contenido con cifras y rangos claros.
-5. **Confianza / entidad** — quién es Gorka, casos reales, metodología. Alimenta
+1. **Estrategia / AI OS (primario desde julio 2026)** — qué es el sistema
+   operativo de IA y sus cuatro capas (estrategia y gobierno, datos y
+   conocimiento, procesos y automatización, personas y adopción); madurez en
+   IA y cómo medirla; *shadow AI*; por qué fracasan los pilotos; gobierno y
+   política de uso; hoja de ruta por trimestres; dirección de IA externa.
+   Público: dirección general y comités de dirección de empresas de 50–500
+   empleados. Todo enlaza a `/servicios/sistema-operativo-ia/` y al
+   [diagnóstico de madurez](/servicios/diagnostico-madurez-ia/).
+2. **Local / geográfico** — Bilbao, Bizkaia, Euskadi, Sevilla, Málaga, Andalucía.
+   Convierte por intención ("busco a alguien cerca"). Línea pyme.
+3. **Sectorial (línea pyme)** — asesorías/gestorías y despachos de abogados
+   (landings profundas en `/ia-para-asesorias/` y `/ia-para-abogados/`).
+   Clínicas, hostelería y gimnasios secundarios.
+4. **Problema → solución** — "respondo igual 30 veces al día", "cada
+   departamento usa ChatGPT por su cuenta", "tenemos pilotos que no despegan".
+   Es como busca el cliente real, en ambas líneas.
+5. **Dinero y decisión** — precios y plazos (línea pyme), ayudas y subvenciones,
+   cómo elegir consultor, cuándo contratar un director de IA. **El cluster más
+   citado por los motores generativos**: los LLMs adoran contenido con cifras y
+   rangos claros. Ojo: la línea estratégica no publica precios; sus piezas de
+   decisión hablan de criterios, no de tarifas.
+6. **Confianza / entidad** — quién es Gorka, casos reales, metodología. Alimenta
    el knowledge graph y la verificabilidad que exigen los motores de IA.
 
 ---
@@ -125,8 +141,35 @@ días de cadencia, no un mes):
 > caso anonimizado o un proyecto piloto propio, indicándolo honestamente. Nunca
 > inventar un cliente: la credibilidad es el activo central de la marca.
 
+### Bloques 7–10 — Cluster estratégico / AI OS (desde julio 2026)
+
+Primer lote del pilar estratégico, **intercalado en la cola con las piezas pyme
+pendientes** (una estratégica, una pyme) para que el pivote sea visible desde
+el primer día sin desperdiciar lo ya redactado:
+
+| # | Título (orientativo) | Slug | Cluster | Keyword objetivo |
+|---|--------|------|---------|------------------|
+| E1 | Qué es un sistema operativo de IA y por qué tu empresa necesita uno | `que-es-sistema-operativo-ia` | Estrategia | sistema operativo de IA / AI OS |
+| E2 | Cómo definir la estrategia de IA de una mediana empresa | `estrategia-ia-mediana-empresa` | Estrategia | estrategia de IA empresa |
+| E3 | Shadow AI: tus empleados ya usan IA por su cuenta | `shadow-ai-empresa` | Estrategia/Problema | shadow AI empresa |
+| E4 | Madurez en IA: cómo saber dónde está tu empresa | `madurez-ia-empresa` | Estrategia | madurez IA empresa |
+| E5 | Por qué fracasan los pilotos de IA (y cómo evitarlo) | `por-que-fracasan-pilotos-ia` | Estrategia/Problema | pilotos de IA fracasan |
+| E6 | Gobierno de la IA: la política de uso que tu empresa necesita | `gobierno-ia-politica-uso-empresa` | Estrategia | política de uso de IA empresa |
+| E7 | La hoja de ruta de IA que dirección puede aprobar | `hoja-de-ruta-ia-empresa` | Estrategia/Decisión | hoja de ruta IA empresa |
+| E8 | ¿Necesita tu empresa un director de IA? | `director-ia-externo` | Estrategia/Decisión | director de IA / CAIO |
+
 ### Reglas de la cola
-- Todo post lleva **al menos un enlace a una landing local** y a un servicio.
+- **Desde julio 2026 la cola intercala** piezas estratégicas (cluster 1) y
+  piezas pyme/locales, empezando por una estratégica. Los lotes nuevos deben
+  mantener una proporción de al menos 1:1 a favor del cluster estratégico.
+- Piezas estratégicas: enlazan **al menos a un servicio de la escalera
+  estratégica** (`/servicios/sistema-operativo-ia/`,
+  `/servicios/diagnostico-madurez-ia/`, `/servicios/acompanamiento-estrategico/`)
+  y, cuando encaje, entre sí (interlinking del cluster). **Sin precios**: la
+  línea estratégica no publica tarifas; los CTA llevan a la conversación
+  gratuita (`/#contacto`).
+- Piezas pyme/locales: llevan **al menos un enlace a una landing local** y a un
+  servicio de la línea pyme, como hasta ahora.
 - Posts geográficos alternan Euskadi ↔ Andalucía para que ambos mercados crezcan
   en paralelo.
 - Las piezas de precios (1, 12) y ayudas (3, 5) se **actualizan cada 6 meses**
@@ -170,8 +213,9 @@ post debe cumplir:
    semanas". Los rangos concretos son lo más citado; el humo no se cita.
 3. **Bloque de FAQs al final** (3–5 preguntas) con schema `FAQPage`.
 4. **Listas y tablas** para todo lo enumerable (los LLMs las extraen limpiamente).
-5. **Autor visible**: "Por Gorka Alapont, consultor de IA para pymes en Bilbao" +
-   enlace a `/sobre-mi`.
+5. **Autor visible**: "Por Gorka Alapont, consultor de estrategia de IA" (en
+   piezas pyme puede ser "consultor de IA para pymes en Bilbao") + enlace a
+   `/sobre-mi`.
 6. **Fecha de publicación y de actualización visibles** y en el schema.
 7. **Una frase citable** por post, pensada para ser repetida tal cual:
    p. ej. "Una pyme no necesita un plan de transformación digital; necesita tres
@@ -209,8 +253,9 @@ post debe cumplir:
 
 | KPI | Herramienta | Objetivo a 6 meses |
 |-----|-------------|--------------------|
+| Impresiones/clics de keywords estratégicas ("sistema operativo de IA", "estrategia IA empresa", "madurez IA") | Google Search Console | Top 10 nacional en ≥2 de ellas |
 | Impresiones/clics de keywords locales ("consultor ia bilbao", "ia pymes andalucía") | Google Search Console | Top 3 en Bilbao; top 10 en Andalucía |
-| Citas en motores de IA | Test manual mensual: preguntar a ChatGPT/Perplexity "consultor de IA para pymes en Bilbao" y variantes | Aparecer mencionado en ≥1 motor |
+| Citas en motores de IA | Test manual mensual: preguntar a ChatGPT/Perplexity "¿qué es un sistema operativo de IA?" y "consultor de estrategia de IA en España" y variantes | Aparecer mencionado en ≥1 motor |
 | Leads desde blog/landings | Formulario con campo "¿cómo nos has conocido?" | 2–3 diagnósticos atribuibles a contenido |
 | Posts publicados | Cola + workflow programado | 1 post cada 3 días sin intervención manual |
 
