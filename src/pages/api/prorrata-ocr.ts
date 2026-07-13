@@ -10,23 +10,21 @@ export const prerender = false;
 // Modelo de visión de Workers AI. Lee la imagen y extrae texto/campos.
 const MODEL = '@cf/meta/llama-3.2-11b-vision-instruct';
 
-const SYSTEM_PROMPT = `Eres un asistente experto en facturas españolas. Analiza la
-imagen de UNA factura y devuelve EXCLUSIVAMENTE un objeto JSON válido (sin texto
-alrededor, sin markdown) con estas claves:
-{
-  "tipo": "emitida" | "recibida" | null,   // emitida = la emite quien usa la herramienta (ingreso/venta); recibida = gasto/compra. Si no está claro, null.
-  "contraparte": string | null,             // nombre del cliente (si emitida) o proveedor (si recibida)
-  "fecha": string | null,                   // fecha de la factura en formato AAAA-MM-DD si es legible
-  "base": number | null,                    // base imponible total en euros (número, punto decimal)
-  "cuotaIva": number | null,                // cuota de IVA total en euros (0 si exenta)
-  "tipoIva": number | null,                 // tipo de IVA aplicado en % (21, 10, 4, 0...)
-  "exenta": boolean,                        // true si la operación está exenta o no lleva IVA
-  "articuloExencion": string | null,        // artículo/motivo de exención si aparece (p. ej. "art. 20 LIVA")
-  "total": number | null,                   // importe total factura en euros
-  "confianza": "alta" | "media" | "baja"    // tu confianza en la lectura
-}
-Reglas: usa punto como separador decimal y no incluyas símbolos de moneda ni miles.
-Si un dato no es legible, ponlo a null. No inventes valores.`;
+const SYSTEM_PROMPT = `Analiza la imagen de UNA factura española y devuelve SOLO un
+objeto JSON válido: sin explicaciones, sin comentarios y sin bloques de código.
+Usa exactamente estas claves:
+- "tipo": "emitida" o "recibida" o null (emitida = ingreso/venta; recibida = gasto/compra)
+- "contraparte": nombre del cliente o proveedor, o null
+- "fecha": fecha de la factura como "AAAA-MM-DD", o null
+- "base": base imponible total en euros (número), o null
+- "cuotaIva": cuota de IVA total en euros (número, 0 si exenta), o null
+- "tipoIva": tipo de IVA en % (21, 10, 4, 0), o null
+- "exenta": true o false
+- "articuloExencion": artículo o motivo de exención si aparece, o null
+- "total": importe total de la factura en euros (número), o null
+- "confianza": "alta", "media" o "baja"
+Los números con punto decimal, sin separador de miles ni símbolo de moneda. Si un
+dato no es legible, usa null. No inventes valores. Responde únicamente con el JSON.`;
 
 function json(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), {
@@ -50,14 +48,19 @@ function dataUrlToBytes(dataUrl: string): number[] | null {
   }
 }
 
-// El modelo debería devolver JSON puro, pero por si acaso extraemos el primer
-// bloque {...} y lo parseamos con tolerancia.
+// El modelo debería devolver JSON puro, pero por si acaso limpiamos bloques de
+// código, comentarios y comas colgantes antes de parsear el primer objeto {...}.
 function parseModelJson(text: string): Record<string, unknown> | null {
-  const start = text.indexOf('{');
-  const end = text.lastIndexOf('}');
+  if (!text) return null;
+  let t = text.replace(/```(?:json)?/gi, '').replace(/```/g, '');
+  const start = t.indexOf('{');
+  const end = t.lastIndexOf('}');
   if (start < 0 || end <= start) return null;
+  let body = t.slice(start, end + 1);
+  body = body.replace(/\/\/[^\n\r]*/g, '').replace(/\/\*[\s\S]*?\*\//g, '');
+  body = body.replace(/,(\s*[}\]])/g, '$1');
   try {
-    return JSON.parse(text.slice(start, end + 1));
+    return JSON.parse(body);
   } catch {
     return null;
   }
@@ -102,7 +105,14 @@ export const POST: APIRoute = async ({ request, locals }) => {
       max_tokens: 512,
     });
     const text: string = typeof result?.response === 'string' ? result.response : '';
-    const data = parseModelJson(text) ?? {};
+    const data = parseModelJson(text);
+    // `raw` se devuelve para poder diagnosticar desde el navegador cuando el
+    // modelo no da un JSON parseable (herramienta interna, sin datos sensibles
+    // más allá de la propia factura).
+    if (!data || Object.keys(data).length === 0) {
+      console.warn('[api/prorrata-ocr] Respuesta del modelo sin JSON útil:', text.slice(0, 400));
+      return json(200, { ok: true, data: {}, raw: text.slice(0, 800) });
+    }
     return json(200, { ok: true, data });
   } catch (err) {
     console.error('[api/prorrata-ocr] Error de Workers AI:', err);
