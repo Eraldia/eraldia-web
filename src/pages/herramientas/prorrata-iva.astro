@@ -30,7 +30,7 @@ const loginError = Astro.url.searchParams.get('error');
         <h1 class="section__title">Calculadora de prorrata de IVA</h1>
         <p class="section__subtitle">Esta herramienta es de uso interno. Introduce la contraseña de acceso.</p>
       </div>
-      <form class="pro-login" method="POST" action={url('/api/prorrata-login')}>
+      <form class="pro-login" method="POST" action={url('/api/prorrata-login/')}>
         {loginError === 'config'
           ? <p class="pro-login__error">No hay contraseña configurada en el servidor (PRORRATA_PASS).</p>
           : loginError && <p class="pro-login__error">Contraseña incorrecta. Inténtalo de nuevo.</p>}
@@ -327,7 +327,7 @@ if (root) {
   }
 
   async function ocr(image) {
-    const res = await fetch(base + '/api/prorrata-ocr', {
+    const res = await fetch(base + '/api/prorrata-ocr/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ image }),
