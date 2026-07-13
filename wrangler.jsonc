@@ -14,10 +14,19 @@
     "binding": "ASSETS",
     "directory": "dist"
   },
+  // Workers AI: OCR de facturas en la calculadora de prorrata de IVA
+  // (/herramientas/prorrata-iva/). Se accede desde el Worker como env.AI.
+  "ai": {
+    "binding": "AI"
+  },
   // El aviso de leads por email usa Resend. La clave NO va aquí (es un secreto):
   //   npx wrangler secret put RESEND_API_KEY
   // En local, ponla en .dev.vars (ver .dev.vars.example). El remitente está en
   // src/consts.ts (LEAD_NOTIFY_FROM) y debe ser un dominio verificado en Resend.
+  //
+  // Contraseña de acceso a la herramienta interna de prorrata de IVA. Es un
+  // secreto, se sube con:  npx wrangler secret put PRORRATA_PASS
+  // En local va en .dev.vars (ver .dev.vars.example).
   //
   // Base de datos D1 para guardar los leads del formulario de contacto y del
   // diagnóstico exprés. Crea la base con `npx wrangler d1 create eraldia-leads`

@@ -1,0 +1,378 @@
+---
+import { url, BASE } from '../../utils';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { isAuthorized } from '../../lib/prorrata-auth';
+
+// Herramienta interna: no se prerenderiza (necesita comprobar la sesión en el
+// Worker) y no se indexa.
+export const prerender = false;
+
+const pass = Astro.locals.runtime?.env?.PRORRATA_PASS;
+const authed = await isAuthorized(Astro.request, pass, import.meta.env.DEV);
+const loginError = Astro.url.searchParams.get('error');
+---
+
+<BaseLayout
+  title="Calculadora de prorrata de IVA"
+  description="Herramienta interna de Eraldia para calcular la prorrata de deducción de IVA a partir de facturas."
+  noindex={true}
+>
+
+{!authed && (
+  <section class="section section--alt">
+    <div class="container container--narrow">
+      <div class="section__header">
+        <span class="hero__badge">Herramienta interna · acceso restringido</span>
+        <h1 class="section__title">Calculadora de prorrata de IVA</h1>
+        <p class="section__subtitle">Esta herramienta es de uso interno. Introduce la contraseña de acceso.</p>
+      </div>
+      <form class="pro-login" method="POST" action={url('/api/prorrata-login')}>
+        {loginError === 'config'
+          ? <p class="pro-login__error">No hay contraseña configurada en el servidor (PRORRATA_PASS).</p>
+          : loginError && <p class="pro-login__error">Contraseña incorrecta. Inténtalo de nuevo.</p>}
+        <label class="pro-login__label" for="password">Contraseña</label>
+        <input class="pro-login__input" id="password" name="password" type="password" autocomplete="current-password" required autofocus />
+        <button class="btn btn--primary" type="submit">Entrar</button>
+      </form>
+    </div>
+  </section>
+)}
+
+{authed && (
+  <section class="section">
+    <div class="container">
+      <div class="section__header">
+        <span class="hero__badge">Herramienta interna</span>
+        <h1 class="section__title">Calculadora de prorrata de IVA</h1>
+        <p class="section__subtitle">
+          Sube las facturas (imágenes o PDF), el OCR precarga los importes y la exención,
+          y revisas cada fila para calcular la prorrata general y especial.
+        </p>
+      </div>
+
+      <div class="pro" id="pro" data-base={BASE}>
+
+        <!-- Zona de subida -->
+        <div class="pro__drop" id="pro-drop">
+          <input type="file" id="pro-files" accept="image/*,application/pdf" multiple hidden />
+          <p class="pro__drop-text">
+            Arrastra aquí las facturas o
+            <button type="button" class="pro__drop-btn" id="pro-pick">selecciónalas</button>.
+            <br /><small>Imágenes (JPG, PNG) o PDF. Se procesan en tu navegador y solo se envían para leerlas; no se guardan.</small>
+          </p>
+          <p class="pro__status" id="pro-status" hidden></p>
+        </div>
+
+        <!-- Tabla de facturas -->
+        <div class="pro__table-wrap">
+          <table class="pro__table" id="pro-table">
+            <thead>
+              <tr>
+                <th>Factura</th>
+                <th>Contraparte</th>
+                <th>Fecha</th>
+                <th>Tipo</th>
+                <th class="pro__num">Base (€)</th>
+                <th class="pro__num">Cuota IVA (€)</th>
+                <th>Clasificación</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="pro-rows"></tbody>
+          </table>
+          <p class="pro__empty" id="pro-empty">Todavía no hay facturas. Sube alguna o añade una fila a mano.</p>
+          <button type="button" class="btn btn--outline pro__add" id="pro-add">+ Añadir fila a mano</button>
+        </div>
+
+        <!-- Resultados -->
+        <div class="pro__results" id="pro-results">
+          <h2 class="pro__results-title">Resultado</h2>
+          <div class="pro__grid">
+            <div class="pro__card">
+              <span class="pro__card-label">Prorrata general</span>
+              <span class="pro__card-value" id="pro-pct">—</span>
+              <span class="pro__card-hint" id="pro-pct-hint">Sobre las facturas emitidas</span>
+            </div>
+            <div class="pro__card">
+              <span class="pro__card-label">Deducible por prorrata general</span>
+              <span class="pro__card-value" id="pro-ded-general">—</span>
+              <span class="pro__card-hint">IVA soportado × %</span>
+            </div>
+            <div class="pro__card">
+              <span class="pro__card-label">Deducible por prorrata especial</span>
+              <span class="pro__card-value" id="pro-ded-especial">—</span>
+              <span class="pro__card-hint">Según el uso de cada gasto</span>
+            </div>
+          </div>
+          <p class="pro__reco" id="pro-reco"></p>
+          <div class="pro__formula">
+            <p><strong>Cómo se calcula.</strong> La prorrata general es el % de operaciones con derecho a
+            deducción sobre el total (facturas emitidas), <em>redondeado al alza</em> a la unidad superior
+            (art. 104 LIVA). El IVA soportado (facturas recibidas) se deduce por ese % en la general; en la
+            especial, al 100 % lo de uso exclusivo con derecho, al 0 % lo de uso exclusivo sin derecho, y por
+            el % lo de uso común. La especial es obligatoria si su deducción es inferior en más de un 10 % a la
+            general.</p>
+          </div>
+          <button type="button" class="btn btn--outline" id="pro-csv">Descargar CSV</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+)}
+
+</BaseLayout>
+
+<script>
+import * as pdfjsLib from 'pdfjs-dist';
+import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
+pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
+
+const root = document.getElementById('pro');
+if (root) {
+  const base = root.getAttribute('data-base') || '';
+  const rowsEl = document.getElementById('pro-rows');
+  const emptyEl = document.getElementById('pro-empty');
+  const statusEl = document.getElementById('pro-status');
+  const fileInput = document.getElementById('pro-files');
+  const drop = document.getElementById('pro-drop');
+
+  const eur = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });
+  const num = (v) => {
+    const n = parseFloat(String(v).replace(/\./g, '').replace(',', '.').replace(/[^0-9.\-]/g, ''));
+    return Number.isFinite(n) ? n : 0;
+  };
+
+  // ---- Filas -------------------------------------------------------------
+  function classificationOptions(tipo, selected) {
+    const opts = tipo === 'recibida'
+      ? [
+          ['comun', 'Uso común (prorrata)'],
+          ['excl-con', 'Uso exclusivo con derecho (100%)'],
+          ['excl-sin', 'Uso exclusivo sin derecho (0%)'],
+        ]
+      : [
+          ['con', 'Con derecho a deducción'],
+          ['sin', 'Sin derecho (exenta)'],
+        ];
+    return opts
+      .map(([v, l]) => `<option value="${v}"${v === selected ? ' selected' : ''}>${l}</option>`)
+      .join('');
+  }
+
+  function addRow(data) {
+    data = data || {};
+    const tipo = data.tipo === 'recibida' ? 'recibida' : 'emitida';
+    // Clasificación por defecto a partir de la exención detectada.
+    let clas;
+    if (tipo === 'emitida') clas = data.exenta ? 'sin' : 'con';
+    else clas = 'comun';
+
+    const tr = document.createElement('tr');
+    tr.className = 'pro__row';
+    tr.innerHTML = `
+      <td class="pro__file" title="${escapeAttr(data.archivo || '')}">${escapeHtml(data.archivo || 'A mano')}</td>
+      <td><input class="pro__in" data-k="contraparte" type="text" value="${escapeAttr(data.contraparte || '')}" /></td>
+      <td><input class="pro__in pro__in--date" data-k="fecha" type="text" placeholder="AAAA-MM-DD" value="${escapeAttr(data.fecha || '')}" /></td>
+      <td>
+        <select class="pro__in pro__tipo" data-k="tipo">
+          <option value="emitida"${tipo === 'emitida' ? ' selected' : ''}>Emitida (ingreso)</option>
+          <option value="recibida"${tipo === 'recibida' ? ' selected' : ''}>Recibida (gasto)</option>
+        </select>
+      </td>
+      <td class="pro__num"><input class="pro__in pro__in--num" data-k="base" type="number" step="0.01" min="0" value="${data.base != null ? Number(data.base) : ''}" /></td>
+      <td class="pro__num"><input class="pro__in pro__in--num" data-k="cuota" type="number" step="0.01" min="0" value="${data.cuotaIva != null ? Number(data.cuotaIva) : ''}" /></td>
+      <td><select class="pro__in pro__clas" data-k="clas">${classificationOptions(tipo, clas)}</select></td>
+      <td><button type="button" class="pro__del" title="Quitar fila" aria-label="Quitar fila">×</button></td>
+    `;
+    rowsEl.appendChild(tr);
+
+    const tipoSel = tr.querySelector('.pro__tipo');
+    const clasSel = tr.querySelector('.pro__clas');
+    tipoSel.addEventListener('change', () => {
+      clasSel.innerHTML = classificationOptions(tipoSel.value, tipoSel.value === 'recibida' ? 'comun' : 'con');
+      recompute();
+    });
+    tr.querySelector('.pro__del').addEventListener('click', () => { tr.remove(); recompute(); });
+    tr.querySelectorAll('.pro__in').forEach((el) => el.addEventListener('input', recompute));
+
+    recompute();
+  }
+
+  // ---- Cálculo -----------------------------------------------------------
+  function readRows() {
+    return Array.prototype.map.call(rowsEl.querySelectorAll('.pro__row'), (tr) => ({
+      tipo: tr.querySelector('[data-k="tipo"]').value,
+      base: num(tr.querySelector('[data-k="base"]').value),
+      cuota: num(tr.querySelector('[data-k="cuota"]').value),
+      clas: tr.querySelector('[data-k="clas"]').value,
+      contraparte: tr.querySelector('[data-k="contraparte"]').value,
+      fecha: tr.querySelector('[data-k="fecha"]').value,
+    }));
+  }
+
+  function recompute() {
+    const rows = readRows();
+    emptyEl.hidden = rows.length > 0;
+
+    let baseConDerecho = 0, baseTotalEmitidas = 0;
+    let soportadoTotal = 0, soportadoExclCon = 0, soportadoComun = 0;
+    for (const r of rows) {
+      if (r.tipo === 'emitida') {
+        baseTotalEmitidas += r.base;
+        if (r.clas === 'con') baseConDerecho += r.base;
+      } else {
+        soportadoTotal += r.cuota;
+        if (r.clas === 'excl-con') soportadoExclCon += r.cuota;
+        else if (r.clas === 'comun') soportadoComun += r.cuota;
+        // excl-sin: 0% deducible
+      }
+    }
+
+    const pct = baseTotalEmitidas > 0 ? Math.ceil((baseConDerecho / baseTotalEmitidas) * 100) : null;
+    const dedGeneral = pct != null ? soportadoTotal * (pct / 100) : null;
+    const dedEspecial = pct != null ? soportadoExclCon + soportadoComun * (pct / 100) : null;
+
+    document.getElementById('pro-pct').textContent = pct != null ? pct + ' %' : '—';
+    document.getElementById('pro-pct-hint').textContent = pct != null
+      ? `${eur.format(baseConDerecho)} con derecho ÷ ${eur.format(baseTotalEmitidas)} total`
+      : 'Añade facturas emitidas para el %';
+    document.getElementById('pro-ded-general').textContent = dedGeneral != null ? eur.format(dedGeneral) : '—';
+    document.getElementById('pro-ded-especial').textContent = dedEspecial != null ? eur.format(dedEspecial) : '—';
+
+    const reco = document.getElementById('pro-reco');
+    if (pct == null || soportadoTotal === 0) {
+      reco.textContent = '';
+      reco.className = 'pro__reco';
+    } else if (dedGeneral > dedEspecial * 1.10) {
+      reco.textContent = `La prorrata especial es obligatoria: deduce ${eur.format(dedEspecial)} frente a ${eur.format(dedGeneral)} de la general (más de un 10% de diferencia).`;
+      reco.className = 'pro__reco pro__reco--warn';
+    } else {
+      reco.textContent = `Puedes aplicar la prorrata general (${eur.format(dedGeneral)}). La especial daría ${eur.format(dedEspecial)}; la diferencia no obliga a usarla.`;
+      reco.className = 'pro__reco pro__reco--ok';
+    }
+  }
+
+  // ---- OCR ---------------------------------------------------------------
+  async function fileToImage(file) {
+    if (file.type === 'application/pdf') return await pdfFirstPageToDataUrl(file);
+    return await imageToDataUrl(file);
+  }
+
+  function imageToDataUrl(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = () => resolve(downscale(img, img.width, img.height));
+        img.onerror = reject;
+        img.src = reader.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function pdfFirstPageToDataUrl(file) {
+    const buf = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+    const page = await pdf.getPage(1);
+    const viewport = page.getViewport({ scale: 2 });
+    const canvas = document.createElement('canvas');
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+    return scaleCanvas(canvas);
+  }
+
+  // Reduce la imagen a un máximo de 1600px de lado y la exporta como JPEG para
+  // que la petición al OCR sea razonable.
+  function downscale(img, w, h) {
+    const canvas = document.createElement('canvas');
+    const max = 1600;
+    const ratio = Math.min(1, max / Math.max(w, h));
+    canvas.width = Math.round(w * ratio);
+    canvas.height = Math.round(h * ratio);
+    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL('image/jpeg', 0.85);
+  }
+  function scaleCanvas(canvas) {
+    const max = 1600;
+    const ratio = Math.min(1, max / Math.max(canvas.width, canvas.height));
+    if (ratio === 1) return canvas.toDataURL('image/jpeg', 0.85);
+    const out = document.createElement('canvas');
+    out.width = Math.round(canvas.width * ratio);
+    out.height = Math.round(canvas.height * ratio);
+    out.getContext('2d').drawImage(canvas, 0, 0, out.width, out.height);
+    return out.toDataURL('image/jpeg', 0.85);
+  }
+
+  async function ocr(image) {
+    const res = await fetch(base + '/api/prorrata-ocr', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image }),
+    });
+    if (!res.ok) throw new Error('OCR ' + res.status);
+    const json = await res.json();
+    return json && json.ok ? (json.data || {}) : {};
+  }
+
+  async function handleFiles(files) {
+    const list = Array.prototype.slice.call(files);
+    if (!list.length) return;
+    statusEl.hidden = false;
+    let done = 0;
+    for (const file of list) {
+      statusEl.textContent = `Leyendo ${done + 1} de ${list.length}: ${file.name}…`;
+      try {
+        const image = await fileToImage(file);
+        const data = await ocr(image);
+        addRow(Object.assign({ archivo: file.name }, data));
+      } catch (err) {
+        console.error('No se pudo procesar', file.name, err);
+        addRow({ archivo: file.name });
+      }
+      done++;
+    }
+    statusEl.textContent = `Listo: ${done} factura(s) procesada(s). Revisa y ajusta cada fila.`;
+  }
+
+  // ---- Exportar CSV ------------------------------------------------------
+  function exportCsv() {
+    const rows = readRows();
+    const header = ['Contraparte', 'Fecha', 'Tipo', 'Base', 'Cuota IVA', 'Clasificacion'];
+    const lines = [header.join(';')];
+    for (const r of rows) {
+      lines.push([csv(r.contraparte), csv(r.fecha), r.tipo, r.base, r.cuota, r.clas].join(';'));
+    }
+    const blob = new Blob(['﻿' + lines.join('\n')], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'prorrata-iva.csv';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+  function csv(v) { return '"' + String(v || '').replace(/"/g, '""') + '"'; }
+
+  // ---- Utilidades --------------------------------------------------------
+  function escapeHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function escapeAttr(s) { return escapeHtml(s).replace(/"/g, '&quot;'); }
+
+  // ---- Eventos -----------------------------------------------------------
+  document.getElementById('pro-pick').addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', () => { handleFiles(fileInput.files); fileInput.value = ''; });
+  document.getElementById('pro-add').addEventListener('click', () => addRow({}));
+  document.getElementById('pro-csv').addEventListener('click', exportCsv);
+
+  ['dragover', 'dragenter'].forEach((ev) => drop.addEventListener(ev, (e) => {
+    e.preventDefault(); drop.classList.add('is-drag');
+  }));
+  ['dragleave', 'drop'].forEach((ev) => drop.addEventListener(ev, (e) => {
+    e.preventDefault(); drop.classList.remove('is-drag');
+  }));
+  drop.addEventListener('drop', (e) => { if (e.dataTransfer) handleFiles(e.dataTransfer.files); });
+
+  recompute();
+}
+</script>
