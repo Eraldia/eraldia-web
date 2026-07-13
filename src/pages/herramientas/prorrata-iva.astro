@@ -1,14 +1,18 @@
 ---
 import { url, BASE } from '../../utils';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { isAuthorized } from '../../lib/prorrata-auth';
+// import { isAuthorized } from '../../lib/prorrata-auth';
 
-// Herramienta interna: no se prerenderiza (necesita comprobar la sesión en el
-// Worker) y no se indexa.
+// Herramienta interna: no se prerenderiza (necesita el runtime del Worker) y no
+// se indexa.
 export const prerender = false;
 
-const pass = Astro.locals.runtime?.env?.PRORRATA_PASS;
-const authed = await isAuthorized(Astro.request, pass, import.meta.env.DEV);
+// La herramienta está TEMPORALMENTE ABIERTA (sin contraseña), a petición. Para
+// volver a restringir el acceso, restaura la comprobación de sesión:
+//   import { isAuthorized } from '../../lib/prorrata-auth';
+//   const pass = Astro.locals.runtime?.env?.PRORRATA_PASS;
+//   const authed = await isAuthorized(Astro.request, pass, import.meta.env.DEV);
+const authed = true;
 const loginError = Astro.url.searchParams.get('error');
 ---
 
