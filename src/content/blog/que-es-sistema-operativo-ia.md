@@ -1,7 +1,7 @@
 ---
 title: "Qué es un sistema operativo de IA y por qué tu empresa necesita uno"
 description: "Un sistema operativo de IA (AI OS) es el conjunto de decisiones, reglas y capacidades que hace que la IA funcione en toda la empresa, no solo en pilotos. Sus cuatro capas explicadas."
-date: 2026-01-01
+date: 2026-07-13
 tags: ["estrategia", "ai os", "medianas empresas", "gobierno", "ia"]
 categories: ["estrategia"]
 ---
