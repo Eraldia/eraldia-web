@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { isAuthorized } from '../../lib/prorrata-auth';
+// import { isAuthorized } from '../../lib/prorrata-auth';
 
 // OCR de facturas para la calculadora de prorrata de IVA. Recibe la imagen de una
 // factura (dataURL), la pasa por un modelo de visión de Cloudflare Workers AI y
@@ -65,11 +65,13 @@ function parseModelJson(text: string): Record<string, unknown> | null {
 
 export const POST: APIRoute = async ({ request, locals }) => {
   const env = locals.runtime?.env;
-  const pass = env?.PRORRATA_PASS;
 
-  if (!(await isAuthorized(request, pass, import.meta.env.DEV))) {
-    return json(401, { ok: false, error: 'No autorizado.' });
-  }
+  // Acceso temporalmente libre: sin comprobación de sesión. Para volver a
+  // restringirlo, descomenta el import de isAuthorized y este bloque:
+  //   const pass = env?.PRORRATA_PASS;
+  //   if (!(await isAuthorized(request, pass, import.meta.env.DEV))) {
+  //     return json(401, { ok: false, error: 'No autorizado.' });
+  //   }
 
   let image: string | undefined;
   try {
