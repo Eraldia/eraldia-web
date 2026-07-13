@@ -6,6 +6,8 @@
 # --- Buscadores y crawlers generales ---
 User-agent: *
 Allow: /
+# Herramientas internas (uso profesional, no indexables)
+Disallow: /herramientas/
 
 # --- OpenAI (ChatGPT / SearchGPT) ---
 User-agent: GPTBot

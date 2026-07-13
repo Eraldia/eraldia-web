@@ -1,0 +1,140 @@
+// ==========================================================================
+// Herramienta interna: calculadora de prorrata de IVA (/herramientas/prorrata-iva/)
+// ==========================================================================
+
+.pro-login {
+  max-width: 24rem;
+  margin: $space-6 auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+
+  &__label { font-weight: $font-weight-semibold; }
+  &__input {
+    padding: 0.7rem 0.9rem;
+    border: 1px solid rgba($color-text, 0.2);
+    border-radius: 0.5rem;
+    font-size: $font-size-base;
+    font-family: inherit;
+  }
+  &__error {
+    color: $color-primary;
+    font-weight: $font-weight-semibold;
+    margin: 0;
+  }
+}
+
+.pro {
+  margin-top: $space-5;
+
+  &__drop {
+    border: 2px dashed rgba($color-text, 0.25);
+    border-radius: 0.75rem;
+    padding: $space-6 $space-5;
+    text-align: center;
+    transition: border-color 0.15s, background 0.15s;
+
+    &.is-drag { border-color: $color-primary; background: rgba($color-primary, 0.05); }
+  }
+  &__drop-text { margin: 0; line-height: $line-height-base; }
+  &__drop-btn {
+    background: none;
+    border: none;
+    color: $color-primary;
+    font: inherit;
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+  }
+  &__status {
+    margin: $space-3 0 0;
+    font-weight: $font-weight-semibold;
+    color: $color-sage;
+  }
+
+  &__table-wrap { margin-top: $space-5; overflow-x: auto; }
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: $font-size-sm;
+    min-width: 52rem;
+
+    th, td {
+      padding: 0.4rem 0.5rem;
+      border-bottom: 1px solid rgba($color-text, 0.12);
+      text-align: left;
+      vertical-align: middle;
+    }
+    th { font-weight: $font-weight-semibold; white-space: nowrap; }
+  }
+  &__num { text-align: right; }
+  &__file {
+    max-width: 10rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: $font-size-xs;
+    color: rgba($color-text, 0.7);
+  }
+  &__in {
+    width: 100%;
+    padding: 0.35rem 0.45rem;
+    border: 1px solid rgba($color-text, 0.18);
+    border-radius: 0.35rem;
+    font: inherit;
+    font-size: $font-size-sm;
+    background: $color-white;
+  }
+  &__in--num { text-align: right; }
+  &__in--date { min-width: 7rem; }
+  &__del {
+    background: none;
+    border: none;
+    color: $color-primary;
+    font-size: $font-size-xl;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 0.25rem;
+  }
+  &__empty { color: rgba($color-text, 0.6); font-size: $font-size-sm; margin: $space-3 0; }
+  &__add { margin-top: $space-2; }
+
+  &__results { margin-top: $space-7; }
+  &__results-title { margin: 0 0 $space-4; }
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: $space-4;
+  }
+  &__card {
+    border: 1px solid rgba($color-text, 0.12);
+    border-radius: 0.75rem;
+    padding: 1.1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  &__card-label { font-size: $font-size-sm; color: rgba($color-text, 0.7); }
+  &__card-value { font-size: 1.9rem; font-weight: $font-weight-bold; color: $color-primary; font-family: $font-heading; }
+  &__card-hint { font-size: $font-size-xs; color: rgba($color-text, 0.6); }
+
+  &__reco {
+    margin: $space-5 0 0;
+    padding: 0.85rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: $font-weight-medium;
+    &:empty { display: none; }
+    &--warn { background: rgba($color-primary, 0.1); border: 1px solid rgba($color-primary, 0.35); }
+    &--ok { background: rgba($color-sage, 0.12); border: 1px solid rgba($color-sage, 0.35); }
+  }
+  &__formula {
+    margin-top: $space-5;
+    font-size: $font-size-sm;
+    color: rgba($color-text, 0.75);
+    line-height: $line-height-base;
+    p { margin: 0; }
+  }
+
+  #pro-csv { margin-top: $space-5; }
+}

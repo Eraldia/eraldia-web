@@ -6,3 +6,8 @@
 # Clave de API de Resend (https://resend.com/api-keys). Sin ella, el lead se
 # guarda igual pero no se envía el aviso por email.
 RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxx
+
+# Contraseña de acceso a la herramienta interna de prorrata de IVA
+# (/herramientas/prorrata-iva/). En dev, si se deja sin definir, el acceso queda
+# abierto para poder probar el flujo. En producción es obligatoria.
+PRORRATA_PASS=cambia-esta-contrasena

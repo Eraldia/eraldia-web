@@ -12,6 +12,7 @@ interface Props {
   publishedTime?: string;
   tags?: string[];
   isHome?: boolean;
+  noindex?: boolean;
 }
 
 const {
@@ -23,6 +24,7 @@ const {
   publishedTime,
   tags = [],
   isHome = false,
+  noindex = false,
 } = Astro.props;
 
 const pageTitle = title ? `${title} | ${SITE_TITLE}` : `${SITE_TITLE} — ${TAGLINE}`;
@@ -110,6 +112,7 @@ const currentYear = new Date().getFullYear();
 
   <meta name="description" content={description}>
   <meta name="author" content={AUTHOR}>
+  {noindex && <meta name="robots" content="noindex,nofollow">}
 
   {/* Open Graph */}
   <meta property="og:title" content={ogTitle}>
