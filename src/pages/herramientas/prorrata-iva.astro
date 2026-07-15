@@ -273,9 +273,30 @@ if (root) {
   }
 
   // ---- OCR ---------------------------------------------------------------
-  async function fileToImage(file) {
-    if (file.type === 'application/pdf') return await pdfFirstPageToDataUrl(file);
-    return await imageToDataUrl(file);
+  // Devuelve { text } cuando se puede extraer texto real (PDF digital) o
+  // { image } (foto, escaneo o PDF sin capa de texto) para el respaldo de visión.
+  async function readFile(file) {
+    if (file.type === 'application/pdf') {
+      const text = await pdfText(file).catch(() => '');
+      // Si el PDF tiene una capa de texto útil, usamos el texto (mucho más fiable
+      // con los importes); si no (escaneo), rasterizamos y vamos por visión.
+      if (text && text.replace(/\s/g, '').length >= 40) return { text };
+      return { image: await pdfFirstPageToDataUrl(file) };
+    }
+    return { image: await imageToDataUrl(file) };
+  }
+
+  async function pdfText(file) {
+    const buf = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+    const pages = Math.min(pdf.numPages, 2);
+    let out = '';
+    for (let i = 1; i <= pages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      out += content.items.map((it) => (it.str || '')).join(' ') + '\n';
+    }
+    return out.trim();
   }
 
   function imageToDataUrl(file) {
@@ -326,11 +347,11 @@ if (root) {
     return out.toDataURL('image/jpeg', 0.85);
   }
 
-  async function ocr(image) {
+  async function ocr(payload) {
     const res = await fetch(base + '/api/prorrata-ocr/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image }),
+      body: JSON.stringify(payload),
     });
     const json = await res.json().catch(() => ({}));
     if (!res.ok) {
@@ -354,8 +375,8 @@ if (root) {
       statusEl.textContent = `Leyendo ${done + 1} de ${list.length}: ${file.name}…`;
       let data = {};
       try {
-        const image = await fileToImage(file);
-        const r = await ocr(image);
+        const payload = await readFile(file);
+        const r = await ocr(payload);
         data = r.data || {};
       } catch (err) {
         console.error('[prorrata] No se pudo procesar', file.name, err);

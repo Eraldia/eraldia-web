@@ -1,18 +1,20 @@
 import type { APIRoute } from 'astro';
 // import { isAuthorized } from '../../lib/prorrata-auth';
 
-// OCR de facturas para la calculadora de prorrata de IVA. Recibe la imagen de una
-// factura (dataURL), la pasa por un modelo de visión de Cloudflare Workers AI y
-// devuelve los campos estructurados que precargan la tabla editable. No guarda
-// nada: la imagen solo se usa para leerla. Corre en el Worker.
+// Lectura de facturas para la calculadora de prorrata de IVA. Acepta dos
+// entradas y usa el modelo de Workers AI adecuado:
+//   - { text }  -> texto ya extraído del PDF (PDF digital): modelo de TEXTO,
+//                  mucho más fiable con los importes.
+//   - { image } -> imagen (foto/escaneo): modelo de VISIÓN como respaldo.
+// Devuelve los campos estructurados que precargan la tabla editable. No guarda
+// nada. Corre en el Worker.
 export const prerender = false;
 
-// Modelo de visión de Workers AI. Lee la imagen y extrae texto/campos.
-const MODEL = '@cf/meta/llama-3.2-11b-vision-instruct';
+const VISION_MODEL = '@cf/meta/llama-3.2-11b-vision-instruct';
+const TEXT_MODEL = '@cf/meta/llama-3.1-8b-instruct';
 
-const SYSTEM_PROMPT = `Analiza la imagen de UNA factura española y devuelve SOLO un
-objeto JSON válido: sin explicaciones, sin comentarios y sin bloques de código.
-Usa exactamente estas claves:
+// Esquema común pedido al modelo (mismas claves en ambos caminos).
+const SCHEMA = `Usa exactamente estas claves:
 - "tipo": "emitida" o "recibida" o null (emitida = ingreso/venta; recibida = gasto/compra)
 - "contraparte": nombre del cliente o proveedor, o null
 - "fecha": fecha de la factura como "AAAA-MM-DD", o null
@@ -24,7 +26,11 @@ Usa exactamente estas claves:
 - "total": importe total de la factura en euros (número), o null
 - "confianza": "alta", "media" o "baja"
 Los números con punto decimal, sin separador de miles ni símbolo de moneda. Si un
-dato no es legible, usa null. No inventes valores. Responde únicamente con el JSON.`;
+dato no es legible, usa null. No inventes valores. Responde SOLO con el objeto JSON,
+sin explicaciones, sin comentarios y sin bloques de código.`;
+
+const VISION_PROMPT = `Analiza la imagen de UNA factura española y devuelve SOLO un objeto JSON válido. ${SCHEMA}`;
+const TEXT_SYSTEM = `Eres un extractor de datos de facturas españolas. A partir del texto de UNA factura, devuelve SOLO un objeto JSON válido. ${SCHEMA}`;
 
 function json(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), {
@@ -66,6 +72,16 @@ function parseModelJson(text: string): Record<string, unknown> | null {
   }
 }
 
+// Empaqueta el resultado: si no hay JSON útil, devuelve `raw` para diagnóstico.
+function respond(out: string): Response {
+  const data = parseModelJson(out);
+  if (!data || Object.keys(data).length === 0) {
+    console.warn('[api/prorrata-ocr] Respuesta del modelo sin JSON útil:', out.slice(0, 400));
+    return json(200, { ok: true, data: {}, raw: out.slice(0, 800) });
+  }
+  return json(200, { ok: true, data });
+}
+
 export const POST: APIRoute = async ({ request, locals }) => {
   const env = locals.runtime?.env;
 
@@ -76,44 +92,52 @@ export const POST: APIRoute = async ({ request, locals }) => {
   //     return json(401, { ok: false, error: 'No autorizado.' });
   //   }
 
-  let image: string | undefined;
+  let payload: { image?: string; text?: string };
   try {
-    const body = (await request.json()) as { image?: string };
-    image = body.image;
+    payload = (await request.json()) as { image?: string; text?: string };
   } catch {
     return json(400, { ok: false, error: 'Cuerpo no válido.' });
   }
-  if (!image || !image.startsWith('data:image/')) {
-    return json(400, { ok: false, error: 'Falta la imagen de la factura.' });
-  }
 
-  const bytes = dataUrlToBytes(image);
-  if (!bytes) return json(400, { ok: false, error: 'Imagen no válida.' });
+  const text = typeof payload.text === 'string' ? payload.text.trim() : '';
+  const image = payload.image;
+
+  if (!text && (!image || !image.startsWith('data:image/'))) {
+    return json(400, { ok: false, error: 'Falta el contenido de la factura.' });
+  }
 
   const ai = env?.AI;
   if (!ai) {
-    // En dev sin binding de Workers AI no se puede hacer OCR; se devuelve una
-    // fila vacía para que el asesor la rellene a mano y probar el flujo.
+    // En dev sin binding de Workers AI no se puede leer; se devuelve una fila
+    // vacía para que el asesor la rellene a mano y poder probar el flujo.
     if (import.meta.env.DEV) return json(200, { ok: true, data: {}, note: 'sin-binding-ai' });
     return json(503, { ok: false, error: 'OCR no disponible.' });
   }
 
   try {
-    const result: any = await ai.run(MODEL, {
-      prompt: SYSTEM_PROMPT,
+    // Camino de TEXTO (PDF digital): modelo de texto sobre el texto extraído.
+    if (text) {
+      const result: any = await ai.run(TEXT_MODEL, {
+        messages: [
+          { role: 'system', content: TEXT_SYSTEM },
+          { role: 'user', content: text.slice(0, 6000) },
+        ],
+        max_tokens: 512,
+      });
+      const out: string = typeof result?.response === 'string' ? result.response : '';
+      return respond(out);
+    }
+
+    // Camino de VISIÓN (foto/escaneo): modelo de visión sobre la imagen.
+    const bytes = dataUrlToBytes(image as string);
+    if (!bytes) return json(400, { ok: false, error: 'Imagen no válida.' });
+    const result: any = await ai.run(VISION_MODEL, {
+      prompt: VISION_PROMPT,
       image: bytes,
       max_tokens: 512,
     });
-    const text: string = typeof result?.response === 'string' ? result.response : '';
-    const data = parseModelJson(text);
-    // `raw` se devuelve para poder diagnosticar desde el navegador cuando el
-    // modelo no da un JSON parseable (herramienta interna, sin datos sensibles
-    // más allá de la propia factura).
-    if (!data || Object.keys(data).length === 0) {
-      console.warn('[api/prorrata-ocr] Respuesta del modelo sin JSON útil:', text.slice(0, 400));
-      return json(200, { ok: true, data: {}, raw: text.slice(0, 800) });
-    }
-    return json(200, { ok: true, data });
+    const out: string = typeof result?.response === 'string' ? result.response : '';
+    return respond(out);
   } catch (err) {
     console.error('[api/prorrata-ocr] Error de Workers AI:', err);
     return json(502, { ok: false, error: 'No se pudo leer la factura.' });
