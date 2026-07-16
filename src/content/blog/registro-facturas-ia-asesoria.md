@@ -1,7 +1,7 @@
 ---
 title: "Registro automático de facturas con IA en una asesoría: cómo funciona de verdad"
 description: "Cómo funciona por dentro el registro automático de facturas con IA en una asesoría: lectura del buzón, extracción de datos, validación y punto de revisión humana. Con plazos y costes de 2026."
-date: 2026-01-01
+date: 2026-07-16
 tags: ["asesorías", "gestorías", "facturas", "ia", "automatización"]
 categories: ["sectores"]
 ---
