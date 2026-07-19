@@ -1,7 +1,7 @@
 ---
 title: "Cómo definir la estrategia de IA de una mediana empresa"
 description: "La estrategia de IA de una mediana empresa no es una lista de herramientas: define dónde crea valor la IA en tu negocio, con qué prioridades, quién la gobierna y cómo se convierte en hoja de ruta."
-date: 2026-01-01
+date: 2026-07-19
 tags: ["estrategia", "ai os", "medianas empresas", "dirección", "gobierno"]
 categories: ["estrategia"]
 ---
