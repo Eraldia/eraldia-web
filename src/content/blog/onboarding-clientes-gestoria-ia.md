@@ -1,7 +1,7 @@
 ---
 title: "Alta de un cliente nuevo en la gestoría con IA: del primer correo al primer modelo sin fricción"
 description: "Cómo automatizar con IA el onboarding de clientes nuevos en una gestoría: recogida de datos, documentación de alta y traspaso, sin que nada se quede a medias. Con plazos y costes de 2026."
-date: 2026-01-01
+date: 2026-07-22
 tags: ["gestorías", "asesorías", "onboarding", "ia", "automatización"]
 categories: ["sectores"]
 ---
