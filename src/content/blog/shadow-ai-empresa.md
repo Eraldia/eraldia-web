@@ -1,7 +1,7 @@
 ---
 title: "Shadow AI: tus empleados ya usan IA por su cuenta (y prohibirlo no es la solución)"
 description: "El shadow AI —empleados usando IA personal sin control— existe ya en la mayoría de medianas empresas. Por qué prohibirlo no funciona y qué política de uso sí reduce el riesgo real."
-date: 2026-01-01
+date: 2026-07-25
 tags: ["shadow ai", "gobierno", "estrategia", "medianas empresas", "ia"]
 categories: ["estrategia"]
 ---
