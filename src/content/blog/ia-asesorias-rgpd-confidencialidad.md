@@ -1,7 +1,7 @@
 ---
 title: "Usar IA en una asesoría sin saltarte el RGPD: guía práctica 2026"
 description: "Cómo usar IA en una asesoría cumpliendo el RGPD: qué herramientas no entrenan con tus datos, qué documentar y cuándo evitar la IA generativa con datos fiscales. Guía práctica de 2026."
-date: 2026-01-01
+date: 2026-07-28
 tags: ["asesorías", "gestorías", "rgpd", "ia", "confidencialidad"]
 categories: ["sectores"]
 ---
