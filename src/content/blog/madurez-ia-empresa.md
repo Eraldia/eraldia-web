@@ -1,7 +1,7 @@
 ---
 title: "Madurez en IA: cómo saber dónde está de verdad tu empresa"
 description: "Un marco para medir la madurez en IA de tu empresa en cuatro capas: estrategia, datos, procesos y personas. Con etapas reconocibles, de la anarquía al sistema, y qué hacer en cada una."
-date: 2026-01-01
+date: 2026-07-31
 tags: ["madurez", "ai os", "estrategia", "medianas empresas", "diagnóstico"]
 categories: ["estrategia"]
 ---
