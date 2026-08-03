@@ -1,7 +1,7 @@
 ---
 title: "IA para pymes en Bilbao: qué automatizar primero en 2026"
 description: "Guía práctica para pymes de Bilbao y Bizkaia que quieren empezar con IA en 2026: qué proceso automatizar primero según tu sector, cómo hacerlo con precio cerrado y qué ayudas existen en Euskadi."
-date: 2026-01-01
+date: 2026-08-03
 tags: ["bilbao", "bizkaia", "ia", "pymes", "automatización"]
 categories: ["guías"]
 ---
