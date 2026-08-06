@@ -1,7 +1,7 @@
 ---
 title: "Por qué fracasan los pilotos de IA en las empresas (y cómo evitarlo)"
 description: "Los pilotos de IA fracasan casi siempre por el mismo puñado de motivos, ninguno tecnológico. Los cinco patrones más comunes y cómo evitarlos en 2026."
-date: 2026-01-01
+date: 2026-08-06
 tags: ["estrategia", "gobierno", "medianas empresas", "pilotos ia", "adopción"]
 categories: ["estrategia"]
 ---
