@@ -1,7 +1,7 @@
 ---
 title: "IA para pymes en el País Vasco: por dónde empezar en 2026"
 description: "Cómo empezar con IA en una pyme de Euskadi (Bizkaia, Gipuzkoa y Álava) en 2026: qué automatizar primero en servicios e industria auxiliar, cómo trabajar en remoto y qué ayudas hay."
-date: 2026-01-01
+date: 2026-08-09
 tags: ["país vasco", "euskadi", "ia", "pymes", "automatización"]
 categories: ["guías"]
 ---
