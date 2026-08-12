@@ -1,7 +1,7 @@
 ---
 title: "Gobierno de la IA: la política de uso que tu empresa necesita (antes de que la escriba la costumbre)"
 description: "Qué debe cubrir una política de uso de IA en una empresa: herramientas aprobadas, datos, revisión humana y responsables. Guía práctica de 2026."
-date: 2026-01-01
+date: 2026-08-12
 tags: ["estrategia", "gobierno", "medianas empresas", "política de uso", "ia"]
 categories: ["estrategia"]
 ---
