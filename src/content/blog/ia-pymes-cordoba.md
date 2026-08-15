@@ -1,7 +1,7 @@
 ---
 title: "IA para pymes en Córdoba: qué automatizar primero en 2026"
 description: "Guía práctica para pymes de Córdoba y provincia que quieren empezar con IA en 2026: qué proceso automatizar primero según tu sector, cómo hacerlo en remoto con precio cerrado y qué ayudas hay en Andalucía."
-date: 2026-01-01
+date: 2026-08-15
 tags: ["córdoba", "andalucía", "ia", "pymes", "automatización"]
 categories: ["guías"]
 ---
