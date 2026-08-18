@@ -1,7 +1,7 @@
 ---
 title: "La hoja de ruta de IA que un comité de dirección puede aprobar"
 description: "Qué diferencia una hoja de ruta de IA real de una presentación: fases con final definido, responsables, métricas y cómo se prioriza (2026)."
-date: 2026-01-01
+date: 2026-08-18
 tags: ["estrategia", "hoja de ruta", "medianas empresas", "gobierno", "dirección"]
 categories: ["estrategia"]
 ---
