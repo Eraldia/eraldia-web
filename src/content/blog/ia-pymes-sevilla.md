@@ -1,7 +1,7 @@
 ---
 title: "IA para pymes en Sevilla: qué automatizar primero en 2026"
 description: "Guía práctica para pymes de Sevilla y su área metropolitana que quieren empezar con IA en 2026: qué proceso automatizar primero según tu sector, cómo hacerlo en remoto con precio cerrado y qué ayudas hay en Andalucía."
-date: 2026-01-01
+date: 2026-08-21
 tags: ["sevilla", "andalucía", "ia", "pymes", "automatización"]
 categories: ["guías"]
 ---
