@@ -51,11 +51,12 @@ const checkIcon =
         </div>
       </div>
 
-      <!-- Paso 2 — Proceso -->
+      <!-- Paso 2 — Proceso (multi-selección: el cliente puede tener varios dolores) -->
       <div class="diag__step" data-step="1">
         <span class="diag__eyebrow">El dolor</span>
-        <h2 class="diag__question">¿Qué tarea os come más tiempo cada semana?</h2>
-        <div class="diag__options" data-key="proceso">
+        <h2 class="diag__question">¿Qué tareas os comen más tiempo cada semana?</h2>
+        <p class="diag__hint">Puedes marcar todas las que apliquen.</p>
+        <div class="diag__options" data-key="proceso" data-multi>
           <button type="button" class="diag__option" data-value="atencion" data-label="Responder siempre las mismas preguntas"><span class="diag__option-mark" set:html={checkIcon}></span>Responder siempre las mismas preguntas (teléfono, email, WhatsApp)</button>
           <button type="button" class="diag__option" data-value="citas" data-label="Gestionar citas o reservas"><span class="diag__option-mark" set:html={checkIcon}></span>Gestionar citas o reservas (y las ausencias)</button>
           <button type="button" class="diag__option" data-value="presupuestos" data-label="Hacer presupuestos o pasar facturas"><span class="diag__option-mark" set:html={checkIcon}></span>Hacer presupuestos o pasar facturas a mano</button>
@@ -135,7 +136,7 @@ const checkIcon =
       <!-- Navegación -->
       <div class="diag__nav" id="diag-nav">
         <button type="button" class="diag__back" id="diag-back" hidden>&larr; Atrás</button>
-        <span></span>
+        <button type="button" class="btn btn--primary diag__next" id="diag-next" hidden disabled>Continuar &rarr;</button>
       </div>
 
       <noscript>
@@ -164,6 +165,24 @@ const checkIcon =
   var progress = document.getElementById('diag-progress');
   var progressLabel = document.getElementById('diag-progress-label');
   var back = document.getElementById('diag-back');
+  var next = document.getElementById('diag-next');
+
+  // Devuelve el grupo de opciones multi-selección de un paso, o null si es de
+  // respuesta única (sector, horas, método).
+  function multiGroup(index) {
+    var step = steps[index];
+    return step ? step.querySelector('.diag__options[data-multi]') : null;
+  }
+
+  // Cuántas opciones hay marcadas en un grupo multi-selección.
+  function countSelected(group) {
+    return group ? group.querySelectorAll('.diag__option.is-selected').length : 0;
+  }
+
+  function advance() {
+    if (current + 1 >= TOTAL) { buildResult(); show(TOTAL); }
+    else { show(current + 1); }
+  }
 
   function show(index) {
     current = index;
@@ -177,6 +196,11 @@ const checkIcon =
       progressLabel.textContent = 'Paso ' + (index + 1) + ' de ' + TOTAL;
     }
     back.hidden = index === 0 || isResult;
+    // El botón "Continuar" solo aparece en los pasos multi-selección, ya que
+    // los de respuesta única avanzan solos al elegir.
+    var group = multiGroup(index);
+    next.hidden = isResult || !group;
+    if (group) next.disabled = countSelected(group) === 0;
     var focusable = steps[index] && steps[index].querySelector('.diag__option, input, a, button');
     if (focusable && index > 0) { try { focusable.focus({ preventScroll: true }); } catch (e) {} }
   }
@@ -184,21 +208,35 @@ const checkIcon =
   // Selección de opción
   root.querySelectorAll('.diag__options').forEach(function (group) {
     var key = group.getAttribute('data-key');
+    var isMulti = group.hasAttribute('data-multi');
+
     group.querySelectorAll('.diag__option').forEach(function (btn) {
       btn.addEventListener('click', function () {
+        if (isMulti) {
+          // Multi-selección: alternar la opción y recoger todas las marcadas.
+          // El cliente avanza con el botón "Continuar".
+          btn.classList.toggle('is-selected');
+          var selected = Array.prototype.slice.call(
+            group.querySelectorAll('.diag__option.is-selected'),
+          );
+          answers[key] = selected.map(function (b) { return b.getAttribute('data-value'); });
+          labels[key] = selected.map(function (b) { return b.getAttribute('data-label'); });
+          next.disabled = selected.length === 0;
+          return;
+        }
+
+        // Respuesta única: marca una opción y avanza automáticamente.
         group.querySelectorAll('.diag__option').forEach(function (b) { b.classList.remove('is-selected'); });
         btn.classList.add('is-selected');
         answers[key] = btn.getAttribute('data-value');
         labels[key] = btn.getAttribute('data-label');
-        setTimeout(function () {
-          if (current + 1 >= TOTAL) { buildResult(); show(TOTAL); }
-          else { show(current + 1); }
-        }, 220);
+        setTimeout(advance, 220);
       });
     });
   });
 
   back.addEventListener('click', function () { if (current > 0) show(current - 1); });
+  next.addEventListener('click', function () { if (!next.disabled) advance(); });
 
   // --- Lógica de recomendación ------------------------------------------
   var PROCESOS = {
@@ -216,11 +254,28 @@ const checkIcon =
 
   var METODO_PESO = { manual: 1.0, sheets: 0.9, software: 0.8, auto: 0.5 };
 
+  // Une una lista en lenguaje natural: ["a"] → "a"; ["a","b"] → "a y b";
+  // ["a","b","c"] → "a, b y c".
+  function joinNatural(arr) {
+    if (arr.length <= 1) return arr[0] || '';
+    return arr.slice(0, -1).join(', ') + ' y ' + arr[arr.length - 1];
+  }
+
   function buildResult() {
     var horas = Number(answers.horas) || 1;
     var peso = METODO_PESO[answers.metodo] != null ? METODO_PESO[answers.metodo] : 0.8;
-    var score = horas * peso;
-    var proc = PROCESOS[answers.proceso] || PROCESOS.atencion;
+
+    // El proceso ahora es multi-selección: puede llegar como array de claves.
+    var procKeys = [].concat(answers.proceso || []).filter(function (k) { return PROCESOS[k]; });
+    if (!procKeys.length) procKeys = ['atencion'];
+    var procs = procKeys.map(function (k) { return PROCESOS[k]; });
+    var primary = procs[0];
+    var varios = procs.length > 1;
+    var nombres = joinNatural(procs.map(function (p) { return p.nombre; }));
+    // Varios dolores a la vez = más potencial: pequeño empujón por cada proceso
+    // extra marcado (tope razonable).
+    var multiplicador = Math.min(1 + (procs.length - 1) * 0.25, 1.6);
+    var score = horas * peso * multiplicador;
     var sector = SECTORES[answers.sector] || 'negocio';
 
     var level, levelClass, title, body, action, ctaHref, ctaText;
@@ -230,25 +285,28 @@ const checkIcon =
       level = 'Potencial alto';
       levelClass = 'alto';
       title = 'Tienes un caso claro para automatizar.';
-      body = 'Dedicáis bastante tiempo a ' + proc.nombre + ' y todavía de forma manual. En una ' +
+      body = 'Dedicáis bastante tiempo a ' + nombres + ' y todavía de forma manual. En una ' +
         sector + ' eso es justo el tipo de proceso repetible que sale rentable automatizar pronto: el ahorro de horas se nota desde el primer mes.';
-      action = 'Una automatización a medida: ' + proc.accion;
+      action = varios
+        ? 'Una automatización a medida que ataque varios frentes, empezando por lo que más pesa: ' + primary.accion + ' A partir de ahí encadenamos el resto.'
+        : 'Una automatización a medida: ' + primary.accion;
       ctaHref = serviciosBase + 'automatizacion/';
       ctaText = 'Ver cómo sería la automatización';
     } else if (score >= 3) {
       level = 'Potencial medio';
       levelClass = 'medio';
       title = 'Hay margen, y conviene medirlo bien antes de invertir.';
-      body = 'En tu ' + sector + ' se va tiempo en ' + proc.nombre + ', pero merece la pena cuantificar el ahorro real ' +
+      body = 'En tu ' + sector + ' se va tiempo en ' + nombres + ', pero merece la pena cuantificar el ahorro real ' +
         'antes de construir nada. Para eso está el diagnóstico: dos semanas para priorizar qué automatizar y con qué retorno.';
-      action = 'Un diagnóstico de IA que mida el ahorro de automatizar ' + proc.nombre + ' y lo priorice frente a otras tareas.';
+      action = 'Un diagnóstico de IA que mida el ahorro de automatizar ' + nombres + ' y lo priorice' +
+        (varios ? ' por orden de retorno.' : ' frente a otras tareas.');
       ctaHref = serviciosBase + 'diagnostico-ia/';
       ctaText = 'Ver el diagnóstico de IA';
     } else {
       level = 'Para explorar';
       levelClass = 'explorar';
       title = 'Aún no es tu mayor urgencia, pero hay por dónde empezar.';
-      body = 'De momento ' + proc.nombre + ' no os quita tantas horas, así que no tiene sentido un proyecto grande. ' +
+      body = 'De momento ' + nombres + (varios ? ' no os quitan' : ' no os quita') + ' tantas horas, así que no tiene sentido un proyecto grande. ' +
         'Lo más rentable es una llamada de 30 minutos para detectar el proceso que de verdad duela en tu ' + sector + '.';
       action = 'Una llamada gratuita de 30 minutos para localizar el proceso con más potencial antes de invertir nada.';
       ctaHref = '/#contacto';
@@ -267,7 +325,7 @@ const checkIcon =
 
     // Campos ocultos que viajan a /api/lead junto al nombre y el email.
     document.getElementById('diag-h-sector').value = labels.sector || '';
-    document.getElementById('diag-h-proceso').value = labels.proceso || '';
+    document.getElementById('diag-h-proceso').value = [].concat(labels.proceso || []).join(', ');
     document.getElementById('diag-h-horas').value = labels.horas || '';
     document.getElementById('diag-h-metodo').value = labels.metodo || '';
     document.getElementById('diag-h-recom').value = level + ' — ' + action;
